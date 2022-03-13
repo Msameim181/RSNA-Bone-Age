@@ -1,0 +1,10 @@
+
+Epoch 1/2:   0%|                                                                                                                                                                                                         | 0/5778 [00:07<?, ?img/s]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\Train.py", line 165, in <module>
+    train_net(net, device, train_loader, test_loader,
+  File "c:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\Train.py", line 96, in train_net
+    assert images.shape[1] == net.n_channels, \
+  File "C:\Python\Python39\lib\site-packages\torch\nn\modules\module.py", line 1177, in __getattr__
+    raise AttributeError("'{}' object has no attribute '{}'".format(
+AttributeError: 'ResNet' object has no attribute 'n_channels'

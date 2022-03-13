@@ -1,0 +1,8 @@
+
+Epoch 1/2:   0%|                                                                                                                                                                                                         | 0/5778 [00:08<?, ?img/s]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\Train.py", line 165, in <module>
+    train_net(net, device, train_loader, test_loader,
+  File "c:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\Train.py", line 94, in train_net
+    images = torch.unsqueeze(images, 1)
+UnboundLocalError: local variable 'images' referenced before assignment
