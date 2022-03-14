@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 
 # Deep learning libs
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
@@ -89,7 +88,7 @@ def train_net(net, device, train_loader, test_loader,
         #     for _, img, boneage, sex, num_classes in progress.track(train_loader):
         
         with tqdm(total=n_train, desc=f'Epoch {epoch + 1}/{epochs}', unit='img') as pbar:
-            for _, images, boneage, sex, num_classes in train_loader:
+            for _, images, boneage, boneage_onehot, sex, num_classes in train_loader:
 
                 images = torch.unsqueeze(images, 1)
 
@@ -100,7 +99,7 @@ def train_net(net, device, train_loader, test_loader,
 
                 images = images.to(device=device, dtype=torch.float32)
 
-                boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
+                # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
                 age = boneage_onehot.to(device=device, dtype=torch.float32)
 
 
@@ -147,7 +146,7 @@ if __name__ == '__main__':
     defualt_path = ''
     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
-                           basedOnSex=True, gender='female')
+                           basedOnSex=True, gender='male')
 
     test_dataset = RSNATestDataset(data_file = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset.csv',
                            image_dir = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/',

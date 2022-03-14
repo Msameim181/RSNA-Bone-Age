@@ -4,15 +4,12 @@ import os
 from pathlib import Path
 
 # Deep learning libs
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
-import wandb
 from PIL import Image
 from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
                            TimeElapsedColumn, TimeRemainingColumn)
-                           
 from torch.utils.data import DataLoader, Dataset
 from torchvision import models, transforms
 
@@ -65,7 +62,7 @@ class RSNATrainDataset(Dataset):
         # Number of classes for the one hot encoding
         self.num_classes = np.max(self.train_data['boneage']) + 1
         # One Hoting the bone age
-        # self.age_onehot  = torch.nn.functional.one_hot(torch.tensor(self.train_data['boneage']), num_classes = 229)
+        self.age_onehot  = torch.nn.functional.one_hot(torch.tensor(self.train_data['boneage']), num_classes = self.num_classes)
 
         if not os.path.exists(data_file):
             raise RuntimeError(f'No data file found in {data_file}.')
@@ -83,8 +80,8 @@ class RSNATrainDataset(Dataset):
 
         boneage = self.train_data_filtered.iloc[index].boneage
 
-        # onehot_index = self.train_data_filtered.iloc[index]['indx']
-        # boneage_onehot = self.age_onehot[onehot_index]
+        onehot_index = self.train_data_filtered.iloc[index]['indx']
+        boneage_onehot = self.age_onehot[onehot_index]
 
         sex = 1 if self.train_data.iloc[index].male else 0
 
@@ -101,7 +98,7 @@ class RSNATrainDataset(Dataset):
             img = augmentations["image"]
         
         # return img_id, img, boneage, boneage_onehot, sex
-        return img_id, img, boneage, sex, num_classes
+        return img_id, img, boneage, boneage_onehot, sex, num_classes
 
 
 class RSNATestDataset(Dataset):
