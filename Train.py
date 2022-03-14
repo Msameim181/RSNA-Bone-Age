@@ -153,11 +153,11 @@ if __name__ == '__main__':
                            basedOnSex=True, gender='male')
     
     num_classes = train_dataset.num_classes                   
-    net = ResNet50(img_channel=1, num_classes=num_classes)
+    net = ResNet101(img_channel=1, num_classes=num_classes)
     device = 'cuda'
     learning_rate = 0.0001
-    epochs = 2
-    batch_size = 1
+    epochs = 10
+    batch_size = 20
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
 

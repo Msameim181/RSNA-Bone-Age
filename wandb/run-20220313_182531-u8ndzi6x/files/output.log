@@ -1,0 +1,10 @@
+
+Epoch 1/2:   0%|                                                                                               | 0/5778 [00:00<?, ?img/s]/home/studio-lab-user/RSNA-Bone-Age/Train.py:103: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
+Epoch 1/2:   0%|                                                                                               | 0/5778 [00:02<?, ?img/s]
+Traceback (most recent call last):
+  File "/home/studio-lab-user/RSNA-Bone-Age/Train.py", line 165, in <module>
+    train_net(net, device, train_loader, test_loader,
+  File "/home/studio-lab-user/RSNA-Bone-Age/Train.py", line 103, in train_net
+    boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
+ValueError: only one element tensors can be converted to Python scalars

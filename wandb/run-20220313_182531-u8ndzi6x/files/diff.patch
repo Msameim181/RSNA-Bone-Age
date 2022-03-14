@@ -1,0 +1,19 @@
+diff --git a/Train.py b/Train.py
+index f4101ff..28a1308 100644
+--- a/Train.py
++++ b/Train.py
+@@ -158,7 +158,7 @@ if __name__ == '__main__':
+     device = 'cuda'
+     learning_rate = 0.0001
+     epochs = 2
+-    batch_size = 1
++    batch_size = 20
+     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
+     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
+ 
+diff --git a/__pycache__/DataLoader.cpython-39.pyc b/__pycache__/DataLoader.cpython-39.pyc
+index 4dd0da4..e0eafbd 100644
+Binary files a/__pycache__/DataLoader.cpython-39.pyc and b/__pycache__/DataLoader.cpython-39.pyc differ
+diff --git a/__pycache__/Model.cpython-39.pyc b/__pycache__/Model.cpython-39.pyc
+index dfc1a6b..160b3ae 100644
+Binary files a/__pycache__/Model.cpython-39.pyc and b/__pycache__/Model.cpython-39.pyc differ
