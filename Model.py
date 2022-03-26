@@ -121,9 +121,12 @@ class ResNet(torch.nn.Module):
         )
 
         self.avgpool = torch.nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = torch.nn.Linear(512 * 4, num_classes)
+        self.fc = torch.nn.Linear(512 * 4 + 1, num_classes)
 
     def forward(self, x):
+        y = x[1]
+        x = x[0]
+        
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -135,7 +138,11 @@ class ResNet(torch.nn.Module):
 
         x = self.avgpool(x)
         x = x.reshape(x.shape[0], -1)
-        x = self.fc(x)
+
+        z = x
+        z = torch.cat((z, torch.tensor([[y]]).to(device='cuda', dtype=torch.float32)), dim=1)
+
+        x = self.fc(z)
 
         return x
 
@@ -202,9 +209,10 @@ def ResNet152(img_channel=3, num_classes=1000):
 def test():
     net = ResNet50(img_channel=1, num_classes=229)
     net.cuda()
-    summary(net, (1, 500, 625))
+    inp = torch.randn(1, 1, 500, 625).cuda()
+    out = net([inp, 0])
     # y = net(torch.randn(4, 3, 224, 224)).to("cuda")
-    # print(y.size())
+    print(out.size())
 
     # print(net)
 

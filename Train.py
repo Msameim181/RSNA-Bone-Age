@@ -98,6 +98,7 @@ def train_net(net, device, train_loader, test_loader,
                     'the images are loaded correctly.'
 
                 images = images.to(device=device, dtype=torch.float32)
+                sex = sex.to(device=device, dtype=torch.float32)
 
                 # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
                 age = boneage_onehot.to(device=device, dtype=torch.float32)
@@ -105,7 +106,7 @@ def train_net(net, device, train_loader, test_loader,
 
                 # Forward pass
                 with torch.cuda.amp.autocast(enabled=amp):
-                    age_pred = net(images)
+                    age_pred = net([images, sex])
                     loss = criterion(age_pred, age)
 
                 # Backward and optimize
@@ -137,20 +138,25 @@ def ResNet50(img_channel=3, num_classes=1000):
 def ResNet101(img_channel=3, num_classes=1000):
     return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
 
+def ResNet152(img_channel=3, num_classes=1000):
+    return ResNet(Block, [3, 8, 36, 3], img_channel, num_classes)
+
 
 if __name__ == '__main__':
     
     torch.cuda.empty_cache()
     torch.cuda.memory_summary(device=None, abbreviated=False)
     
+    basedOnSex = False
+    gender = 'male'
     defualt_path = ''
     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
-                           basedOnSex=True, gender='male')
+                           basedOnSex=basedOnSex, gender=gender)
 
     test_dataset = RSNATestDataset(data_file = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset.csv',
                            image_dir = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/',
-                           basedOnSex=True, gender='male')
+                           basedOnSex=basedOnSex, gender=gender)
     
     num_classes = train_dataset.num_classes                   
     net = ResNet101(img_channel=1, num_classes=num_classes)
