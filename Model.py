@@ -138,7 +138,6 @@ class ResNet(torch.nn.Module):
 
         x = self.avgpool(x)
         x = x.reshape(x.shape[0], -1)
-        print("in ss", x.shape)
         
         z = x
         y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)

@@ -163,7 +163,7 @@ if __name__ == '__main__':
     device = 'cuda'
     learning_rate = 0.0001
     epochs = 10
-    batch_size = 20
+    batch_size = 5
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
 
