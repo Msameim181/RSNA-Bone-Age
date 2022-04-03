@@ -1,9 +1,9 @@
 numpy==1.22.1
 pandas==1.4.0
-torch==1.10.2+cu113
-torchaudio==0.10.2+cu113
-torchsummary==1.5.1
-torchvision==0.11.3+cu113
+torch
+torchaudio
+torchsummary
+torchvision
 tqdm==4.62.3
 rich==11.2.0
 wandb==0.12.9
