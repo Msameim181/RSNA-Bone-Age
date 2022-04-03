@@ -1,0 +1,26 @@
+2022-04-03 21:46:15,038 INFO    MainThread:2780 [wandb_setup.py:_flush():71] setting env: {}
+2022-04-03 21:46:15,038 INFO    MainThread:2780 [wandb_setup.py:_flush():71] setting login settings: {'api_key': '***REDACTED***'}
+2022-04-03 21:46:15,038 INFO    MainThread:2780 [wandb_setup.py:_flush():71] setting login settings: {'api_key': '***REDACTED***'}
+2022-04-03 21:46:15,038 INFO    MainThread:2780 [wandb_setup.py:_flush():71] setting login settings: {}
+2022-04-03 21:46:15,039 INFO    MainThread:2780 [wandb_init.py:_log_setup():371] Logging user logs to C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220403_214615-11i1lyi3\logs\debug.log
+2022-04-03 21:46:15,039 INFO    MainThread:2780 [wandb_init.py:_log_setup():372] Logging internal logs to C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220403_214615-11i1lyi3\logs\debug-internal.log
+2022-04-03 21:46:15,039 INFO    MainThread:2780 [wandb_init.py:init():404] calling init triggers
+2022-04-03 21:46:15,039 INFO    MainThread:2780 [wandb_init.py:init():409] wandb.init called with sweep_config: {}
+config: {}
+2022-04-03 21:46:15,040 INFO    MainThread:2780 [wandb_init.py:init():460] starting backend
+2022-04-03 21:46:15,040 INFO    MainThread:2780 [backend.py:_multiprocessing_setup():99] multiprocessing start_methods=spawn, using: spawn
+2022-04-03 21:46:15,048 INFO    MainThread:2780 [backend.py:ensure_launched():216] starting backend process...
+2022-04-03 21:46:15,130 INFO    MainThread:2780 [backend.py:ensure_launched():221] started backend process with pid: 10308
+2022-04-03 21:46:15,131 INFO    MainThread:2780 [wandb_init.py:init():469] backend started and connected
+2022-04-03 21:46:15,132 INFO    MainThread:2780 [wandb_init.py:init():533] updated telemetry
+2022-04-03 21:46:15,195 INFO    MainThread:2780 [wandb_init.py:init():563] communicating current version
+2022-04-03 21:46:17,988 INFO    MainThread:2780 [wandb_init.py:init():568] got version response upgrade_message: "wandb version 0.12.11 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2022-04-03 21:46:17,990 INFO    MainThread:2780 [wandb_init.py:init():578] communicating run to backend with 30 second timeout
+2022-04-03 21:46:18,794 INFO    MainThread:2780 [wandb_init.py:init():606] starting run threads in backend
+2022-04-03 21:46:19,442 INFO    MainThread:2780 [wandb_run.py:_console_start():1810] atexit reg
+2022-04-03 21:46:19,442 INFO    MainThread:2780 [wandb_run.py:_redirect():1684] redirect: SettingsConsole.WRAP
+2022-04-03 21:46:19,443 INFO    MainThread:2780 [wandb_run.py:_redirect():1721] Wrapping output streams.
+2022-04-03 21:46:19,446 INFO    MainThread:2780 [wandb_run.py:_redirect():1745] Redirects installed.
+2022-04-03 21:46:19,446 INFO    MainThread:2780 [wandb_init.py:init():633] run started, returning control to user process
+2022-04-03 21:46:19,447 INFO    MainThread:2780 [wandb_run.py:_config_callback():956] config_cb None None {'epochs': 10, 'batch_size': 5, 'learning_rate': 0.0001, 'save_checkpoint': True, 'amp': False}

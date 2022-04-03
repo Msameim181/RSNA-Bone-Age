@@ -9,8 +9,8 @@ import torch
 from PIL import Image
 # Custom libs
 from torch.utils.data import DataLoader, Dataset
-from DataLoader import RSNATestDataset, RSNATrainDataset
-from Model import ResNet, Block
+from utils.dataloader import RSNATestDataset, RSNATrainDataset
+from ResNet.resnet_model import ResNet, Block
 
 def ResNet50(img_channel=3, num_classes=1000):
     return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
@@ -52,7 +52,13 @@ if __name__ == '__main__':
         print(images.shape)
         print(sex.shape)
         out = net([images,sex])
-        print(images.shape)
+        print(out.shape)
+        print('----')
+        print(out)
+        print(boneage_onehot)
+        print('----')
+        print(boneage)
+        print(out.argmax(-1))
         break
     # train_net(net, device, train_loader, test_loader, 
     #         epochs, batch_size, learning_rate)

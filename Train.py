@@ -1,24 +1,19 @@
 # System and utils for preprocessing
 import logging
-import os
+import sys
 from pathlib import Path
 
 # Deep learning libs
-import numpy as np
-import pandas as pd
 import torch
-import wandb
-from PIL import Image
 from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
                            TimeElapsedColumn, TimeRemainingColumn)
-from torch.utils.data import DataLoader, Dataset
-from torchvision import models, transforms
+from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
+import wandb
+from ResNet.resnet_model import Block, ResNet
 # Custom libs
-from DataLoader import RSNATestDataset, RSNATrainDataset
-from Model import ResNet, Block
-
+from utils.dataloader import RSNATestDataset, RSNATrainDataset
 
 # Pre-initializing the loggers
 progress = Progress(
@@ -39,8 +34,8 @@ progress = Progress(
 wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
 
 
-def train_net(net, device, train_loader, test_loader, 
-            epochs, batch_size, learning_rate,
+def train_net(net, device, train_loader, val_loader, 
+            epochs, batch_size, learning_rate, val_percent,
             amp: bool = False, save_checkpoint: bool = True, 
             dir_checkpoint:str = './checkpoints/'):
 
@@ -62,17 +57,20 @@ def train_net(net, device, train_loader, test_loader,
     # Defining the global step
     global_step = 0
     n_train = len(train_loader.dataset)
+    n_val = len(val_loader.dataset)
 
     # Setting up the wandb logger
-    experiment = wandb.init(project="Bone-Age-RSNA", entity="rsna-bone-age")
-    experiment.config.update(dict(epochs=epochs, batch_size=batch_size, learning_rate=learning_rate,
-                            save_checkpoint=save_checkpoint, amp=amp))
+    experiment = wandb.init(project = "Bone-Age-RSNA", entity = "rsna-bone-age")
+    experiment.config.update(dict(epochs = epochs, batch_size = batch_size, learning_rate = learning_rate,
+                            save_checkpoint = save_checkpoint, amp = amp))
 
     logging.info(f'''Starting training:
         Epochs:          {epochs}
         Batch size:      {batch_size}
         Learning rate:   {learning_rate}
         Training size:   {n_train}
+        validation size: {n_val}
+        validation %:    {val_percent}
         Checkpoints:     {save_checkpoint}
         Device:          {device}
         Mixed Precision: {amp}
@@ -80,14 +78,14 @@ def train_net(net, device, train_loader, test_loader,
 
     # Begin training
     for epoch in range(epochs):
-        net.to(device=device, dtype=torch.float32)
+        net.to(device = device, dtype = torch.float32)
         net.train()
         epoch_loss = 0
         
         # with progress:
         #     for _, img, boneage, sex, num_classes in progress.track(train_loader):
         
-        with tqdm(total=n_train, desc=f'Epoch {epoch + 1}/{epochs}', unit='img') as pbar:
+        with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
             for _, images, boneage, boneage_onehot, sex, num_classes in train_loader:
 
                 images = torch.unsqueeze(images, 1)
@@ -97,15 +95,15 @@ def train_net(net, device, train_loader, test_loader,
                     f'but loaded images have {images.shape[1]} channels. Please check that ' \
                     'the images are loaded correctly.'
 
-                images = images.to(device=device, dtype=torch.float32)
-                sex = sex.to(device=device, dtype=torch.float32)
+                images = images.to(device = device, dtype = torch.float32)
+                sex = sex.to(device = device, dtype = torch.float32)
 
                 # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
-                age = boneage_onehot.to(device=device, dtype=torch.float32)
+                age = boneage_onehot.to(device = device, dtype = torch.float32)
 
 
                 # Forward pass
-                with torch.cuda.amp.autocast(enabled=amp):
+                with torch.cuda.amp.autocast(enabled = amp):
                     age_pred = net([images, sex])
                     loss = criterion(age_pred, age)
 
@@ -125,47 +123,98 @@ def train_net(net, device, train_loader, test_loader,
                     'epoch': epoch
                 })
                 pbar.set_postfix(**{'loss (batch)': loss.item()})
+                
 
         if save_checkpoint:
-            Path(dir_checkpoint).mkdir(parents=True, exist_ok=True)
+            Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
             torch.save(net.state_dict(), str(f"{dir_checkpoint}/checkpoint_epoch{epoch + 1}.pth"))    
 
 
 
-def ResNet50(img_channel=3, num_classes=1000):
+def data_organizer(train_dataset, test_dataset, batch_size: int, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
+    """ Generate the train, validation and test dataloader for model.
+
+    Args:
+        train_dataset (dataset class): training dataset.
+        test_dataset (dataset class): test dataset.
+        batch_size (int): batch size.
+        val_percent (float, optional): valifation percentage. Defaults to 0.2.
+        shuffle (bool, optional): shuffle data. Defaults to True.
+        num_workers (int, optional): number of worker. Defaults to 1.
+
+    Returns:
+        data loaders: train_loader, val_loader, test_loader
+    """
+    n_val = int(len(train_dataset) * val_percent)
+    n_train = len(train_dataset) - n_val
+    train_set, val_set = random_split(train_dataset, [n_train, n_val], generator=torch.Generator().manual_seed(0))
+    train_loader = DataLoader(dataset = train_set, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+    val_loader = DataLoader(dataset = val_set, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+
+    test_loader = DataLoader(dataset = test_dataset, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+
+    return train_loader, val_loader, test_loader
+
+
+def ResNet50(img_channel = 3, num_classes = 1000):
     return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
 
-def ResNet101(img_channel=3, num_classes=1000):
+def ResNet101(img_channel = 3, num_classes = 1000):
     return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
 
-def ResNet152(img_channel=3, num_classes=1000):
+def ResNet152(img_channel = 3, num_classes = 1000):
     return ResNet(Block, [3, 8, 36, 3], img_channel, num_classes)
 
 
 if __name__ == '__main__':
-    
+
+    logging.basicConfig(level = logging.INFO, format = '%(levelname)s: %(message)s')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    logging.info(f'Using device {device}')
+
     torch.cuda.empty_cache()
-    torch.cuda.memory_summary(device=None, abbreviated=False)
+    torch.cuda.memory_summary(device = None, abbreviated = False)
     
     basedOnSex = False
     gender = 'male'
     defualt_path = ''
     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
-                           basedOnSex=basedOnSex, gender=gender)
+                           basedOnSex = basedOnSex, gender = gender)
 
     test_dataset = RSNATestDataset(data_file = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset.csv',
                            image_dir = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/',
-                           basedOnSex=basedOnSex, gender=gender)
+                           basedOnSex = basedOnSex, gender = gender)
     
     num_classes = train_dataset.num_classes                   
-    net = ResNet101(img_channel=1, num_classes=num_classes)
-    device = 'cuda'
+    net = ResNet50(img_channel=1, num_classes=num_classes)
+    logging.info(f'Network:\n'
+                 f'\t{net.n_channels} input channels\n'
+                 f'\t{net.num_classes} output channels (classes)\n')
+    
     learning_rate = 0.0001
     epochs = 10
-    batch_size = 5
-    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
+    batch_size = 1
+    val_percent = 0.2
+    train_loader, val_loader, test_loader = data_organizer(train_dataset, test_dataset, 
+                                    batch_size, val_percent = val_percent, shuffle = False, num_workers = 1)
 
-    train_net(net, device, train_loader, test_loader, 
-            epochs, batch_size, learning_rate)
+    # train_net(net, device, train_loader, val_loader, val_percent
+    #         epochs, batch_size, learning_rate)
+
+    try:
+        train_net(net = net,
+                  device = device,
+                  train_loader = train_loader, 
+                  val_loader = val_loader, 
+                  epochs = epochs, 
+                  batch_size = batch_size, 
+                  learning_rate = learning_rate, 
+                  val_percent = val_percent,
+                  amp = False, 
+                  save_checkpoint = True, 
+                  dir_checkpoint = './checkpoints/')
+    except KeyboardInterrupt:
+        torch.save(net.state_dict(), 'INTERRUPTED.pth')
+        logging.info('Saved interrupt')
+        sys.exit(0)

@@ -17,8 +17,8 @@ from torchvision import models, transforms
 from tqdm import tqdm
 
 # Custom libs
-from DataLoader import RSNATestDataset, RSNATrainDataset
-from Model import ResNet, Block
+from utils.dataloader import RSNATestDataset, RSNATrainDataset
+from ResNet.resnet_model import ResNet, Block
 
 
 # Pre-initializing the loggers

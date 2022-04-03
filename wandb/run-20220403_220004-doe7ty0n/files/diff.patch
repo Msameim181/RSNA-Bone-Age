@@ -1,0 +1,771 @@
+diff --git a/DataLoader.py b/DataLoader.py
+deleted file mode 100644
+index 32aed80..0000000
+--- a/DataLoader.py
++++ /dev/null
+@@ -1,195 +0,0 @@
+-# System and utils for preprocessing
+-import logging
+-import os
+-from pathlib import Path
+-
+-# Deep learning libs
+-import numpy as np
+-import pandas as pd
+-import torch
+-from PIL import Image
+-from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
+-                           TimeElapsedColumn, TimeRemainingColumn)
+-from torch.utils.data import DataLoader, Dataset
+-from torchvision import models, transforms
+-
+-# Pre-initializing the loggers
+-progress = Progress(
+-    SpinnerColumn(finished_text="[bold blue]:heavy_check_mark:", style='blue'),
+-    TextColumn("[bold blue]{task.description}", justify="right"),
+-    BarColumn(bar_width=50, style='bar.back', complete_style='bar.complete', 
+-                finished_style='bar.finished', pulse_style='bar.pulse'),
+-    "[progress.percentage]{task.percentage:>3.1f}%",
+-    "•",
+-    TimeRemainingColumn(),
+-    "•",
+-    TimeElapsedColumn(),
+-    "•",
+-    "[progress.filesize]Passed: {task.completed} item",
+-    "•",
+-    "[progress.filesize.total]Total: {task.total:>.0f} item",
+-)
+-
+-# wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
+-
+-
+-# Defining the dataset class
+-
+-
+-class RSNATrainDataset(Dataset):
+-    def __init__(self, data_file: str, image_dir: str, transform = None, 
+-                scale: float = 1.0, basedOnSex: bool=False, gender:str='male'):
+-        self.data_file = Path(data_file)
+-        self.image_dir = Path(image_dir)
+-        self.transform = transform
+-        assert 0 < scale <= 1, 'Scale must be between 0 and 1'
+-        self.scale = scale
+-        self.basedOnSex = basedOnSex
+-        self.gender = gender
+-
+-        # Proccessing data and csv file
+-        self.train_data = pd.read_csv(data_file)
+-        self.train_data['indx'] = range(len(self.train_data))
+-
+-        # Dividing data based on gender
+-        if self.basedOnSex and self.gender == 'male':
+-            self.train_data_filtered = self.train_data[self.train_data['male'] == True]
+-        elif self.basedOnSex and self.gender == 'female':
+-            self.train_data_filtered = self.train_data[self.train_data['male'] == False]
+-        else:
+-            self.train_data_filtered = self.train_data
+-        
+-        # Number of classes for the one hot encoding
+-        self.num_classes = np.max(self.train_data['boneage']) + 1
+-        # One Hoting the bone age
+-        self.age_onehot  = torch.nn.functional.one_hot(torch.tensor(self.train_data['boneage']), num_classes = self.num_classes)
+-
+-        if not os.path.exists(data_file):
+-            raise RuntimeError(f'No data file found in {data_file}.')
+-        if self.train_data.empty:
+-            raise RuntimeError(f'train data is empty file')
+-        
+-        logging.info(f'Creating dataset with {len(self.train_data)} samples')
+-
+-    def __len__(self):
+-        return len(self.train_data_filtered)
+-
+-    def __getitem__(self, index):
+-        img_id = self.train_data_filtered.iloc[index].id
+-        img_addr = Path(self.image_dir, str(img_id) + ".png")
+-
+-        boneage = self.train_data_filtered.iloc[index].boneage
+-
+-        onehot_index = self.train_data_filtered.iloc[index]['indx']
+-        boneage_onehot = self.age_onehot[onehot_index]
+-
+-        sex = 1 if self.train_data.iloc[index].male else 0
+-
+-        num_classes = self.num_classes
+-        
+-        assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
+-
+-        img = Image.open(img_addr)
+-        img = img.resize((500, 625))
+-        img = np.array(img)
+-        
+-        if self.transform is not None:
+-            augmentations = self.transform(image=img)
+-            img = augmentations["image"]
+-        
+-        # return img_id, img, boneage, boneage_onehot, sex
+-        return img_id, img, boneage, boneage_onehot, sex, num_classes
+-
+-
+-class RSNATestDataset(Dataset):
+-    def __init__(self, data_file: str, image_dir: str, transform = None, 
+-                scale: float = 1.0, basedOnSex: bool=False, gender:str='male'):
+-        self.data_file = Path(data_file)
+-        self.image_dir = Path(image_dir)
+-        self.transform = transform
+-        assert 0 < scale <= 1, 'Scale must be between 0 and 1'
+-        self.scale = scale
+-        self.basedOnSex = basedOnSex
+-        self.gender = gender
+-
+-        # Proccessing data and csv file
+-        self.test_data = pd.read_csv(self.data_file)
+-
+-        # Dividing data based on gender
+-        if self.basedOnSex and self.gender == 'male':
+-            self.test_data_filtered = self.test_data[self.test_data['Sex'] == 'M']
+-        elif self.basedOnSex and self.gender == 'female':
+-            self.test_data_filtered = self.test_data[self.test_data['male'] == 'F']
+-        else:
+-            self.test_data_filtered = self.test_data
+-
+-        if not os.path.exists(self.data_file):
+-            raise RuntimeError(f'No data file found in {data_file}.')
+-        if self.test_data.empty:
+-            raise RuntimeError(f'train data is empty file')
+-        
+-        logging.info(f'Creating dataset with {len(self.test_data)} samples')
+-
+-    def __len__(self):
+-        return len(self.test_data_filtered)
+-
+-    def __getitem__(self, index):
+-
+-        img_id = self.test_data_filtered.iloc[index]['Case ID']
+-        img_addr = Path(self.image_dir, str(img_id) + ".png")
+-
+-        sex = 1 if self.test_data_filtered.iloc[index]['Sex'] == 'M' else 0
+-        
+-        assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
+-
+-        img = Image.open(img_addr)
+-        img = img.resize((500, 625))
+-        img = np.array(img)
+-        
+-        if self.transform is not None:
+-            augmentations = self.transform(image=img)
+-            img = augmentations["image"]
+-        
+-        return img_id, img, sex
+-
+-
+-
+-
+-defualt_path = ''
+-train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
+-                           image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
+-                           basedOnSex=True, gender='female')
+-
+-test_dataset = RSNATestDataset(data_file = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset.csv',
+-                           image_dir = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/',
+-                           basedOnSex=True, gender='male')
+-
+-
+-train_loader = DataLoader(dataset=train_dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
+-test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=8, pin_memory=True)
+-
+-
+-
+-
+-# if __name__ == '__main__':
+-#     with progress:
+-#         for img_id, img, boneage, sex, num_classes in progress.track(train_loader):
+-#             # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
+-#             # images = torch.unsqueeze(img, 1)
+-#             print(int(num_classes))
+-#             break
+-#             ...
+-
+-    # with progress:
+-    #     for img_id, img, sex in progress.track(test_dataset):
+-    #         # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
+-            
+-    #         ...
+-
+-
+-
+-# with progress:
+-#     for img_id, img, sex in progress.track(test_loader):
+-#         # print(img_id, img, sex)
+-#         ...
+-
+diff --git a/Model.py b/Model.py
+deleted file mode 100644
+index 7ccfe0b..0000000
+--- a/Model.py
++++ /dev/null
+@@ -1,225 +0,0 @@
+-# Deep learning libs
+-import torch
+-from torchsummary import summary
+-
+-
+-class Block(torch.nn.Module):
+-    """Convolutional block with Batch Normalization and ReLU activation.
+-
+-    Args:
+-        nn (nn.Module): nn.Module package from PyTorch.
+-
+-    Returns:
+-        nn.Module: Convolutional block with 3 conv layers and Batch Normalization and ReLU activation.
+-    """
+-    def __init__(
+-        self, in_channels, intermediate_channels, identity_downsample=None, stride=1
+-    ):
+-        """Initialization.
+-        
+-        Args:
+-            in_channels (int): Number of input channels.
+-            intermediate_channels (int): Number of intermediate channels.
+-            identity_downsample (nn.Module): Downsample layer for identity shortcut.
+-            stride (int): Stride for the convolution.
+-
+-        Returns:
+-            nn.Module: Convolutional block with 3 conv layers and Batch Normalization and ReLU activation.
+-        """
+-        super(Block, self).__init__()
+-        self.expansion = 4
+-        self.conv1 = torch.nn.Conv2d(
+-            in_channels, intermediate_channels, kernel_size=1, stride=1, padding=0, bias=False
+-        )
+-        self.bn1 = torch.nn.BatchNorm2d(intermediate_channels)
+-        self.conv2 = torch.nn.Conv2d(
+-            intermediate_channels,
+-            intermediate_channels,
+-            kernel_size=3,
+-            stride=stride,
+-            padding=1,
+-            bias=False
+-        )
+-        self.bn2 = torch.nn.BatchNorm2d(intermediate_channels)
+-        self.conv3 = torch.nn.Conv2d(
+-            intermediate_channels,
+-            intermediate_channels * self.expansion,
+-            kernel_size=1,
+-            stride=1,
+-            padding=0,
+-            bias=False
+-        )
+-        self.bn3 = torch.nn.BatchNorm2d(intermediate_channels * self.expansion)
+-        self.relu = torch.nn.ReLU()
+-        self.identity_downsample = identity_downsample
+-        self.stride = stride
+-
+-    def forward(self, x):
+-        identity = x.clone()
+-
+-        x = self.conv1(x)
+-        x = self.bn1(x)
+-        x = self.relu(x)
+-        x = self.conv2(x)
+-        x = self.bn2(x)
+-        x = self.relu(x)
+-        x = self.conv3(x)
+-        x = self.bn3(x)
+-
+-        if self.identity_downsample is not None:
+-            identity = self.identity_downsample(identity)
+-
+-        x += identity
+-        x = self.relu(x)
+-        return x
+-
+-
+-class ResNet(torch.nn.Module):
+-    """ResNet model.
+-    
+-    Args:
+-        block (nn.Module): Block module.
+-        layers (list): List of layers.
+-        image_channels (int): Number of image channels.
+-        num_classes (int): Number of classes.
+-
+-    Returns:
+-        nn.Module: ResNet model.
+-    
+-    """
+-
+-    def __init__(self, block, layers: list=[3, 4, 6, 3], 
+-                    image_channels: int=3, num_classes: int=100):
+-        """_summary_
+-
+-        Args:
+-            block (Class): From Block class.
+-            layers (list, optional): Layers list depends on ResNet model. Defaults to [3, 4, 6, 3].
+-            image_channels (int, optional): Channels of image (RGB:3, Gray:1). Defaults to 3.
+-            num_classes (int, optional): Class to classification. Defaults to 100.
+-        """
+-        super(ResNet, self).__init__()
+-        self.n_channels = image_channels
+-        self.in_channels = 64
+-        self.conv1 = torch.nn.Conv2d(image_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
+-        self.bn1 = torch.nn.BatchNorm2d(64)
+-        self.relu = torch.nn.ReLU()
+-        self.maxpool = torch.nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+-
+-        # Essentially the entire ResNet architecture are in these 4 lines below
+-        self.layer1 = self._make_layer(
+-            block, layers[0], intermediate_channels=64, stride=1
+-        )
+-        self.layer2 = self._make_layer(
+-            block, layers[1], intermediate_channels=128, stride=2
+-        )
+-        self.layer3 = self._make_layer(
+-            block, layers[2], intermediate_channels=256, stride=2
+-        )
+-        self.layer4 = self._make_layer(
+-            block, layers[3], intermediate_channels=512, stride=2
+-        )
+-
+-        self.avgpool = torch.nn.AdaptiveAvgPool2d((1, 1))
+-        self.fc = torch.nn.Linear(512 * 4 + 1, num_classes)
+-
+-    def forward(self, x):
+-        y = x[1]
+-        x = x[0]
+-        
+-        x = self.conv1(x)
+-        x = self.bn1(x)
+-        x = self.relu(x)
+-        x = self.maxpool(x)
+-        x = self.layer1(x)
+-        x = self.layer2(x)
+-        x = self.layer3(x)
+-        x = self.layer4(x)
+-
+-        x = self.avgpool(x)
+-        x = x.reshape(x.shape[0], -1)
+-        
+-        z = x
+-        y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
+-        z = torch.cat((z, y), dim=1)
+-
+-        x = self.fc(z)
+-
+-        return x
+-
+-    def _make_layer(self, block, num_residual_blocks, intermediate_channels, stride):
+-
+-        """
+-
+-        Args:
+-            block (Class): From Block class.
+-            num_residual_blocks (int): Number of residual blocks.
+-            intermediate_channels (int): Number of intermediate channels.
+-            stride (int): Stride for the convolution.
+-
+-        Returns:
+-            nn.Module: Residual layer.
+-        """
+-
+-        identity_downsample = None
+-        layers = []
+-
+-        # Either if we half the input space for ex, 56x56 -> 28x28 (stride=2), or channels changes
+-        # we need to adapt the Identity (skip connection) so it will be able to be added
+-        # to the layer that's ahead
+-        if stride != 1 or self.in_channels != intermediate_channels * 4:
+-            identity_downsample = torch.nn.Sequential(
+-                torch.nn.Conv2d(
+-                    self.in_channels,
+-                    intermediate_channels * 4,
+-                    kernel_size=1,
+-                    stride=stride,
+-                    bias=False
+-                ),
+-                torch.nn.BatchNorm2d(intermediate_channels * 4),
+-            )
+-
+-        layers.append(
+-            block(self.in_channels, intermediate_channels, identity_downsample, stride)
+-        )
+-
+-        # The expansion size is always 4 for ResNet 50,101,152
+-        self.in_channels = intermediate_channels * 4
+-
+-        # For example for first resnet layer: 256 will be mapped to 64 as intermediate layer,
+-        # then finally back to 256. Hence no identity downsample is needed, since stride = 1,
+-        # and also same amount of channels.
+-        for i in range(num_residual_blocks - 1):
+-            layers.append(block(self.in_channels, intermediate_channels))
+-
+-        return torch.nn.Sequential(*layers)
+-
+-
+-
+-
+-# Model sample
+-def ResNet50(img_channel=3, num_classes=1000):
+-    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
+-
+-def ResNet101(img_channel=3, num_classes=1000):
+-    return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
+-
+-def ResNet152(img_channel=3, num_classes=1000):
+-    return ResNet(Block, [3, 8, 36, 3], img_channel, num_classes)
+-
+-def test():
+-    net = ResNet50(img_channel=1, num_classes=229)
+-    net.cuda()
+-    inp = torch.randn(2, 1, 10, 20).cuda()
+-    sx = torch.randn(2, 1)
+-    print(inp.shape)
+-    print(sx.shape)
+-    print(inp)
+-    print(sx)
+-    out = net([inp, sx])
+-    # y = net(torch.randn(4, 3, 224, 224)).to("cuda")
+-    # print(out.size())
+-
+-    # print(net)
+-
+-# test()
+\ No newline at end of file
+diff --git a/T.py b/T.py
+index 7ddef83..f80b257 100644
+--- a/T.py
++++ b/T.py
+@@ -9,8 +9,8 @@ import torch
+ from PIL import Image
+ # Custom libs
+ from torch.utils.data import DataLoader, Dataset
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ def ResNet50(img_channel=3, num_classes=1000):
+     return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
+@@ -52,7 +52,13 @@ if __name__ == '__main__':
+         print(images.shape)
+         print(sex.shape)
+         out = net([images,sex])
+-        print(images.shape)
++        print(out.shape)
++        print('----')
++        print(out)
++        print(boneage_onehot)
++        print('----')
++        print(boneage)
++        print(out.argmax(-1))
+         break
+     # train_net(net, device, train_loader, test_loader, 
+     #         epochs, batch_size, learning_rate)
+\ No newline at end of file
+diff --git a/Train.py b/Train.py
+index 6d94d38..4498397 100644
+--- a/Train.py
++++ b/Train.py
+@@ -1,24 +1,19 @@
+ # System and utils for preprocessing
+ import logging
+-import os
++import sys
+ from pathlib import Path
+ 
+ # Deep learning libs
+-import numpy as np
+-import pandas as pd
+ import torch
+-import wandb
+-from PIL import Image
+ from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
+                            TimeElapsedColumn, TimeRemainingColumn)
+-from torch.utils.data import DataLoader, Dataset
+-from torchvision import models, transforms
++from torch.utils.data import DataLoader, random_split
+ from tqdm import tqdm
+ 
++import wandb
++from ResNet.resnet_model import Block, ResNet
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
+-
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
+ 
+ # Pre-initializing the loggers
+ progress = Progress(
+@@ -39,7 +34,7 @@ progress = Progress(
+ wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
+ 
+ 
+-def train_net(net, device, train_loader, test_loader, 
++def train_net(net, device, train_loader, val_loader, 
+             epochs, batch_size, learning_rate,
+             amp: bool = False, save_checkpoint: bool = True, 
+             dir_checkpoint:str = './checkpoints/'):
+@@ -62,17 +57,19 @@ def train_net(net, device, train_loader, test_loader,
+     # Defining the global step
+     global_step = 0
+     n_train = len(train_loader.dataset)
++    n_val = len(val_loader.dataset)
+ 
+     # Setting up the wandb logger
+-    experiment = wandb.init(project="Bone-Age-RSNA", entity="rsna-bone-age")
+-    experiment.config.update(dict(epochs=epochs, batch_size=batch_size, learning_rate=learning_rate,
+-                            save_checkpoint=save_checkpoint, amp=amp))
++    experiment = wandb.init(project = "Bone-Age-RSNA", entity = "rsna-bone-age")
++    experiment.config.update(dict(epochs = epochs, batch_size = batch_size, learning_rate = learning_rate,
++                            save_checkpoint = save_checkpoint, amp = amp))
+ 
+     logging.info(f'''Starting training:
+         Epochs:          {epochs}
+         Batch size:      {batch_size}
+         Learning rate:   {learning_rate}
+         Training size:   {n_train}
++        validation size: {n_val}
+         Checkpoints:     {save_checkpoint}
+         Device:          {device}
+         Mixed Precision: {amp}
+@@ -80,14 +77,14 @@ def train_net(net, device, train_loader, test_loader,
+ 
+     # Begin training
+     for epoch in range(epochs):
+-        net.to(device=device, dtype=torch.float32)
++        net.to(device = device, dtype = torch.float32)
+         net.train()
+         epoch_loss = 0
+         
+         # with progress:
+         #     for _, img, boneage, sex, num_classes in progress.track(train_loader):
+         
+-        with tqdm(total=n_train, desc=f'Epoch {epoch + 1}/{epochs}', unit='img') as pbar:
++        with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
+             for _, images, boneage, boneage_onehot, sex, num_classes in train_loader:
+ 
+                 images = torch.unsqueeze(images, 1)
+@@ -97,15 +94,15 @@ def train_net(net, device, train_loader, test_loader,
+                     f'but loaded images have {images.shape[1]} channels. Please check that ' \
+                     'the images are loaded correctly.'
+ 
+-                images = images.to(device=device, dtype=torch.float32)
+-                sex = sex.to(device=device, dtype=torch.float32)
++                images = images.to(device = device, dtype = torch.float32)
++                sex = sex.to(device = device, dtype = torch.float32)
+ 
+                 # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
+-                age = boneage_onehot.to(device=device, dtype=torch.float32)
++                age = boneage_onehot.to(device = device, dtype = torch.float32)
+ 
+ 
+                 # Forward pass
+-                with torch.cuda.amp.autocast(enabled=amp):
++                with torch.cuda.amp.autocast(enabled = amp):
+                     age_pred = net([images, sex])
+                     loss = criterion(age_pred, age)
+ 
+@@ -127,45 +124,81 @@ def train_net(net, device, train_loader, test_loader,
+                 pbar.set_postfix(**{'loss (batch)': loss.item()})
+ 
+         if save_checkpoint:
+-            Path(dir_checkpoint).mkdir(parents=True, exist_ok=True)
++            Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
+             torch.save(net.state_dict(), str(f"{dir_checkpoint}/checkpoint_epoch{epoch + 1}.pth"))    
+ 
+ 
+ 
+-def ResNet50(img_channel=3, num_classes=1000):
++def data_organizer(train_dataset, test_dataset, batch_size: int, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
++    
++    n_val = int(len(train_dataset) * val_percent)
++    n_train = len(train_dataset) - n_val
++    train_set, val_set = random_split(train_dataset, [n_train, n_val], generator=torch.Generator().manual_seed(0))
++    train_loader = DataLoader(dataset = train_set, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
++    val_loader = DataLoader(dataset = val_set, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
++
++    test_loader = DataLoader(dataset = test_dataset, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
++
++    return train_loader, val_loader, test_loader
++
++
++def ResNet50(img_channel = 3, num_classes = 1000):
+     return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
+ 
+-def ResNet101(img_channel=3, num_classes=1000):
++def ResNet101(img_channel = 3, num_classes = 1000):
+     return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
+ 
+-def ResNet152(img_channel=3, num_classes=1000):
++def ResNet152(img_channel = 3, num_classes = 1000):
+     return ResNet(Block, [3, 8, 36, 3], img_channel, num_classes)
+ 
+ 
+ if __name__ == '__main__':
+-    
++
++    logging.basicConfig(level = logging.INFO, format = '%(levelname)s: %(message)s')
++    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
++    logging.info(f'Using device {device}')
++
+     torch.cuda.empty_cache()
+-    torch.cuda.memory_summary(device=None, abbreviated=False)
++    torch.cuda.memory_summary(device = None, abbreviated = False)
+     
+     basedOnSex = False
+     gender = 'male'
+     defualt_path = ''
+     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
+                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
+-                           basedOnSex=basedOnSex, gender=gender)
++                           basedOnSex = basedOnSex, gender = gender)
+ 
+     test_dataset = RSNATestDataset(data_file = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset.csv',
+                            image_dir = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/',
+-                           basedOnSex=basedOnSex, gender=gender)
++                           basedOnSex = basedOnSex, gender = gender)
+     
+     num_classes = train_dataset.num_classes                   
+-    net = ResNet101(img_channel=1, num_classes=num_classes)
+-    device = 'cuda'
++    net = ResNet50(img_channel=1, num_classes=num_classes)
++    logging.info(f'Network:\n'
++                 f'\t{net.n_channels} input channels\n'
++                 f'\t{net.num_classes} output channels (classes)\n')
++    
+     learning_rate = 0.0001
+     epochs = 10
+-    batch_size = 5
+-    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
+-    test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
+-
+-    train_net(net, device, train_loader, test_loader, 
+-            epochs, batch_size, learning_rate)
+\ No newline at end of file
++    batch_size = 1
++    train_loader, val_loader, test_loader = data_organizer(train_dataset, test_dataset, 
++                                    batch_size, val_percent = 0.2, shuffle = False, num_workers = 1)
++
++    train_net(net, device, train_loader, val_loader, 
++            epochs, batch_size, learning_rate)
++
++    # try:
++    #     train_net(net = net,
++    #               device = device,
++    #               train_loader = train_loader, 
++    #               val_loader = val_loader, 
++    #               epochs = epochs, 
++    #               batch_size = batch_size, 
++    #               learning_rate = learning_rate, 
++    #               amp = False, 
++    #               save_checkpoint = True, 
++    #               dir_checkpoint = './checkpoints/')
++    # except KeyboardInterrupt:
++    #     torch.save(net.state_dict(), 'INTERRUPTED.pth')
++    #     logging.info('Saved interrupt')
++    #     sys.exit(0)
+diff --git a/wandb/run-20220313_143849-23y9mwmg/files/code/Train.py b/wandb/run-20220313_143849-23y9mwmg/files/code/Train.py
+index 95d03c0..f50b4eb 100644
+--- a/wandb/run-20220313_143849-23y9mwmg/files/code/Train.py
++++ b/wandb/run-20220313_143849-23y9mwmg/files/code/Train.py
+@@ -17,8 +17,8 @@ from torchvision import models, transforms
+ from tqdm import tqdm
+ 
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ 
+ # Pre-initializing the loggers
+diff --git a/wandb/run-20220313_144000-3fqq0ta4/files/code/Train.py b/wandb/run-20220313_144000-3fqq0ta4/files/code/Train.py
+index 34664ff..8b039b4 100644
+--- a/wandb/run-20220313_144000-3fqq0ta4/files/code/Train.py
++++ b/wandb/run-20220313_144000-3fqq0ta4/files/code/Train.py
+@@ -17,8 +17,8 @@ from torchvision import models, transforms
+ from tqdm import tqdm
+ 
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ 
+ # Pre-initializing the loggers
+diff --git a/wandb/run-20220313_144134-1nop955f/files/code/Train.py b/wandb/run-20220313_144134-1nop955f/files/code/Train.py
+index 79aaa7d..0963d51 100644
+--- a/wandb/run-20220313_144134-1nop955f/files/code/Train.py
++++ b/wandb/run-20220313_144134-1nop955f/files/code/Train.py
+@@ -17,8 +17,8 @@ from torchvision import models, transforms
+ from tqdm import tqdm
+ 
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ 
+ # Pre-initializing the loggers
+diff --git a/wandb/run-20220313_144303-2or8dxtv/files/code/Train.py b/wandb/run-20220313_144303-2or8dxtv/files/code/Train.py
+index 79aaa7d..0963d51 100644
+--- a/wandb/run-20220313_144303-2or8dxtv/files/code/Train.py
++++ b/wandb/run-20220313_144303-2or8dxtv/files/code/Train.py
+@@ -17,8 +17,8 @@ from torchvision import models, transforms
+ from tqdm import tqdm
+ 
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ 
+ # Pre-initializing the loggers
+diff --git a/wandb/run-20220313_144453-2xabi5bv/files/code/Train.py b/wandb/run-20220313_144453-2xabi5bv/files/code/Train.py
+index f4101ff..852d9c8 100644
+--- a/wandb/run-20220313_144453-2xabi5bv/files/code/Train.py
++++ b/wandb/run-20220313_144453-2xabi5bv/files/code/Train.py
+@@ -17,8 +17,8 @@ from torchvision import models, transforms
+ from tqdm import tqdm
+ 
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ 
+ # Pre-initializing the loggers
+diff --git a/wandb/run-20220313_180730-6eexhpnb/files/code/Train.py b/wandb/run-20220313_180730-6eexhpnb/files/code/Train.py
+index f4101ff..852d9c8 100644
+--- a/wandb/run-20220313_180730-6eexhpnb/files/code/Train.py
++++ b/wandb/run-20220313_180730-6eexhpnb/files/code/Train.py
+@@ -17,8 +17,8 @@ from torchvision import models, transforms
+ from tqdm import tqdm
+ 
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ 
+ # Pre-initializing the loggers
+diff --git a/wandb/run-20220313_182531-u8ndzi6x/files/code/Train.py b/wandb/run-20220313_182531-u8ndzi6x/files/code/Train.py
+index 28a1308..ff9b129 100644
+--- a/wandb/run-20220313_182531-u8ndzi6x/files/code/Train.py
++++ b/wandb/run-20220313_182531-u8ndzi6x/files/code/Train.py
+@@ -17,8 +17,8 @@ from torchvision import models, transforms
+ from tqdm import tqdm
+ 
+ # Custom libs
+-from DataLoader import RSNATestDataset, RSNATrainDataset
+-from Model import ResNet, Block
++from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from ResNet.resnet_model import ResNet, Block
+ 
+ 
+ # Pre-initializing the loggers
