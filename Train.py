@@ -215,6 +215,6 @@ if __name__ == '__main__':
                   save_checkpoint = True, 
                   dir_checkpoint = './checkpoints/')
     except KeyboardInterrupt:
-        torch.save(net.state_dict(), 'INTERRUPTED.pth')
+        torch.save(net.state_dict(), './checkpoints/INTERRUPTED.pth')
         logging.info('Saved interrupt')
         sys.exit(0)

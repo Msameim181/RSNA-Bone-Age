@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     learning_rate = 0.0001
     epochs = 10
-    batch_size = 3
+    batch_size = 1
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
     # test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
 

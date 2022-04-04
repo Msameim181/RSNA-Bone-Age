@@ -58,7 +58,7 @@ class RSNATrainDataset(Dataset):
             self.train_data_filtered = self.train_data[self.train_data['male'] == False]
         else:
             self.train_data_filtered = self.train_data
-        
+
         # Number of classes for the one hot encoding
         self.num_classes = np.max(self.train_data['boneage']) + 1
         # One Hoting the bone age
@@ -67,8 +67,8 @@ class RSNATrainDataset(Dataset):
         if not os.path.exists(data_file):
             raise RuntimeError(f'No data file found in {data_file}.')
         if self.train_data.empty:
-            raise RuntimeError(f'train data is empty file')
-        
+            raise RuntimeError('train data is empty file')
+
         logging.info(f'Creating dataset with {len(self.train_data)} samples')
 
     def __len__(self):
@@ -76,7 +76,7 @@ class RSNATrainDataset(Dataset):
 
     def __getitem__(self, index):
         img_id = self.train_data_filtered.iloc[index].id
-        img_addr = Path(self.image_dir, str(img_id) + ".png")
+        img_addr = Path(self.image_dir, f'{str(img_id)}.png')
 
         boneage = self.train_data_filtered.iloc[index].boneage
 
@@ -86,17 +86,17 @@ class RSNATrainDataset(Dataset):
         sex = 1 if self.train_data.iloc[index].male else 0
 
         num_classes = self.num_classes
-        
+
         assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
 
         img = Image.open(img_addr)
         img = img.resize((500, 625))
         img = np.array(img)
-        
+
         if self.transform is not None:
             augmentations = self.transform(image=img)
             img = augmentations["image"]
-        
+
         # return img_id, img, boneage, boneage_onehot, sex
         return img_id, img, boneage, boneage_onehot, sex, num_classes
 
@@ -126,8 +126,8 @@ class RSNATestDataset(Dataset):
         if not os.path.exists(self.data_file):
             raise RuntimeError(f'No data file found in {data_file}.')
         if self.test_data.empty:
-            raise RuntimeError(f'train data is empty file')
-        
+            raise RuntimeError('train data is empty file')
+
         logging.info(f'Creating dataset with {len(self.test_data)} samples')
 
     def __len__(self):
@@ -136,20 +136,20 @@ class RSNATestDataset(Dataset):
     def __getitem__(self, index):
 
         img_id = self.test_data_filtered.iloc[index]['Case ID']
-        img_addr = Path(self.image_dir, str(img_id) + ".png")
+        img_addr = Path(self.image_dir, f'{str(img_id)}.png')
 
         sex = 1 if self.test_data_filtered.iloc[index]['Sex'] == 'M' else 0
-        
+
         assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
 
         img = Image.open(img_addr)
         img = img.resize((500, 625))
         img = np.array(img)
-        
+
         if self.transform is not None:
             augmentations = self.transform(image=img)
             img = augmentations["image"]
-        
+
         return img_id, img, sex
 
 

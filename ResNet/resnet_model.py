@@ -88,8 +88,7 @@ class ResNet(torch.nn.Module):
     
     """
 
-    def __init__(self, block, layers: list=[3, 4, 6, 3], 
-                    image_channels: int=3, num_classes: int=100):
+    def __init__(self, block, layers: list = None, image_channels: int=3, num_classes: int=100):
         """_summary_
 
         Args:
@@ -98,6 +97,8 @@ class ResNet(torch.nn.Module):
             image_channels (int, optional): Channels of image (RGB:3, Gray:1). Defaults to 3.
             num_classes (int, optional): Class to classification. Defaults to 100.
         """
+        if layers is None:
+            layers = [3, 4, 6, 3]
         super(ResNet, self).__init__()
         self.n_channels = image_channels
         self.num_classes = num_classes
@@ -163,8 +164,6 @@ class ResNet(torch.nn.Module):
         """
 
         identity_downsample = None
-        layers = []
-
         # Either if we half the input space for ex, 56x56 -> 28x28 (stride=2), or channels changes
         # we need to adapt the Identity (skip connection) so it will be able to be added
         # to the layer that's ahead
@@ -180,9 +179,14 @@ class ResNet(torch.nn.Module):
                 torch.nn.BatchNorm2d(intermediate_channels * 4),
             )
 
-        layers.append(
-            block(self.in_channels, intermediate_channels, identity_downsample, stride)
-        )
+        layers = [
+            block(
+                self.in_channels,
+                intermediate_channels,
+                identity_downsample,
+                stride,
+            )
+        ]
 
         # The expansion size is always 4 for ResNet 50,101,152
         self.in_channels = intermediate_channels * 4
@@ -190,8 +194,10 @@ class ResNet(torch.nn.Module):
         # For example for first resnet layer: 256 will be mapped to 64 as intermediate layer,
         # then finally back to 256. Hence no identity downsample is needed, since stride = 1,
         # and also same amount of channels.
-        for i in range(num_residual_blocks - 1):
-            layers.append(block(self.in_channels, intermediate_channels))
+        layers.extend(
+            block(self.in_channels, intermediate_channels)
+            for _ in range(num_residual_blocks - 1)
+        )
 
         return torch.nn.Sequential(*layers)
 
@@ -211,12 +217,12 @@ def ResNet152(img_channel=3, num_classes=1000):
 def test():
     net = ResNet50(img_channel=1, num_classes=229)
     net.cuda()
-    inp = torch.randn(2, 1, 10, 20).cuda()
-    sx = torch.randn(2, 1)
+    inp = torch.randn(1, 1, 200, 200).cuda()
+    sx = torch.randn(1).cuda()
     print(inp.shape)
     print(sx.shape)
-    print(inp)
-    print(sx)
+    # print(inp)
+    # print(sx)
     out = net([inp, sx])
     # y = net(torch.randn(4, 3, 224, 224)).to("cuda")
     # print(out.size())
