@@ -1,0 +1,163 @@
+diff --git a/ResNet/__pycache__/resnet_model.cpython-39.pyc b/ResNet/__pycache__/resnet_model.cpython-39.pyc
+index 552115f..0ef4a8e 100644
+Binary files a/ResNet/__pycache__/resnet_model.cpython-39.pyc and b/ResNet/__pycache__/resnet_model.cpython-39.pyc differ
+diff --git a/ResNet/resnet_model.py b/ResNet/resnet_model.py
+index 47ae3b4..d56a63e 100644
+--- a/ResNet/resnet_model.py
++++ b/ResNet/resnet_model.py
+@@ -88,7 +88,7 @@ class ResNet(torch.nn.Module):
+     
+     """
+ 
+-    def __init__(self, block, layers: list = None, image_channels: int=3, num_classes: int=100):
++    def __init__(self, block, layers: list = None, image_channels: int=3, num_classes: int=100, name: str='ResNet'):
+         """_summary_
+ 
+         Args:
+@@ -100,6 +100,7 @@ class ResNet(torch.nn.Module):
+         if layers is None:
+             layers = [3, 4, 6, 3]
+         super(ResNet, self).__init__()
++        self.name = name
+         self.n_channels = image_channels
+         self.num_classes = num_classes
+         self.in_channels = 64
+@@ -206,7 +207,7 @@ class ResNet(torch.nn.Module):
+ 
+ # Model sample
+ def ResNet50(img_channel=3, num_classes=1000):
+-    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
++    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes, name='ResNet50')
+ 
+ def ResNet101(img_channel=3, num_classes=1000):
+     return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
+@@ -223,7 +224,9 @@ def test():
+     print(sx.shape)
+     # print(inp)
+     # print(sx)
+-    out = net([inp, sx])
++    # out = net([inp, sx])
++    print(net.__class__.__name__)
++    print(net.name)
+     # y = net(torch.randn(4, 3, 224, 224)).to("cuda")
+     # print(out.size())
+ 
+diff --git a/Train.py b/Train.py
+index 9e87fb5..0d9e909 100644
+--- a/Train.py
++++ b/Train.py
+@@ -14,6 +14,7 @@ import wandb
+ from ResNet.resnet_model import Block, ResNet
+ # Custom libs
+ from utils.dataloader import RSNATestDataset, RSNATrainDataset
++from Validation import validate
+ 
+ # Pre-initializing the loggers
+ progress = Progress(
+@@ -65,15 +66,16 @@ def train_net(net, device, train_loader, val_loader,
+                             save_checkpoint = save_checkpoint, amp = amp))
+ 
+     logging.info(f'''Starting training:
+-        Epochs:          {epochs}
+-        Batch size:      {batch_size}
+-        Learning rate:   {learning_rate}
+-        Training size:   {n_train}
+-        validation size: {n_val}
+-        validation %:    {val_percent}
+-        Checkpoints:     {save_checkpoint}
+-        Device:          {device}
+-        Mixed Precision: {amp}
++        Model:              {net.name}
++        Epochs:             {epochs}
++        Batch size:         {batch_size}
++        Learning rate:      {learning_rate}
++        Training size:      {n_train}
++        validation size:    {n_val}
++        validation %:       {val_percent}
++        Checkpoints:        {save_checkpoint}
++        Device:             {device}
++        Mixed Precision:    {amp}
+     ''')
+ 
+     # Begin training
+@@ -81,10 +83,10 @@ def train_net(net, device, train_loader, val_loader,
+         net.to(device = device, dtype = torch.float32)
+         net.train()
+         epoch_loss = 0
+-        
++
+         # with progress:
+         #     for _, img, boneage, sex, num_classes in progress.track(train_loader):
+-        
++
+         with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
+             for _, images, boneage, boneage_onehot, sex, num_classes in train_loader:
+ 
+@@ -123,7 +125,35 @@ def train_net(net, device, train_loader, val_loader,
+                     'epoch': epoch
+                 })
+                 pbar.set_postfix(**{'loss (batch)': loss.item()})
+-                
++
++
++                # Evaluation round
++                division_step = (n_train // (1000 * batch_size))
++                if division_step > 0 and global_step % division_step == 0:
++                    histograms = {}
++                    for tag, value in net.named_parameters():
++                        tag = tag.replace('/', '.')
++                        histograms[f'Weights/{tag}'] = wandb.Histogram(value.data.cpu())
++                        histograms[f'Gradients/{tag}'] = wandb.Histogram(value.grad.data.cpu())
++
++                    val_score, correct = validate(net, val_loader, device, criterion)
++                    scheduler.step(val_score)
++
++                    logging.info(f'Validation Dice score: {val_score}, Correct: {correct}')
++                    experiment.log({
++                        'learning rate': optimizer.param_groups[0]['lr'],
++                        'validation Dice': val_score,
++                        'validation Correct': correct,
++                        'images': wandb.Image(images[0].cpu()),
++                        'Age': {
++                            'True': boneage.float().cpu(),
++                            'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu(),
++                            'Pred softmax': wandb.Image(torch.softmax(age_pred, dim=1).argmax(dim=1, keepdim=True)[0].float().cpu()),
++                        },
++                        'step': global_step,
++                        'epoch': epoch,
++                        **histograms
++                    })
+ 
+         if save_checkpoint:
+             Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
+@@ -155,15 +185,14 @@ def data_organizer(train_dataset, test_dataset, batch_size: int, val_percent: fl
+ 
+     return train_loader, val_loader, test_loader
+ 
+-
+ def ResNet50(img_channel = 3, num_classes = 1000):
+-    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
++    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes, name="ResNet50")
+ 
+ def ResNet101(img_channel = 3, num_classes = 1000):
+-    return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
++    return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes, name="ResNet101")
+ 
+ def ResNet152(img_channel = 3, num_classes = 1000):
+-    return ResNet(Block, [3, 8, 36, 3], img_channel, num_classes)
++    return ResNet(Block, [3, 8, 36, 3], img_channel, num_classes, name="ResNet152")
+ 
+ 
+ if __name__ == '__main__':
+@@ -195,7 +224,7 @@ if __name__ == '__main__':
+     learning_rate = 0.0001
+     epochs = 10
+     batch_size = 1
+-    val_percent = 0.2
++    val_percent = 0.1
+     train_loader, val_loader, test_loader = data_organizer(train_dataset, test_dataset, 
+                                     batch_size, val_percent = val_percent, shuffle = False, num_workers = 1)
+ 
+diff --git a/utils/__pycache__/dataloader.cpython-39.pyc b/utils/__pycache__/dataloader.cpython-39.pyc
+index f582127..ff980c5 100644
+Binary files a/utils/__pycache__/dataloader.cpython-39.pyc and b/utils/__pycache__/dataloader.cpython-39.pyc differ

@@ -1,0 +1,112 @@
+INFO: Starting training:
+        Model:              ResNet50
+        Epochs:             10
+        Batch size:         1
+        Learning rate:      0.0001
+        Training size:      10089
+        validation size:    2522
+        validation %:       0.2
+        Checkpoints:        True
+        Device:             cuda
+        Mixed Precision:    False
+
+Epoch 1/10:   0%|▏                                                                                                                                 | 10/10089 [00:15<1:07:52,  2.47img/s, loss (batch)=0.0533]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set: Average loss: 21.1383, Accuracy: 0.06%
+INFO: Validation Dice score: 21.13834571838379, Correct: 0.06026962727993656
+Epoch 1/10:   0%|▏                                                                                                                                | 10/10089 [03:21<56:20:04, 20.12s/img, loss (batch)=0.0533]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 236, in <module>
+    train_net(net = net,
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 150, in train_net
+    'True': wandb.Image(boneage.float().cpu()),
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\data_types.py", line 2086, in __init__
+    self._initialize_from_data(data_or_path, mode)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\data_types.py", line 2203, in _initialize_from_data
+    data.mul(255).clamp(0, 255).byte().permute(1, 2, 0).cpu().numpy()
+RuntimeError: number of dims don't match in permute

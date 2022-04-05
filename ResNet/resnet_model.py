@@ -88,7 +88,7 @@ class ResNet(torch.nn.Module):
     
     """
 
-    def __init__(self, block, layers: list = None, image_channels: int=3, num_classes: int=100):
+    def __init__(self, block, layers: list = None, image_channels: int=3, num_classes: int=100, name: str='ResNet'):
         """_summary_
 
         Args:
@@ -100,6 +100,7 @@ class ResNet(torch.nn.Module):
         if layers is None:
             layers = [3, 4, 6, 3]
         super(ResNet, self).__init__()
+        self.name = name
         self.n_channels = image_channels
         self.num_classes = num_classes
         self.in_channels = 64
@@ -206,7 +207,7 @@ class ResNet(torch.nn.Module):
 
 # Model sample
 def ResNet50(img_channel=3, num_classes=1000):
-    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
+    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes, name='ResNet50')
 
 def ResNet101(img_channel=3, num_classes=1000):
     return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
@@ -223,7 +224,9 @@ def test():
     print(sx.shape)
     # print(inp)
     # print(sx)
-    out = net([inp, sx])
+    # out = net([inp, sx])
+    print(net.__class__.__name__)
+    print(net.name)
     # y = net(torch.randn(4, 3, 224, 224)).to("cuda")
     # print(out.size())
 
