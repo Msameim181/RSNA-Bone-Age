@@ -128,7 +128,7 @@ def train_net(net, device, train_loader, val_loader,
 
 
                 # Evaluation round
-                division_step = (n_train // (100 * batch_size))
+                division_step = (n_train // (10 * batch_size))
                 if division_step > 0 and global_step % division_step == 0:
                     histograms = {}
                     for tag, value in net.named_parameters():
@@ -142,12 +142,12 @@ def train_net(net, device, train_loader, val_loader,
                     logging.info(f'Validation Dice score: {val_score}, Correct: {correct}')
                     experiment.log({
                         'learning rate': optimizer.param_groups[0]['lr'],
-                        'validation Dice': val_score,
+                        'validation Loss': val_score,
                         'validation Correct': correct,
                         'images': wandb.Image(images[0].cpu()),
                         'Age': {
-                            'True': boneage[0].float().cpu(),
-                            'Pred': age_pred[0].argmax(dim=1, keepdim=True)[0].float().cpu(),
+                            'True': boneage.float().cpu(),
+                            'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu(),
                         },
                         'step': global_step,
                         'epoch': epoch,

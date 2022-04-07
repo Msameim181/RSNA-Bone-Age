@@ -1,0 +1,21 @@
+diff --git a/ResNet/__pycache__/resnet_model.cpython-39.pyc b/ResNet/__pycache__/resnet_model.cpython-39.pyc
+index 0ef4a8e..e42fa1a 100644
+Binary files a/ResNet/__pycache__/resnet_model.cpython-39.pyc and b/ResNet/__pycache__/resnet_model.cpython-39.pyc differ
+diff --git a/Train.py b/Train.py
+index 4839d00..0536e9e 100644
+--- a/Train.py
++++ b/Train.py
+@@ -146,8 +146,8 @@ def train_net(net, device, train_loader, val_loader,
+                         'validation Correct': correct,
+                         'images': wandb.Image(images[0].cpu()),
+                         'Age': {
+-                            'True': boneage[0].float().cpu(),
+-                            'Pred': age_pred[0].argmax(dim=1, keepdim=True)[0].float().cpu(),
++                            'True': boneage.float().cpu(),
++                            'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu(),
+                         },
+                         'step': global_step,
+                         'epoch': epoch,
+diff --git a/checkpoints/INTERRUPTED.pth b/checkpoints/INTERRUPTED.pth
+index aef01a0..2a605fb 100644
+Binary files a/checkpoints/INTERRUPTED.pth and b/checkpoints/INTERRUPTED.pth differ

@@ -1,0 +1,28 @@
+INFO: Starting training:
+        Model:              ResNet50
+        Epochs:             10
+        Batch size:         1
+        Learning rate:      0.0001
+        Training size:      11350
+        validation size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Device:             cuda
+        Mixed Precision:    False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:   1%|█▎                                                                                                                                 | 113/11350 [00:43<44:13,  4.23img/s, loss (batch)=0.0212]
+
+INFO: Saved interrupt
