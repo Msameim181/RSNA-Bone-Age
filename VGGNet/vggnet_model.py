@@ -14,9 +14,9 @@ VGG_types = {
 }
 
 
-class VGG_net(nn.Module):
+class VGGNet(nn.Module):
     def __init__(self, in_channels=3, num_classes=1000, type="VGG11"):
-        super(VGG_net, self).__init__()
+        super(VGGNet, self).__init__()
         self.name = type
         self.n_channels = in_channels
         self.num_classes = num_classes
@@ -31,7 +31,7 @@ class VGG_net(nn.Module):
             nn.ReLU(),
             nn.Dropout(p=0.5),
         )
-        self.fc = nn.Linear(4097, num_classes)
+        self.fc = nn.Linear(4096 + 1, num_classes)
 
     def forward(self, x):
         y = x[1]
@@ -75,12 +75,13 @@ class VGG_net(nn.Module):
 
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    net = VGG_net(in_channels=1, num_classes=229, type="VGG11").to(device)
+    net = VGGNet(in_channels=1, num_classes=229, type="VGG11").to(device)
     # print(net)
     inp = torch.randn(1, 1, 500, 625).cuda()
     sx = torch.randn(1).cuda()
 
     out = net([inp, sx])
+    print(out.shape)
     # N = 3 (Mini batch size)
     # x = torch.randn(1, 3, 224, 224).to(device)
     # print(net(x).shape)
