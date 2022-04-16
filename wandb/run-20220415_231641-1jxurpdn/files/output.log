@@ -1,0 +1,38 @@
+INFO: Starting training:
+        Model:              MobileNetV2
+        Epochs:             10
+        Batch size:         2
+        Learning rate:      0.001
+        Training size:      11350
+        validation size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Device:             cuda
+        Mixed Precision:    False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:   6%|███████▍                                                                                                                           | 642/11350 [01:03<17:45, 10.05img/s, loss (batch)=0.0158]
+INFO: Saved interrupt

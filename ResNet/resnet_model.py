@@ -217,19 +217,19 @@ def ResNet152(img_channel=3, num_classes=1000):
 
 def test():
     net = ResNet50(img_channel=1, num_classes=229)
-    net.cuda()
-    inp = torch.randn(1, 1, 200, 200).cuda()
-    sx = torch.randn(1).cuda()
-    print(inp.shape)
-    print(sx.shape)
-    # print(inp)
-    # print(sx)
-    # out = net([inp, sx])
-    print(net.__class__.__name__)
-    print(net.name)
+    # net.cuda()
+    # inp = torch.randn(1, 1, 200, 200).cuda()
+    # sx = torch.randn(1).cuda()
+    # print(inp.shape)
+    # print(sx.shape)
+    # # print(inp)
+    # # print(sx)
+    # # out = net([inp, sx])
+    # print(net.__class__.__name__)
+    # print(net.name)
     # y = net(torch.randn(4, 3, 224, 224)).to("cuda")
     # print(out.size())
-
+    # summary(net, (1, 1, 500, 625), batch_size=1)
     # print(net)
 
 if __name__ == "__main__":

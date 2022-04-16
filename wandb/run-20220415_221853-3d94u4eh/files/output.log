@@ -1,0 +1,190 @@
+INFO: Starting training:
+        Model:              MobileNetV2
+        Epochs:             10
+        Batch size:         1
+        Learning rate:      0.0001
+        Training size:      11350
+        validation size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Device:             cuda
+        Mixed Precision:    False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  10%|█████████████                                                                                                                     | 1135/11350 [01:57<16:50, 10.11img/s, loss (batch)=0.0187]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set: Average loss: 0.0823, Accuracy: 0.09%
+INFO: Validation Dice score: 0.0823444128036499, Correct: 0.09357652656621729
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  20%|██████████████████████████                                                                                                        | 2270/11350 [04:53<13:34, 11.14img/s, loss (batch)=0.0186]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set: Average loss: 0.0271, Accuracy: 0.09%
+INFO: Validation Dice score: 0.02714798040688038, Correct: 0.08643933386201427
+
+
+
+
+
+
+
+Epoch 1/10:  21%|███████████████████████████▉                                                                                                      | 2435/11350 [06:14<22:49,  6.51img/s, loss (batch)=0.0189]
+INFO: Saved interrupt

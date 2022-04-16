@@ -1,0 +1,38 @@
+2022-04-15 22:14:21,414 INFO    MainThread:7848 [wandb_setup.py:_flush():71] setting env: {}
+2022-04-15 22:14:21,414 INFO    MainThread:7848 [wandb_setup.py:_flush():71] setting login settings: {'api_key': '***REDACTED***'}
+2022-04-15 22:14:21,415 INFO    MainThread:7848 [wandb_setup.py:_flush():71] setting login settings: {'api_key': '***REDACTED***'}
+2022-04-15 22:14:21,415 INFO    MainThread:7848 [wandb_setup.py:_flush():71] setting login settings: {}
+2022-04-15 22:14:21,415 INFO    MainThread:7848 [wandb_init.py:_log_setup():371] Logging user logs to C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220415_221421-22robc5s\logs\debug.log
+2022-04-15 22:14:21,415 INFO    MainThread:7848 [wandb_init.py:_log_setup():372] Logging internal logs to C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220415_221421-22robc5s\logs\debug-internal.log
+2022-04-15 22:14:21,416 INFO    MainThread:7848 [wandb_init.py:init():404] calling init triggers
+2022-04-15 22:14:21,416 INFO    MainThread:7848 [wandb_init.py:init():409] wandb.init called with sweep_config: {}
+config: {}
+2022-04-15 22:14:21,416 INFO    MainThread:7848 [wandb_init.py:init():460] starting backend
+2022-04-15 22:14:21,416 INFO    MainThread:7848 [backend.py:_multiprocessing_setup():99] multiprocessing start_methods=spawn, using: spawn
+2022-04-15 22:14:21,427 INFO    MainThread:7848 [backend.py:ensure_launched():216] starting backend process...
+2022-04-15 22:14:21,530 INFO    MainThread:7848 [backend.py:ensure_launched():221] started backend process with pid: 15720
+2022-04-15 22:14:21,531 INFO    MainThread:7848 [wandb_init.py:init():469] backend started and connected
+2022-04-15 22:14:21,531 INFO    MainThread:7848 [wandb_init.py:init():533] updated telemetry
+2022-04-15 22:14:21,594 INFO    MainThread:7848 [wandb_init.py:init():563] communicating current version
+2022-04-15 22:14:23,897 INFO    MainThread:7848 [wandb_init.py:init():568] got version response upgrade_message: "wandb version 0.12.14 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2022-04-15 22:14:23,898 INFO    MainThread:7848 [wandb_init.py:init():578] communicating run to backend with 30 second timeout
+2022-04-15 22:14:53,913 WARNING MainThread:7848 [wandb_init.py:init():952] interrupted
+Traceback (most recent call last):
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\wandb_init.py", line 931, in init
+    run = wi.init()
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\wandb_init.py", line 579, in init
+    ret = backend.interface.communicate_run(run, timeout=30)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\interface.py", line 210, in communicate_run
+    return self._communicate_run(run, timeout=timeout)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\interface_shared.py", line 311, in _communicate_run
+    resp = self._communicate(req, timeout=timeout)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\router.py", line 37, in get
+    is_set = self._object_ready.wait(timeout)
+  File "C:\Python\Python39\lib\threading.py", line 574, in wait
+    signaled = self._cond.wait(timeout)
+  File "C:\Python\Python39\lib\threading.py", line 316, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt

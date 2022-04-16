@@ -11,7 +11,8 @@ from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
 import wandb
-from ResNet.resnet_model import Block, ResNet
+from MobileNet import MobileNetV2
+from ResNet import Block, ResNet
 # Custom libs
 from utils.dataloader import RSNATestDataset, RSNATrainDataset
 from Validation import validate
@@ -147,7 +148,7 @@ def train_net(net, device, train_loader, val_loader,
                         'images': wandb.Image(images[0].cpu()),
                         'Age': {
                             'True': boneage.float().cpu(),
-                            'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu(),
+                            'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else age_pred.argmax(dim=1, keepdim=True).float().cpu(),
                         },
                         'step': global_step,
                         'epoch': epoch,
@@ -217,14 +218,14 @@ if __name__ == '__main__':
                            basedOnSex = basedOnSex, gender = gender)
     
     num_classes = train_dataset.num_classes                   
-    net = ResNet50(img_channel=1, num_classes=num_classes)
+    net = MobileNetV2(img_channel=1, num_classes=num_classes)
     logging.info(f'Network:\n'
                  f'\t{net.n_channels} input channels\n'
                  f'\t{net.num_classes} output channels (classes)\n')
     
-    learning_rate = 0.0001
+    learning_rate = 0.001
     epochs = 10
-    batch_size = 1
+    batch_size = 2
     val_percent = 0.1
     train_loader, val_loader, test_loader = data_organizer(train_dataset, test_dataset, 
                                     batch_size, val_percent = val_percent, shuffle = False, num_workers = 1)

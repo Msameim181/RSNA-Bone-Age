@@ -10,7 +10,8 @@ from PIL import Image
 # Custom libs
 from torch.utils.data import DataLoader, Dataset
 from utils.dataloader import RSNATestDataset, RSNATrainDataset
-from ResNet.resnet_model import ResNet, Block
+from ResNet import ResNet, Block
+from MobileNet import MobileNetV2
 
 def ResNet50(img_channel=3, num_classes=1000):
     return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes)
@@ -27,7 +28,7 @@ if __name__ == '__main__':
 
     
     num_classes = train_dataset.num_classes
-    net = ResNet50(img_channel=1, num_classes=num_classes)
+    net = MobileNetV2(img_channel=1, num_classes=num_classes)
     device = 'cuda'
     # net.to(device=device, dtype=torch.float32) 
     # images = images.to(device=device, dtype=torch.float32)
