@@ -1,1 +1,2 @@
-from .resnet_model import ResNet, Block
+# from .resnet_model import *
+from .resnet import *

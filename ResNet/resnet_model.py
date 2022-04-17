@@ -88,7 +88,14 @@ class ResNet(torch.nn.Module):
     
     """
 
-    def __init__(self, block, layers: list = None, image_channels: int=3, num_classes: int=100, name: str='ResNet'):
+    def __init__(
+        self, 
+        block, 
+        layers: list = None, 
+        image_channels: int=3, 
+        num_classes: int=100, 
+        name: str='ResNet',
+        add_nodes: int=1):
         """_summary_
 
         Args:
@@ -124,12 +131,12 @@ class ResNet(torch.nn.Module):
         )
 
         self.avgpool = torch.nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = torch.nn.Linear(512 * 4 + 1, num_classes)
+        self.fc = torch.nn.Linear(512 * 4 + add_nodes, num_classes)
 
     def forward(self, x):
         y = x[1]
         x = x[0]
-        
+
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -141,12 +148,12 @@ class ResNet(torch.nn.Module):
 
         x = self.avgpool(x)
         x = x.reshape(x.shape[0], -1)
-        
+
         z = x
         y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
-        z = torch.cat((z, y), dim=1)
+        x = torch.cat((z, y), dim=1)
 
-        x = self.fc(z)
+        x = self.fc(x)
 
         return x
 
@@ -204,19 +211,25 @@ class ResNet(torch.nn.Module):
 
 
 
-
 # Model sample
-def ResNet50(img_channel=3, num_classes=1000):
-    return ResNet(Block, [3, 4, 6, 3], img_channel, num_classes, name='ResNet50')
+def ResNet18(image_channels=3, num_classes=1000):
+    return ResNet(Block, [2, 2, 2, 2], image_channels, num_classes, name='ResNet18')
 
-def ResNet101(img_channel=3, num_classes=1000):
-    return ResNet(Block, [3, 4, 23, 3], img_channel, num_classes)
+def ResNet34(image_channels=3, num_classes=1000):
+    return ResNet(Block, [3, 4, 6, 3], image_channels, num_classes, name='ResNet34')
 
-def ResNet152(img_channel=3, num_classes=1000):
-    return ResNet(Block, [3, 8, 36, 3], img_channel, num_classes)
+def ResNet50(image_channels=3, num_classes=1000):
+    return ResNet(Block, [3, 4, 6, 3], image_channels, num_classes, name='ResNet50')
+
+def ResNet101(image_channels=3, num_classes=1000):
+    return ResNet(Block, [3, 4, 23, 3], image_channels, num_classes, name='ResNet50')
+
+def ResNet152(image_channels=3, num_classes=1000):
+    return ResNet(Block, [3, 8, 36, 3], image_channels, num_classes, name='ResNet50')
+
 
 def test():
-    net = ResNet50(img_channel=1, num_classes=229)
+    net = ResNet18(image_channels=1, num_classes=229)
     # net.cuda()
     # inp = torch.randn(1, 1, 200, 200).cuda()
     # sx = torch.randn(1).cuda()
@@ -224,12 +237,12 @@ def test():
     # print(sx.shape)
     # # print(inp)
     # # print(sx)
-    # # out = net([inp, sx])
+    # out = net([inp, sx])
     # print(net.__class__.__name__)
     # print(net.name)
     # y = net(torch.randn(4, 3, 224, 224)).to("cuda")
     # print(out.size())
-    # summary(net, (1, 1, 500, 625), batch_size=1)
+    # summary(net, (1, 500, 625), batch_size=1)
     # print(net)
 
 if __name__ == "__main__":

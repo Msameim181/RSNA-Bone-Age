@@ -1,0 +1,33 @@
+INFO: Starting training:
+        Model:              ResNet18
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.001
+        Training Size:      11350
+        validation Size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Device:             cuda
+        Mixed Precision:    False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:   5%|██████                                                                                                                             | 530/11350 [00:49<16:49, 10.72img/s, loss (batch)=0.0151]
+INFO: Saved interrupt
