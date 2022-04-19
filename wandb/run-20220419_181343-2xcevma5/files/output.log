@@ -1,0 +1,101 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.001
+        Training Size:      11350
+        validation Size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          RMSprop
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220419_181343_MobileNetV2" ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  10%|████████████████▊                                                                                                                                                       | 1134/11350 [01:45<13:48, 12.33img/s, loss (batch)=0.014]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 90, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 141, in trainer
+    validation(wandb_logger, net, device, optimizer, scheduler, criterion,
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 192, in validation
+    val_loss, acc, correct = validate(net, val_loader, device, criterion)
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Validation.py", line 36, in validate
+    acc /= n_val
+UnboundLocalError: local variable 'acc' referenced before assignment

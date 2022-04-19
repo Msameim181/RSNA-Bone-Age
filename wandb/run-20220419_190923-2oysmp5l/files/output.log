@@ -1,0 +1,370 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.001
+        Training Size:      11350
+        validation Size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          RMSprop
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220419_190923_MobileNetV2" ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  10%|████████████████▋                                                                                                                                                      | 1134/11350 [01:37<13:13, 12.87img/s, loss (batch)=0.0123]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.0210	Accuracy: 10.71% 	 Correct = 135/1261
+INFO: Validation completed.
+INFO: Result Saved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  20%|█████████████████████████████████▎                                                                                                                                     | 2268/11350 [04:13<12:28, 12.13img/s, loss (batch)=0.0312]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.0196	Accuracy: 9.83% 	 Correct = 124/1261
+INFO: Validation completed.
+INFO: Result Saved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  30%|██████████████████████████████████████████████████                                                                                                                     | 3402/11350 [06:51<11:01, 12.02img/s, loss (batch)=0.0181]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.0194	Accuracy: 8.49% 	 Correct = 107/1261
+INFO: Validation completed.
+INFO: Result Saved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  40%|██████████████████████████████████████████████████████████████████▋                                                                                                    | 4536/11350 [09:28<09:04, 12.50img/s, loss (batch)=0.0172]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.0192	Accuracy: 9.36% 	 Correct = 118/1261
+INFO: Validation completed.
+INFO: Result Saved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  46%|█████████████████████████████████████████████████████████████████████████████▍                                                                                          | 5228/11350 [11:31<13:30,  7.56img/s, loss (batch)=0.015]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 90, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 123, in trainer
+    grad_scaler.scale(loss).backward()
+  File "C:\Python\Python39\lib\site-packages\torch\_tensor.py", line 363, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "C:\Python\Python39\lib\site-packages\torch\autograd\__init__.py", line 173, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

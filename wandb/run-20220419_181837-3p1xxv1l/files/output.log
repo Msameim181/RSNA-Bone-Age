@@ -1,0 +1,108 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.001
+        Training Size:      11350
+        validation Size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          RMSprop
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220419_181837_MobileNetV2" ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  10%|████████████████▊                                                                                                                                                       | 1134/11350 [01:42<15:11, 11.21img/s, loss (batch)=0.013]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.0210	Accuracy: 9.12% 	 Correct = 115/1261
+INFO: Validation Dice score: 0.021033771336078644, Correct: 0.09119746233148295
+Epoch 1/10:  10%|████████████████▊                                                                                                                                                       | 1134/11350 [02:49<25:30,  6.67img/s, loss (batch)=0.013]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 90, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 141, in trainer
+    validation(wandb_logger, net, device, optimizer, scheduler, criterion,
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 209, in validation
+    'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age.argmax(dim=1, keepdim=True).float().cpu() for age in age_pred],
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 209, in <listcomp>
+    'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age.argmax(dim=1, keepdim=True).float().cpu() for age in age_pred],
+IndexError: Dimension out of range (expected to be in range of [-1, 0], but got 1)

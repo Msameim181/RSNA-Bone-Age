@@ -1,0 +1,84 @@
+2022-04-17 23:29:58 ERROR Traceback (most recent call last):
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 24, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\sdk\internal\internal_api.py", line 563, in sweep
+    raise ValueError("Sweep {}/{}/{} not found".format(entity, project, sweep))
+ValueError: Sweep msameim181/pytorch-intro/xxe9je3i not found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\python\python39\lib\site-packages\wandb\cli\cli.py", line 86, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\cli\cli.py", line 1184, in agent
+    wandb_agent.agent(sweep_id, entity=entity, project=project, count=count)
+  File "c:\python\python39\lib\site-packages\wandb\wandb_agent.py", line 578, in agent
+    return run_agent(
+  File "c:\python\python39\lib\site-packages\wandb\wandb_agent.py", line 520, in run_agent
+    agent.run()
+  File "c:\python\python39\lib\site-packages\wandb\wandb_agent.py", line 181, in run
+    sweep_obj = self._api.sweep(self._sweep_id, "{}")
+  File "c:\python\python39\lib\site-packages\wandb\apis\internal.py", line 96, in sweep
+    return self.api.sweep(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 62, in wrapper
+    six.reraise(CommError, CommError(message, err), sys.exc_info()[2])
+  File "C:\Users\mahdi\AppData\Roaming\Python\Python39\site-packages\six.py", line 718, in reraise
+    raise value.with_traceback(tb)
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 24, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\sdk\internal\internal_api.py", line 563, in sweep
+    raise ValueError("Sweep {}/{}/{} not found".format(entity, project, sweep))
+wandb.errors.CommError: Sweep msameim181/pytorch-intro/xxe9je3i not found
+
+2022-04-17 23:31:16 ERROR Traceback (most recent call last):
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 24, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\sdk\internal\internal_api.py", line 563, in sweep
+    raise ValueError("Sweep {}/{}/{} not found".format(entity, project, sweep))
+ValueError: Sweep msameim181/pytorch-intro/xxe9je3i not found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\python\python39\lib\site-packages\wandb\cli\cli.py", line 86, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\cli\cli.py", line 791, in sweep
+    found = api.sweep(sweep_id, "{}", entity=entity, project=project)
+  File "c:\python\python39\lib\site-packages\wandb\apis\internal.py", line 96, in sweep
+    return self.api.sweep(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 62, in wrapper
+    six.reraise(CommError, CommError(message, err), sys.exc_info()[2])
+  File "C:\Users\mahdi\AppData\Roaming\Python\Python39\site-packages\six.py", line 718, in reraise
+    raise value.with_traceback(tb)
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 24, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\sdk\internal\internal_api.py", line 563, in sweep
+    raise ValueError("Sweep {}/{}/{} not found".format(entity, project, sweep))
+wandb.errors.CommError: Sweep msameim181/pytorch-intro/xxe9je3i not found
+
+2022-04-17 23:33:46 ERROR Traceback (most recent call last):
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 24, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\sdk\internal\internal_api.py", line 563, in sweep
+    raise ValueError("Sweep {}/{}/{} not found".format(entity, project, sweep))
+ValueError: Sweep msameim181/pytorch-intro/xxe9je3i not found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\python\python39\lib\site-packages\wandb\cli\cli.py", line 86, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\cli\cli.py", line 791, in sweep
+    found = api.sweep(sweep_id, "{}", entity=entity, project=project)
+  File "c:\python\python39\lib\site-packages\wandb\apis\internal.py", line 96, in sweep
+    return self.api.sweep(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 62, in wrapper
+    six.reraise(CommError, CommError(message, err), sys.exc_info()[2])
+  File "C:\Users\mahdi\AppData\Roaming\Python\Python39\site-packages\six.py", line 718, in reraise
+    raise value.with_traceback(tb)
+  File "c:\python\python39\lib\site-packages\wandb\apis\normalize.py", line 24, in wrapper
+    return func(*args, **kwargs)
+  File "c:\python\python39\lib\site-packages\wandb\sdk\internal\internal_api.py", line 563, in sweep
+    raise ValueError("Sweep {}/{}/{} not found".format(entity, project, sweep))
+wandb.errors.CommError: Sweep msameim181/pytorch-intro/xxe9je3i not found
+

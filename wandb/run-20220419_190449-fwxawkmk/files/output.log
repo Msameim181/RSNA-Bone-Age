@@ -1,0 +1,122 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.001
+        Training Size:      11350
+        validation Size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          RMSprop
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220419_190449_MobileNetV2" ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  10%|████████████████▋                                                                                                                                                      | 1134/11350 [01:39<12:48, 13.29img/s, loss (batch)=0.0129]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.0205	Accuracy: 9.83% 	 Correct = 124/1261
+INFO: Validation completed.
+INFO: Result Saved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  15%|████████████████████████▊                                                                                                                                               | 1678/11350 [03:28<19:59,  8.06img/s, loss (batch)=0.025]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 90, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 131, in trainer
+    epoch_loss += loss.item()
+KeyboardInterrupt
