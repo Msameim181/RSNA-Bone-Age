@@ -10,8 +10,8 @@ import torch
 from PIL import Image
 from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
                            TimeElapsedColumn, TimeRemainingColumn)
-from torch.utils.data import DataLoader, Dataset
-from torchvision import models, transforms
+from torch.utils.data import DataLoader, Dataset, random_split
+from torchvision import transforms
 
 # Pre-initializing the loggers
 progress = Progress(
@@ -34,8 +34,6 @@ progress = Progress(
 
 
 # Defining the dataset class
-
-
 class RSNATrainDataset(Dataset):
     def __init__(self, data_file: str, image_dir: str, transform = None, 
                 scale: float = 1.0, basedOnSex: bool=False, gender:str='male'):
@@ -153,6 +151,30 @@ class RSNATestDataset(Dataset):
         return img_id, img, sex
 
 
+# Data Packaging
+def data_wrapper(train_dataset, test_dataset, batch_size: int, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
+    """ Generate the train, validation and test dataloader for model.
+
+    Args:
+        train_dataset (dataset class): training dataset.
+        test_dataset (dataset class): test dataset.
+        batch_size (int): batch size.
+        val_percent (float, optional): valifation percentage. Defaults to 0.2.
+        shuffle (bool, optional): shuffle data. Defaults to True.
+        num_workers (int, optional): number of worker. Defaults to 1.
+
+    Returns:
+        data loaders: train_loader, val_loader, test_loader
+    """
+    n_val = int(len(train_dataset) * val_percent)
+    n_train = len(train_dataset) - n_val
+    train_set, val_set = random_split(train_dataset, [n_train, n_val], generator=torch.Generator().manual_seed(0))
+    train_loader = DataLoader(dataset = train_set, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+    val_loader = DataLoader(dataset = val_set, batch_size = 1, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+
+    test_loader = DataLoader(dataset = test_dataset, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+
+    return train_loader, val_loader, test_loader
 
 
 

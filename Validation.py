@@ -31,9 +31,14 @@ def validate(net, val_loader, device, criterion):
             pred = output_age.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(t_age.view_as(pred)).sum().item()
     
+    acc = correct
     if n_val != 0:
         val_loss /= n_val
-        correct /= n_val
+        acc /= n_val
 
-    logging.info(f'\nValidation set: Average loss: {val_loss:.4f}, Accuracy: {correct:.2f}%\n')
-    return val_loss, correct
+    # Logging
+    logging.info(f'\nValidation set:\n'
+                 f'\tAverage loss: {val_loss:.4f}'
+                 f'\tAccuracy: {acc * 100:.2f}% \t Correct = {correct}/{n_val}\n')
+    
+    return val_loss, acc, correct
