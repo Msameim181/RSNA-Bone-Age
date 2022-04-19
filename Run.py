@@ -9,8 +9,8 @@ import torch
 
 import wandb
 # Models
-from MobileNet import MobileNetV2
-from ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+from models.MobileNet import MobileNetV2
+from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 # Custom libs
 from Train import trainer
 from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper

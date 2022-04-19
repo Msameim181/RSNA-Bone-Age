@@ -10,8 +10,8 @@ from PIL import Image
 # Custom libs
 from torch.utils.data import DataLoader, Dataset
 from utils.dataloader import RSNATestDataset, RSNATrainDataset
-from ResNet import ResNet18, ResNet50
-from MobileNet import MobileNetV2
+from models.ResNet import ResNet18, ResNet50
+from models.MobileNet import MobileNetV2
 
 
 # if __name__ == '__main__':
