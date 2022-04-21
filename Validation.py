@@ -39,6 +39,6 @@ def validate(net, val_loader, device, criterion):
     # Logging
     logging.info(f'\nValidation set:\n'
                  f'\tAverage loss: {val_loss:.4f}'
-                 f'\tAccuracy: {acc * 100:.2f}% \t Correct = {correct}/{n_val}\n')
+                 f'\tAccuracy: {acc * 100:.2f}%\tCorrect = {correct}/{n_val}\n')
     
     return val_loss, acc, correct

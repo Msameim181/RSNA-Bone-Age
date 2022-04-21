@@ -141,7 +141,7 @@ def trainer(
 
                 # Validation
                 validation(wandb_logger, net, device, optimizer, scheduler, criterion, 
-                    epochs,global_step,  n_train, batch_size,val_loader, images, 
+                    epoch,global_step,  n_train, batch_size,val_loader, images, 
                     boneage, age_pred, gender)
 
                 net.train()
@@ -165,7 +165,7 @@ def validation(
     optimizer, 
     scheduler, 
     criterion, 
-    epochs:int,
+    epoch:int,
     global_step,  
     n_train:int, 
     batch_size:int,
@@ -208,7 +208,7 @@ def validation(
                 'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age for age in age_pred.argmax(dim=1, keepdim=True).float().cpu()],
             }, 
             'step': global_step, 
-            'epoch': epochs, 
+            'epoch': epoch, 
             **histograms
         })
 

@@ -1,0 +1,248 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2_Pre
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.001
+        Training Size:      11350
+        validation Size:    1261
+        validation %:       0.1
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          RMSprop
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220420_170553_MobileNetV2_Pre" ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  10%|█████████████                                                                                                                      | 1134/11350 [01:44<13:25, 12.69img/s, loss (batch)=0.694]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.6956	Accuracy: 6.98%	Correct = 88/1261
+INFO: Validation completed.
+INFO: Result Saved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  20%|██████████████████████████▏                                                                                                        | 2268/11350 [04:25<12:06, 12.50img/s, loss (batch)=0.696]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation set:
+	Average loss: 0.6956	Accuracy: 6.98%	Correct = 88/1261
+INFO: Validation completed.
+INFO: Result Saved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:  30%|██████████████████████████████████████▊                                                                                            | 3358/11350 [07:04<16:49,  7.91img/s, loss (batch)=0.693]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 90, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 139, in trainer
+    pbar.set_postfix(**{'loss (batch)': loss.item()})
+  File "C:\Python\Python39\lib\site-packages\tqdm\std.py", line 1430, in set_postfix
+    self.refresh()
+  File "C:\Python\Python39\lib\site-packages\tqdm\std.py", line 1346, in refresh
+    self.display()
+  File "C:\Python\Python39\lib\site-packages\tqdm\std.py", line 1494, in display
+    self.sp(self.__str__() if msg is None else msg)
+  File "C:\Python\Python39\lib\site-packages\tqdm\std.py", line 350, in print_status
+    fp_write('\r' + s + (' ' * max(last_len[0] - len_s, 0)))
+  File "C:\Python\Python39\lib\site-packages\tqdm\std.py", line 343, in fp_write
+    fp.write(_unicode(s))
+  File "C:\Python\Python39\lib\site-packages\tqdm\utils.py", line 145, in inner
+    return func(*args, **kwargs)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\lib\redirect.py", line 584, in write
+    self._old_write(data)
+  File "C:\Users\mahdi\AppData\Roaming\Python\Python39\site-packages\colorama\ansitowin32.py", line 41, in write
+    self.__convertor.write(text)
+  File "C:\Users\mahdi\AppData\Roaming\Python\Python39\site-packages\colorama\ansitowin32.py", line 162, in write
+    self.write_and_convert(text)
+  File "C:\Users\mahdi\AppData\Roaming\Python\Python39\site-packages\colorama\ansitowin32.py", line 190, in write_and_convert
+    self.write_plain_text(text, cursor, len(text))
+  File "C:\Users\mahdi\AppData\Roaming\Python\Python39\site-packages\colorama\ansitowin32.py", line 195, in write_plain_text
+    self.wrapped.write(text[start:end])
+KeyboardInterrupt

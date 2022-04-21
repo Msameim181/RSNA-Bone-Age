@@ -1,0 +1,182 @@
+2022-04-20 17:15:11,181 INFO    MainThread:5988 [internal.py:wandb_internal():92] W&B internal server running at pid: 5988, started at: 2022-04-20 17:15:11.180506
+2022-04-20 17:15:11,185 INFO    WriterThread:5988 [datastore.py:open_for_write():77] open: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\run-1z2xmdsr.wandb
+2022-04-20 17:15:11,189 DEBUG   SenderThread:5988 [sender.py:send():235] send: header
+2022-04-20 17:15:11,189 DEBUG   SenderThread:5988 [sender.py:send():235] send: run
+2022-04-20 17:15:11,982 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: check_version
+2022-04-20 17:15:11,990 INFO    SenderThread:5988 [dir_watcher.py:__init__():169] watching files in: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files
+2022-04-20 17:15:11,990 INFO    SenderThread:5988 [sender.py:_start_run_threads():812] run started: 1z2xmdsr with start time 1650458709
+2022-04-20 17:15:11,990 DEBUG   SenderThread:5988 [sender.py:send():235] send: summary
+2022-04-20 17:15:11,991 INFO    SenderThread:5988 [sender.py:_save_file():947] saving file wandb-summary.json with policy end
+2022-04-20 17:15:11,992 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: check_version
+2022-04-20 17:15:12,891 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: run_start
+2022-04-20 17:15:12,915 DEBUG   HandlerThread:5988 [meta.py:__init__():37] meta init
+2022-04-20 17:15:12,915 DEBUG   HandlerThread:5988 [meta.py:__init__():51] meta init done
+2022-04-20 17:15:12,915 DEBUG   HandlerThread:5988 [meta.py:probe():211] probe
+2022-04-20 17:15:12,974 DEBUG   HandlerThread:5988 [meta.py:_setup_git():201] setup git
+2022-04-20 17:15:13,004 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_created():217] file/dir created: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\wandb-summary.json
+2022-04-20 17:15:13,068 DEBUG   HandlerThread:5988 [meta.py:_setup_git():208] setup git done
+2022-04-20 17:15:13,068 DEBUG   HandlerThread:5988 [meta.py:_save_code():89] save code
+2022-04-20 17:15:13,116 DEBUG   HandlerThread:5988 [meta.py:_save_code():110] save code done
+2022-04-20 17:15:13,117 DEBUG   HandlerThread:5988 [meta.py:_save_patches():127] save patches
+2022-04-20 17:15:13,470 DEBUG   HandlerThread:5988 [meta.py:_save_patches():169] save patches done
+2022-04-20 17:15:13,470 DEBUG   HandlerThread:5988 [meta.py:_save_pip():55] save pip
+2022-04-20 17:15:13,471 DEBUG   HandlerThread:5988 [meta.py:_save_pip():69] save pip done
+2022-04-20 17:15:13,471 DEBUG   HandlerThread:5988 [meta.py:probe():249] probe done
+2022-04-20 17:15:13,478 DEBUG   SenderThread:5988 [sender.py:send():235] send: files
+2022-04-20 17:15:13,478 INFO    SenderThread:5988 [sender.py:_save_file():947] saving file wandb-metadata.json with policy now
+2022-04-20 17:15:13,479 INFO    SenderThread:5988 [sender.py:_save_file():947] saving file code\Run.py with policy now
+2022-04-20 17:15:13,480 INFO    SenderThread:5988 [sender.py:_save_file():947] saving file diff.patch with policy now
+2022-04-20 17:15:13,494 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-20 17:15:13,494 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: stop_status
+2022-04-20 17:15:14,009 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_created():217] file/dir created: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\wandb-metadata.json
+2022-04-20 17:15:14,010 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_created():217] file/dir created: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\output.log
+2022-04-20 17:15:14,010 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_created():217] file/dir created: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\requirements.txt
+2022-04-20 17:15:14,011 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_created():217] file/dir created: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\diff.patch
+2022-04-20 17:15:14,011 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_created():217] file/dir created: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\code\Run.py
+2022-04-20 17:15:14,012 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_created():217] file/dir created: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\code
+2022-04-20 17:15:14,248 DEBUG   SenderThread:5988 [sender.py:send():235] send: telemetry
+2022-04-20 17:15:14,248 DEBUG   SenderThread:5988 [sender.py:send():235] send: config
+2022-04-20 17:15:15,237 INFO    Thread-30 :5988 [upload_job.py:push():137] Uploaded file C:\Users\mahdi\AppData\Local\Temp\tmpsikkpdkvwandb\ojr86ucj-code/Run.py
+2022-04-20 17:15:15,269 INFO    Thread-29 :5988 [upload_job.py:push():137] Uploaded file C:\Users\mahdi\AppData\Local\Temp\tmpsikkpdkvwandb\3qabu3ac-wandb-metadata.json
+2022-04-20 17:15:15,294 INFO    Thread-31 :5988 [upload_job.py:push():137] Uploaded file C:\Users\mahdi\AppData\Local\Temp\tmpsikkpdkvwandb\1n7lj72q-diff.patch
+2022-04-20 17:15:16,025 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_modified():230] file/dir modified: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\output.log
+2022-04-20 17:15:23,270 DEBUG   SenderThread:5988 [sender.py:send():235] send: telemetry
+2022-04-20 17:15:24,185 DEBUG   SenderThread:5988 [sender.py:send():235] send: exit
+2022-04-20 17:15:24,186 INFO    SenderThread:5988 [sender.py:send_exit():371] handling exit code: 1
+2022-04-20 17:15:24,187 INFO    SenderThread:5988 [sender.py:send_exit():373] handling runtime: 11
+2022-04-20 17:15:24,188 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:24,190 INFO    SenderThread:5988 [sender.py:_save_file():947] saving file wandb-summary.json with policy end
+2022-04-20 17:15:24,191 INFO    SenderThread:5988 [sender.py:send_exit():379] send defer
+2022-04-20 17:15:24,191 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:24,192 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:24,193 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 0
+2022-04-20 17:15:24,193 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:24,193 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 0
+2022-04-20 17:15:24,194 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 1
+2022-04-20 17:15:24,194 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:24,194 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 1
+2022-04-20 17:15:24,261 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:24,261 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 1
+2022-04-20 17:15:24,261 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 2
+2022-04-20 17:15:24,262 DEBUG   SenderThread:5988 [sender.py:send():235] send: stats
+2022-04-20 17:15:24,262 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:24,262 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 2
+2022-04-20 17:15:24,263 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:24,263 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 2
+2022-04-20 17:15:24,263 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 3
+2022-04-20 17:15:24,263 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:24,263 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 3
+2022-04-20 17:15:24,263 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:24,263 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 3
+2022-04-20 17:15:24,263 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 4
+2022-04-20 17:15:24,264 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:24,264 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 4
+2022-04-20 17:15:24,264 DEBUG   SenderThread:5988 [sender.py:send():235] send: summary
+2022-04-20 17:15:24,265 INFO    SenderThread:5988 [sender.py:_save_file():947] saving file wandb-summary.json with policy end
+2022-04-20 17:15:24,265 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:24,265 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 4
+2022-04-20 17:15:24,265 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 5
+2022-04-20 17:15:24,265 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:24,265 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 5
+2022-04-20 17:15:24,265 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:24,265 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 5
+2022-04-20 17:15:24,312 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:25,089 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_modified():230] file/dir modified: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\output.log
+2022-04-20 17:15:25,089 INFO    Thread-11 :5988 [dir_watcher.py:_on_file_modified():230] file/dir modified: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\wandb-summary.json
+2022-04-20 17:15:25,297 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 6
+2022-04-20 17:15:25,298 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:25,299 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:25,299 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 6
+2022-04-20 17:15:25,299 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:25,299 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 6
+2022-04-20 17:15:25,300 INFO    SenderThread:5988 [dir_watcher.py:finish():283] shutting down directory watcher
+2022-04-20 17:15:25,416 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,102 INFO    SenderThread:5988 [dir_watcher.py:_on_file_modified():230] file/dir modified: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\config.yaml
+2022-04-20 17:15:26,103 INFO    SenderThread:5988 [dir_watcher.py:finish():313] scan: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files
+2022-04-20 17:15:26,103 INFO    SenderThread:5988 [dir_watcher.py:finish():327] scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\config.yaml config.yaml
+2022-04-20 17:15:26,104 INFO    SenderThread:5988 [dir_watcher.py:finish():327] scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\diff.patch diff.patch
+2022-04-20 17:15:26,104 INFO    SenderThread:5988 [dir_watcher.py:finish():327] scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\output.log output.log
+2022-04-20 17:15:26,104 INFO    SenderThread:5988 [dir_watcher.py:finish():327] scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\requirements.txt requirements.txt
+2022-04-20 17:15:26,108 INFO    SenderThread:5988 [dir_watcher.py:finish():327] scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\wandb-metadata.json wandb-metadata.json
+2022-04-20 17:15:26,109 INFO    SenderThread:5988 [dir_watcher.py:finish():327] scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\wandb-summary.json wandb-summary.json
+2022-04-20 17:15:26,113 INFO    SenderThread:5988 [dir_watcher.py:finish():327] scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\code\Run.py code\Run.py
+2022-04-20 17:15:26,113 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 7
+2022-04-20 17:15:26,113 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,115 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:26,115 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 7
+2022-04-20 17:15:26,115 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:26,115 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 7
+2022-04-20 17:15:26,116 INFO    SenderThread:5988 [file_pusher.py:finish():145] shutting down file pusher
+2022-04-20 17:15:26,224 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,224 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,335 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,336 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,444 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,444 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,551 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,551 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,660 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,660 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,768 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,769 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,877 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,877 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:26,984 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:26,984 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,091 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,091 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,199 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,199 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,309 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,309 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,419 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,420 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,526 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,527 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,636 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,636 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,744 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,744 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,855 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,855 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,898 INFO    Thread-33 :5988 [upload_job.py:push():137] Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\output.log
+2022-04-20 17:15:27,908 INFO    Thread-32 :5988 [upload_job.py:push():137] Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\config.yaml
+2022-04-20 17:15:27,925 INFO    Thread-34 :5988 [upload_job.py:push():137] Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\requirements.txt
+2022-04-20 17:15:27,966 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:27,967 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:27,982 INFO    Thread-35 :5988 [upload_job.py:push():137] Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\files\wandb-summary.json
+2022-04-20 17:15:28,075 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:28,076 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:28,184 INFO    Thread-10 :5988 [sender.py:transition_state():392] send defer: 8
+2022-04-20 17:15:28,185 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:28,185 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:28,185 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 8
+2022-04-20 17:15:28,185 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:28,185 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:28,185 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 8
+2022-04-20 17:15:28,295 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:30,662 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 9
+2022-04-20 17:15:30,662 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:30,664 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:30,664 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 9
+2022-04-20 17:15:30,664 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:30,665 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 9
+2022-04-20 17:15:30,666 INFO    SenderThread:5988 [sender.py:transition_state():392] send defer: 10
+2022-04-20 17:15:30,668 DEBUG   SenderThread:5988 [sender.py:send():235] send: final
+2022-04-20 17:15:30,669 DEBUG   SenderThread:5988 [sender.py:send():235] send: footer
+2022-04-20 17:15:30,669 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: defer
+2022-04-20 17:15:30,670 INFO    HandlerThread:5988 [handler.py:handle_request_defer():164] handle defer: 10
+2022-04-20 17:15:30,671 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: defer
+2022-04-20 17:15:30,671 INFO    SenderThread:5988 [sender.py:send_request_defer():388] handle sender defer: 10
+2022-04-20 17:15:30,775 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-20 17:15:30,775 DEBUG   SenderThread:5988 [sender.py:send_request():249] send_request: poll_exit
+2022-04-20 17:15:30,776 INFO    SenderThread:5988 [file_pusher.py:join():150] waiting for file pusher
+2022-04-20 17:15:32,334 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: sampled_history
+2022-04-20 17:15:32,336 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: get_summary
+2022-04-20 17:15:32,338 DEBUG   HandlerThread:5988 [handler.py:handle_request():141] handle_request: shutdown
+2022-04-20 17:15:32,339 INFO    HandlerThread:5988 [handler.py:finish():790] shutting down handler
+2022-04-20 17:15:32,692 INFO    WriterThread:5988 [datastore.py:close():281] close: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_171509-1z2xmdsr\run-1z2xmdsr.wandb
+2022-04-20 17:15:33,221 INFO    SenderThread:5988 [sender.py:finish():1107] shutting down sender
+2022-04-20 17:15:33,221 INFO    SenderThread:5988 [file_pusher.py:finish():145] shutting down file pusher
+2022-04-20 17:15:33,221 INFO    SenderThread:5988 [file_pusher.py:join():150] waiting for file pusher
+2022-04-20 17:15:33,228 INFO    MainThread:5988 [internal.py:handle_exit():82] Internal process exited

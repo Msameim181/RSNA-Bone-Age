@@ -1,0 +1,40 @@
+2022-04-20 17:42:42,395 INFO    MainThread:18540 [wandb_setup.py:_flush():75] Loading settings from C:\Users\mahdi\.config\wandb\settings
+2022-04-20 17:42:42,395 INFO    MainThread:18540 [wandb_setup.py:_flush():75] Loading settings from C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\settings
+2022-04-20 17:42:42,395 INFO    MainThread:18540 [wandb_setup.py:_flush():75] Loading settings from environment variables: {}
+2022-04-20 17:42:42,395 INFO    MainThread:18540 [wandb_setup.py:_flush():75] Inferring run settings from compute environment: {'program_relpath': 'Run.py', 'program': 'c:\\Users\\mahdi\\Desktop\\Github_Work\\1\\RSNA-Bone-Age\\Run.py'}
+2022-04-20 17:42:42,395 INFO    MainThread:18540 [wandb_setup.py:_flush():75] Applying login settings: {'api_key': '***REDACTED***'}
+2022-04-20 17:42:42,396 INFO    MainThread:18540 [wandb_setup.py:_flush():75] Applying login settings: {'api_key': '***REDACTED***'}
+2022-04-20 17:42:42,397 INFO    MainThread:18540 [wandb_init.py:_log_setup():438] Logging user logs to C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_174242-3gnd75mm\logs\debug.log
+2022-04-20 17:42:42,397 INFO    MainThread:18540 [wandb_init.py:_log_setup():439] Logging internal logs to C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\run-20220420_174242-3gnd75mm\logs\debug-internal.log
+2022-04-20 17:42:42,397 INFO    MainThread:18540 [wandb_init.py:init():472] calling init triggers
+2022-04-20 17:42:42,397 INFO    MainThread:18540 [wandb_init.py:init():475] wandb.init called with sweep_config: {}
+config: {}
+2022-04-20 17:42:42,397 INFO    MainThread:18540 [wandb_init.py:init():525] starting backend
+2022-04-20 17:42:42,398 INFO    MainThread:18540 [backend.py:_multiprocessing_setup():99] multiprocessing start_methods=spawn, using: spawn
+2022-04-20 17:42:42,408 INFO    MainThread:18540 [backend.py:ensure_launched():219] starting backend process...
+2022-04-20 17:42:42,516 INFO    MainThread:18540 [backend.py:ensure_launched():224] started backend process with pid: 13536
+2022-04-20 17:42:42,517 INFO    MainThread:18540 [wandb_init.py:init():534] backend started and connected
+2022-04-20 17:42:42,523 INFO    MainThread:18540 [wandb_init.py:init():598] updated telemetry
+2022-04-20 17:42:42,786 INFO    MainThread:18540 [wandb_init.py:init():629] communicating run to backend with 30 second timeout
+2022-04-20 17:42:45,449 INFO    MainThread:18540 [wandb_run.py:_on_init():1922] communicating current version
+2022-04-20 17:42:46,402 INFO    MainThread:18540 [wandb_run.py:_on_init():1926] got version response 
+2022-04-20 17:42:46,403 INFO    MainThread:18540 [wandb_init.py:init():660] starting run threads in backend
+2022-04-20 17:42:47,097 WARNING MainThread:18540 [wandb_init.py:init():1017] interrupted
+Traceback (most recent call last):
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\wandb_init.py", line 996, in init
+    run = wi.init()
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\wandb_init.py", line 671, in init
+    _ = backend.interface.communicate_run_start(run_obj)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\interface.py", line 221, in communicate_run_start
+    result = self._communicate_run_start(run_start)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\interface_shared.py", line 439, in _communicate_run_start
+    result = self._communicate(rec)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\interface_shared.py", line 225, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "C:\Python\Python39\lib\site-packages\wandb\sdk\interface\router.py", line 37, in get
+    is_set = self._object_ready.wait(timeout)
+  File "C:\Python\Python39\lib\threading.py", line 574, in wait
+    signaled = self._cond.wait(timeout)
+  File "C:\Python\Python39\lib\threading.py", line 316, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt

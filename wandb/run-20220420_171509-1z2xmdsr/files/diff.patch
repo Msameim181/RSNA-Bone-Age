@@ -1,0 +1,328 @@
+diff --git a/Run.py b/Run.py
+index 1923747..303f724 100644
+--- a/Run.py
++++ b/Run.py
+@@ -9,7 +9,7 @@ import torch
+ 
+ import wandb
+ # Models
+-from models.MobileNet import MobileNetV2
++from models.MobileNet import MobileNet_V2
+ from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+ # Custom libs
+ from Train import trainer
+@@ -50,7 +50,7 @@ if __name__ == '__main__':
+ 
+     # Loading NN model
+     logging.info('Loading NN Model...')
+-    net = MobileNetV2(image_channels=1, num_classes=num_classes)
++    net = MobileNet_V2(pretrained = True, image_channels=1, num_classes=num_classes)
+     logging.info(f'Model loaded as "{net.name}"')
+     logging.info(f'Network:\n'
+                  f'\t{net.in_channels} input channels\n'
+diff --git a/Train.py b/Train.py
+index 8991fa6..ede0f38 100644
+--- a/Train.py
++++ b/Train.py
+@@ -141,7 +141,7 @@ def trainer(
+ 
+                 # Validation
+                 validation(wandb_logger, net, device, optimizer, scheduler, criterion, 
+-                    epochs,global_step,  n_train, batch_size,val_loader, images, 
++                    epoch,global_step,  n_train, batch_size,val_loader, images, 
+                     boneage, age_pred, gender)
+ 
+                 net.train()
+@@ -165,7 +165,7 @@ def validation(
+     optimizer, 
+     scheduler, 
+     criterion, 
+-    epochs:int,
++    epoch:int,
+     global_step,  
+     n_train:int, 
+     batch_size:int,
+@@ -208,7 +208,7 @@ def validation(
+                 'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age for age in age_pred.argmax(dim=1, keepdim=True).float().cpu()],
+             }, 
+             'step': global_step, 
+-            'epoch': epochs, 
++            'epoch': epoch, 
+             **histograms
+         })
+ 
+diff --git a/Validation.py b/Validation.py
+index 7d969db..3a4d2e4 100644
+--- a/Validation.py
++++ b/Validation.py
+@@ -39,6 +39,6 @@ def validate(net, val_loader, device, criterion):
+     # Logging
+     logging.info(f'\nValidation set:\n'
+                  f'\tAverage loss: {val_loss:.4f}'
+-                 f'\tAccuracy: {acc * 100:.2f}% \t Correct = {correct}/{n_val}\n')
++                 f'\tAccuracy: {acc * 100:.2f}%\tCorrect = {correct}/{n_val}\n')
+     
+     return val_loss, acc, correct
+diff --git a/__pycache__/Train.cpython-39.pyc b/__pycache__/Train.cpython-39.pyc
+index 3aefd61..74a1cc1 100644
+Binary files a/__pycache__/Train.cpython-39.pyc and b/__pycache__/Train.cpython-39.pyc differ
+diff --git a/__pycache__/Validation.cpython-39.pyc b/__pycache__/Validation.cpython-39.pyc
+index dc98bf0..aa9c0e2 100644
+Binary files a/__pycache__/Validation.cpython-39.pyc and b/__pycache__/Validation.cpython-39.pyc differ
+diff --git a/models/MobileNet/__init__.py b/models/MobileNet/__init__.py
+index b4371b0..496010e 100644
+--- a/models/MobileNet/__init__.py
++++ b/models/MobileNet/__init__.py
+@@ -1,2 +1,2 @@
+ # from .mobilenet_model_im import mobilenet
+-from .mobilenet import MobileNetV2
++from .mobilenet import MobileNet_V2
+diff --git a/models/MobileNet/__pycache__/__init__.cpython-39.pyc b/models/MobileNet/__pycache__/__init__.cpython-39.pyc
+index 483ac36..e927691 100644
+Binary files a/models/MobileNet/__pycache__/__init__.cpython-39.pyc and b/models/MobileNet/__pycache__/__init__.cpython-39.pyc differ
+diff --git a/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc b/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc
+index 60a02bb..178f282 100644
+Binary files a/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc and b/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc differ
+diff --git a/models/MobileNet/mobilenet.py b/models/MobileNet/mobilenet.py
+index 6baeb71..d64ec40 100644
+--- a/models/MobileNet/mobilenet.py
++++ b/models/MobileNet/mobilenet.py
+@@ -23,7 +23,7 @@ class MobileNetV2(torch.nn.Module):
+         self.mobilenet_v2.classifier[1] = torch.nn.Linear(in_features=1281, out_features=num_classes, bias=True)
+ 
+ 
+-    def forward(self, x):
++    def forward(self, x) -> torch.Tensor:
+         y = x[1]
+         x = x[0]
+         
+@@ -42,19 +42,67 @@ class MobileNetV2(torch.nn.Module):
+         return x
+ 
+ 
++class MobileNetV2_Pre(torch.nn.Module):
++    def __init__(self, image_channels, num_classes = 100, name: str='MobileNetV2_Pre') -> None:
++        super(MobileNetV2_Pre, self).__init__()
++
++        self.name = name
++        self.in_channels = image_channels
++        self.num_classes = num_classes
++
++        self.mobilenet_v2 = models.mobilenet_v2(pretrained=True)
++
++        self.mobilenet_v2.features[0][0] = torch.nn.Conv2d(image_channels, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
++
++        self.fc = torch.nn.Sequential(
++            torch.nn.ReLU(),
++            torch.nn.Dropout(0.2),
++            torch.nn.Linear(1001, 512),
++            torch.nn.ReLU(),
++            torch.nn.Dropout(0.5),
++            torch.nn.Linear(1001, num_classes),
++        )
++
++
++    def forward(self, x) -> torch.Tensor:
++        y = x[1]
++        x = x[0]
++        
++        x = self.mobilenet_v2(x)
++
++        z = x
++        y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
++        x = torch.cat((z, y), dim=1)
++
++        x = self.fc(x)
++
++
++        return x
++
++
++def MobileNet_V2(*, pretrained:bool = False, **kwargs) -> MobileNetV2:
++    """
++    Constructs a MobileNetV2 model
++    Args:
++        pretrained (bool): If True, returns a model pre-trained on ImageNet
++    """
++    return MobileNetV2_Pre(**kwargs) if pretrained else MobileNetV2(**kwargs)
++
++
+ if __name__ == '__main__':
+-    model = MobileNetV2(image_channels=1, num_classes=229)
+-    # print(model)
++    model = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = 229)
++    print(model)
+     model.cuda()
+     
+-    inp = torch.randn(5, 1, 500, 625).cuda()
+-    sx = torch.randn(5).cuda()
+-    # print(inp.shape)
+-    # print(sx.shape)
+-    # # print(inp)
+-    # # print(sx)
+-    out = model([inp, sx])
+-    # print(out.shape)
++    # inp = torch.randn(1, 1, 500, 625).cuda()
++    # sx = torch.randn(1).cuda()
++    # # print(inp.shape)
++    # # print(sx.shape)
++    # # # print(inp)
++    # # # print(sx)
++    # out = model([inp, sx])
++    # # print(out.shape)
++    print(model.name)
+ 
+ 
+     # summary(model, (1, 500, 625,1 ), batch_size=1)
+\ No newline at end of file
+diff --git a/models/ResNet/__init__.py b/models/ResNet/__init__.py
+index 3ddeffc..40aafef 100644
+--- a/models/ResNet/__init__.py
++++ b/models/ResNet/__init__.py
+@@ -1,2 +1,2 @@
+ # from .resnet_model import *
+-from .resnet import *
+\ No newline at end of file
++from .resnet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+\ No newline at end of file
+diff --git a/models/ResNet/__pycache__/__init__.cpython-39.pyc b/models/ResNet/__pycache__/__init__.cpython-39.pyc
+index e998fcf..9316c88 100644
+Binary files a/models/ResNet/__pycache__/__init__.cpython-39.pyc and b/models/ResNet/__pycache__/__init__.cpython-39.pyc differ
+diff --git a/models/ResNet/__pycache__/resnet.cpython-39.pyc b/models/ResNet/__pycache__/resnet.cpython-39.pyc
+index 0779aaf..e52f91e 100644
+Binary files a/models/ResNet/__pycache__/resnet.cpython-39.pyc and b/models/ResNet/__pycache__/resnet.cpython-39.pyc differ
+diff --git a/models/ResNet/resnet.py b/models/ResNet/resnet.py
+index 5663bb8..5498dbc 100644
+--- a/models/ResNet/resnet.py
++++ b/models/ResNet/resnet.py
+@@ -3,6 +3,7 @@ from typing import Any, Callable, List, Optional, Type, Union
+ # Deep learning libs
+ import torch
+ from torchsummary import summary
++import torchvision.models as models
+ 
+ 
+ def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> torch.nn.Conv2d:
+@@ -265,29 +266,96 @@ class ResNet(torch.nn.Module):
+     def forward(self, x: torch.Tensor) -> torch.Tensor:
+         return self._forward_impl(x)
+ 
++class ResNet_Pre(torch.nn.Module):
++    def __init__(
++        self,
++        image_channels: int = 3,
++        num_classes: int = 1000,
++        name: str='ResNet',
++        **kwargs
++    ) -> None:
++        super(ResNet_Pre, self).__init__()
++
++
++        self.name = name
++        self.in_channels = image_channels
++        self.num_classes = num_classes
++        self.inplanes = 64
++
++        if name == "ResNet18":
++            self.resnet = models.resnet18(pretrained=True)
++        elif name == "ResNet34":
++            self.resnet = models.resnet34(pretrained=True)
++        elif name == "ResNet50":
++            self.resnet = models.resnet50(pretrained=True)
++        elif name == "ResNet101":
++            self.resnet = models.resnet101(pretrained=True)
++
++        self.resnet.conv1 = torch.nn.Conv2d(self.in_channels, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
++
++        self.fc = torch.nn.Sequential(
++            torch.nn.Linear(1001, 512),
++            torch.nn.ReLU(),
++            torch.nn.Dropout(0.5),
++            torch.nn.Linear(512, num_classes)
++        )
++
++    def forward(self, x: torch.Tensor) -> torch.Tensor:
++        y = x[1]
++        x = x[0]
++        
++        x = self.resnet(x)
++
++        z = x
++        y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
++        x = torch.cat((z, y), dim=1)
++
++        x = self.fc(x)
++
++
++        return x
+ 
+ 
+-def ResNet18(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
++
++
++
++
++def ResNet18(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
++    if pretrained:
++        return ResNet_Pre(image_channels = image_channels, 
++                    num_classes = num_classes, name='ResNet18', **kwargs)
+     return ResNet(BasicBlock, [2, 2, 2, 2], 
+                     image_channels = image_channels, 
+                     num_classes = num_classes, name='ResNet18', **kwargs)
+ 
+-def ResNet34(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
++def ResNet34(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
++    if pretrained:
++        return ResNet_Pre(image_channels = image_channels, 
++                    num_classes = num_classes, name='ResNet34', **kwargs)
+     return ResNet(BasicBlock, [3, 4, 6, 3], 
+                     image_channels = image_channels, 
+                     num_classes = num_classes, name='ResNet34', **kwargs)
+ 
+-def ResNet50(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
++def ResNet50(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
++    if pretrained:
++        return ResNet_Pre(image_channels = image_channels, 
++                    num_classes = num_classes, name='ResNet50', **kwargs)
+     return ResNet(Bottleneck, [3, 4, 6, 3], 
+                     image_channels = image_channels, 
+                     num_classes = num_classes, name='ResNet50', **kwargs)
+ 
+-def ResNet101(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
++def ResNet101(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
++    if pretrained:
++        return ResNet_Pre(image_channels = image_channels, 
++                    num_classes = num_classes, name='ResNet101', **kwargs)
+     return ResNet(Bottleneck, [3, 4, 23, 3], 
+                     image_channels = image_channels, 
+                     num_classes = num_classes, name='ResNet101', **kwargs)
+ 
+-def ResNet152(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
++def ResNet152(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
++    if pretrained:
++        return ResNet_Pre(image_channels = image_channels, 
++                    num_classes = num_classes, name='ResNet152', **kwargs)
+     return ResNet(Bottleneck, [3, 8, 36, 3], 
+                     image_channels = image_channels, 
+                     num_classes = num_classes, name='ResNet152', **kwargs)
+@@ -296,12 +364,13 @@ def ResNet152(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
+ 
+ 
+ if __name__ == '__main__':
+-    model = ResNet18().cuda()
++    model = ResNet18(pretrained = True, image_channels = 1, num_classes = 229).cuda()
+     print(model)
+-    input_shape = (1, 500, 625)
+-    # summary(model, input_shape, batch_size=1)
+-    inp = torch.randn(1, 1, 500, 625).cuda()
+-    sx = torch.randn(1).cuda()
++    print(model.name)
++    # input_shape = (1, 500, 625)
++    # # summary(model, input_shape, batch_size=1)
++    # inp = torch.randn(1, 1, 500, 625).cuda()
++    # sx = torch.randn(1).cuda()
+     
+-    out = model([inp, sx])
+-    print(out.shape)
++    # out = model([inp, sx])
++    # print(out.shape)

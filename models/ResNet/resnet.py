@@ -3,6 +3,7 @@ from typing import Any, Callable, List, Optional, Type, Union
 # Deep learning libs
 import torch
 from torchsummary import summary
+import torchvision.models as models
 
 
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> torch.nn.Conv2d:
@@ -265,29 +266,98 @@ class ResNet(torch.nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self._forward_impl(x)
 
+class ResNet_Pre(torch.nn.Module):
+    def __init__(
+        self,
+        image_channels: int = 3,
+        num_classes: int = 1000,
+        name: str='ResNet',
+        **kwargs
+    ) -> None:
+        super(ResNet_Pre, self).__init__()
 
 
-def ResNet18(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
+        self.name = name
+        self.in_channels = image_channels
+        self.num_classes = num_classes
+        self.inplanes = 64
+
+        if name == "ResNet18":
+            self.resnet = models.resnet18(pretrained=True)
+        elif name == "ResNet34":
+            self.resnet = models.resnet34(pretrained=True)
+        elif name == "ResNet50":
+            self.resnet = models.resnet50(pretrained=True)
+        elif name == "ResNet101":
+            self.resnet = models.resnet101(pretrained=True)
+
+        self.resnet.conv1 = torch.nn.Conv2d(self.in_channels, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
+
+        self.fc = torch.nn.Sequential(
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.2),
+            torch.nn.Linear(1001, 512),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.5),
+            torch.nn.Linear(512, num_classes),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        y = x[1]
+        x = x[0]
+        
+        x = self.resnet(x)
+
+        z = x
+        y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
+        x = torch.cat((z, y), dim=1)
+
+        x = self.fc(x)
+
+
+        return x
+
+
+
+
+
+
+def ResNet18(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
+    if pretrained:
+        return ResNet_Pre(image_channels = image_channels, 
+                    num_classes = num_classes, name='ResNet18', **kwargs)
     return ResNet(BasicBlock, [2, 2, 2, 2], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet18', **kwargs)
 
-def ResNet34(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
+def ResNet34(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
+    if pretrained:
+        return ResNet_Pre(image_channels = image_channels, 
+                    num_classes = num_classes, name='ResNet34', **kwargs)
     return ResNet(BasicBlock, [3, 4, 6, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet34', **kwargs)
 
-def ResNet50(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
+def ResNet50(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
+    if pretrained:
+        return ResNet_Pre(image_channels = image_channels, 
+                    num_classes = num_classes, name='ResNet50', **kwargs)
     return ResNet(Bottleneck, [3, 4, 6, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet50', **kwargs)
 
-def ResNet101(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
+def ResNet101(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
+    if pretrained:
+        return ResNet_Pre(image_channels = image_channels, 
+                    num_classes = num_classes, name='ResNet101', **kwargs)
     return ResNet(Bottleneck, [3, 4, 23, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet101', **kwargs)
 
-def ResNet152(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
+def ResNet152(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
+    if pretrained:
+        return ResNet_Pre(image_channels = image_channels, 
+                    num_classes = num_classes, name='ResNet152', **kwargs)
     return ResNet(Bottleneck, [3, 8, 36, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet152', **kwargs)
@@ -296,12 +366,13 @@ def ResNet152(image_channels=3, num_classes=1000, **kwargs) -> ResNet:
 
 
 if __name__ == '__main__':
-    model = ResNet18().cuda()
+    model = ResNet18(pretrained = True, image_channels = 1, num_classes = 229).cuda()
     print(model)
-    input_shape = (1, 500, 625)
-    # summary(model, input_shape, batch_size=1)
-    inp = torch.randn(1, 1, 500, 625).cuda()
-    sx = torch.randn(1).cuda()
+    print(model.name)
+    # input_shape = (1, 500, 625)
+    # # summary(model, input_shape, batch_size=1)
+    # inp = torch.randn(1, 1, 500, 625).cuda()
+    # sx = torch.randn(1).cuda()
     
-    out = model([inp, sx])
-    print(out.shape)
+    # out = model([inp, sx])
+    # print(out.shape)
