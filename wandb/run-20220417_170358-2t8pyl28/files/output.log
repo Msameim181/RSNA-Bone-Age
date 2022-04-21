@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 246, in <module>
-    train_net(net = net,
-  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 106, in train_net
-    experiment.tags.append(net.name)
-AttributeError: 'tuple' object has no attribute 'append'

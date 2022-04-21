@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "c:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\Train.py", line 165, in <module>
-    train_net(net, device, train_loader, test_loader,
-  File "c:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\Train.py", line 78, in train_net
-    Device:          {device.type}
-AttributeError: 'str' object has no attribute 'type'

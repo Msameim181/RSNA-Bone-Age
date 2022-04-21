@@ -325,7 +325,7 @@ class ResNet_Pre(torch.nn.Module):
 def ResNet18(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
     if pretrained:
         return ResNet_Pre(image_channels = image_channels, 
-                    num_classes = num_classes, name='ResNet18', **kwargs)
+                    num_classes = num_classes, name='ResNet18_Pre', **kwargs)
     return ResNet(BasicBlock, [2, 2, 2, 2], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet18', **kwargs)
@@ -333,7 +333,7 @@ def ResNet18(pretrained = False, image_channels = 3, num_classes = 1000, **kwarg
 def ResNet34(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
     if pretrained:
         return ResNet_Pre(image_channels = image_channels, 
-                    num_classes = num_classes, name='ResNet34', **kwargs)
+                    num_classes = num_classes, name='ResNet34_Pre', **kwargs)
     return ResNet(BasicBlock, [3, 4, 6, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet34', **kwargs)
@@ -341,7 +341,7 @@ def ResNet34(pretrained = False, image_channels = 3, num_classes = 1000, **kwarg
 def ResNet50(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
     if pretrained:
         return ResNet_Pre(image_channels = image_channels, 
-                    num_classes = num_classes, name='ResNet50', **kwargs)
+                    num_classes = num_classes, name='ResNet50_Pre', **kwargs)
     return ResNet(Bottleneck, [3, 4, 6, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet50', **kwargs)
@@ -349,7 +349,7 @@ def ResNet50(pretrained = False, image_channels = 3, num_classes = 1000, **kwarg
 def ResNet101(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
     if pretrained:
         return ResNet_Pre(image_channels = image_channels, 
-                    num_classes = num_classes, name='ResNet101', **kwargs)
+                    num_classes = num_classes, name='ResNet101_Pre', **kwargs)
     return ResNet(Bottleneck, [3, 4, 23, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet101', **kwargs)
@@ -357,7 +357,7 @@ def ResNet101(pretrained = False, image_channels = 3, num_classes = 1000, **kwar
 def ResNet152(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> ResNet:
     if pretrained:
         return ResNet_Pre(image_channels = image_channels, 
-                    num_classes = num_classes, name='ResNet152', **kwargs)
+                    num_classes = num_classes, name='ResNet152_Pre', **kwargs)
     return ResNet(Bottleneck, [3, 8, 36, 3], 
                     image_channels = image_channels, 
                     num_classes = num_classes, name='ResNet152', **kwargs)

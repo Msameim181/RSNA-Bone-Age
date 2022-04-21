@@ -39,11 +39,10 @@ def trainer(
         run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{net.name}"
 
     # Defining the optimizer
-    optimizer = torch.optim.RMSprop(
+    optimizer = torch.optim.Adam(
                             net.parameters(), 
                             lr=learning_rate, 
-                            weight_decay=1e-8, 
-                            momentum=0.9)
+                            weight_decay=1e-8)
 
     # Defining the scheduler
     # goal: maximize Dice score
@@ -148,7 +147,7 @@ def trainer(
 
         # Logging
         wandb_logger.log({
-            'epoch loss': epoch_loss,
+            'epoch loss': epoch_loss / n_train,
         })
 
         # Save the model checkpoint
@@ -179,7 +178,7 @@ def validation(
 
     # Evaluation round
     # Let's See if is it evaluation time or not
-    division_step = (n_train // (10 * batch_size))
+    division_step = (n_train // (2 * batch_size))
     if division_step > 0 and global_step % division_step == 0:
 
         # WandB Storing the model parameters
@@ -191,7 +190,7 @@ def validation(
 
 
         # Evaluating the model
-        val_loss, acc, _ = validate(net, val_loader, device, criterion)
+        val_loss, acc, _, mae, mse = validate(net, val_loader, device, criterion)
         # 
         scheduler.step(val_loss)
 
@@ -199,6 +198,8 @@ def validation(
         wandb_logger.log({
             'learning rate': optimizer.param_groups[0]['lr'], 
             'validation Loss': val_loss, 
+            # 'validation Loss (MAE)': mae, 
+            # 'validation Loss (MSE)': mse, 
             'validation Correct': acc, 
             'Correct %': acc * 100,
             'Images': wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
