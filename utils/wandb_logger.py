@@ -4,21 +4,20 @@ import wandb
 
 
 
-
-
-
 def wandb_setup(config) -> wandb:
+    logging.info("Setting up WandB...")
+
     # Sign in to wandb
     wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
 
-    
     model = config['model']
     run_name = config['name']
     device = config['device']
     # Create a run
-    experiment = wandb.init(
+    wandb_logger = wandb.init(
         project = "Bone-Age-RSNA", 
         entity = "rsna-bone-age", 
+        sync_tensorboard = True,
         name = run_name, 
         tags = [
             'bone-age', 
@@ -27,28 +26,21 @@ def wandb_setup(config) -> wandb:
             f'{run_name}', 
             f'{device}'
         ],)
+    
+    # wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboardX=True)
     # Configure wandb
-    # experiment.config.update(dict(
-    #     epochs = config['epochs'], 
-    #     batch_size = config['batch_size'], 
-    #     learning_rate = config['learning_rate'],
-    #     save_checkpoint = config['save_checkpoint'], 
-    #     amp = config['amp'],
-    #     model = model,
-    #     name = run_name,
-    #     device = device))
-    experiment.config.update(config)
+    wandb_logger.config.update(config)
     # Logging
     logging.info("WandB setup completed.")
-    return experiment
+    return wandb_logger
 
 
 def wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss_step):
     # Logging
     wandb_logger.log({
-        'Loss/Step Loss':            loss.item(),
+        'Loss/Step_Loss':            loss.item(),
         'Process/Step':                 global_step,
-        'Loss/Train Loss (Step)':    epoch_loss_step,
+        'Loss/Train_Loss_(Step)':    epoch_loss_step,
         'Process/Epoch':                epoch
     })
 
@@ -60,8 +52,6 @@ def wandb_log_training(wandb_logger, epoch_loss, val_loss, epoch):
         'Loss/Validation Loss (Epoch)':  val_loss,
         'Process/Epoch':                    epoch,
     })
-    logging.info(f'\nEpoch: {epoch} | Train Loss: {epoch_loss:.4f} | Validation Loss: {val_loss:.4f}\n')
-
 
 def wandb_log_histogram(net):
     # WandB Storing the model parameters

@@ -1,16 +1,16 @@
 import logging
 from pathlib import Path
 
-import numpy as np
+import torch
 from torch.utils.tensorboard import SummaryWriter
 
-
-def tb_setup(config, log_dir:str = './tensorboard'):
+def tb_setup(config, log_dir:str = './tensorboard/'):
     """
     Setup tensorboard logger
     """
     if not log_dir:
         log_dir = './tensorboard'
+    net = config['net']
     model = config['model']
     name = config['name']
     device = config['device']
@@ -32,7 +32,12 @@ def tb_setup(config, log_dir:str = './tensorboard'):
     tb_logger.add_text(tag='amp', text_string=str(amp), global_step=0)
     tb_logger.add_text(tag='save_checkpoint', text_string=str(save_checkpoint), global_step=0)
 
+    tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size).cuda()], ))
+
+    tb_logger.flush()
+
     return tb_logger
+
 
 
 def tb_log_training_step(tb_logger, loss, global_step, epoch, epoch_loss_step):
@@ -42,6 +47,8 @@ def tb_log_training_step(tb_logger, loss, global_step, epoch, epoch_loss_step):
     tb_logger.add_scalar('Process/Step', global_step, global_step)
     tb_logger.add_scalar('Process/Epoch', epoch, global_step)
 
+    tb_logger.flush()
+
 
 def tb_log_training(tb_logger, epoch_loss, val_loss, epoch):
     # Logging
@@ -49,11 +56,13 @@ def tb_log_training(tb_logger, epoch_loss, val_loss, epoch):
     tb_logger.add_scalar('Loss/Train Loss', epoch_loss, epoch)
     tb_logger.add_scalar('Loss/Epoch Loss', epoch_loss, epoch)
     logging.info(f'\nEpoch: {epoch} | Train Loss: {epoch_loss:.4f} | Validation Loss: {val_loss:.4f}\n')
+
+    tb_logger.flush()
     
 
 
 def tb_log_validation(tb_logger, optimizer, val_loss, acc, 
-    images, batch_size, global_step, epoch):
+    images, batch_size, global_step, epoch, net):
     # TensorBoard Storing the results
     tb_logger.add_scalar('Process/Learning Rate', optimizer.param_groups[0]['lr'], global_step)
     tb_logger.add_scalar('Loss/Validation Loss (Step)', val_loss, global_step)
@@ -64,13 +73,18 @@ def tb_log_validation(tb_logger, optimizer, val_loss, acc,
     # img_batch = images.cpu() if batch_size == 1 else [image.cpu() for image in images]
     # tb_logger.add_images('Data/Images', img_batch, global_step)
 
+    for name, param in net.named_parameters():
+        tb_logger.add_histogram(name, param.clone().cpu().data.numpy(), global_step)
+
+    tb_logger.flush()
 
 
 if __name__ == '__main__':
     # Test
     tb_setup(dict(
+            net = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = 229), 
             epochs = 1000, 
-            batch_size = 200, 
+            batch_size = 2, 
             learning_rate = 0.001,
             save_checkpoint = './checkpoints/', 
             amp = False,

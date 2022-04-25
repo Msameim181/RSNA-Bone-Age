@@ -61,6 +61,7 @@ def trainer(
 
     # Initiate WandB
     config = dict(
+        net = net,
         epochs = epochs, 
         batch_size = batch_size, 
         learning_rate = learning_rate,
@@ -162,6 +163,9 @@ def trainer(
             Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
             torch.save(net.state_dict(), str(f"{dir_checkpoint}/checkpoint_epoch{epoch + 1}.pth"))
 
+    logging.info(f'Finished Training Course. \n')
+    tb_logger.close()
+    logging.info(f'Shutting Down... \n')
 
 # Validation Worker
 def validation(
@@ -212,7 +216,7 @@ def validation(
                 global_step, epoch, histograms)
 
         tb_log_validation(tb_logger, optimizer, val_loss, acc, 
-            images, batch_size, global_step, epoch)
+            images, batch_size, global_step, epoch, net)
 
         logging.info('Validation completed.')
         logging.info('Result Saved.')
