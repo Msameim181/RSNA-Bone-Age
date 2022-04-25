@@ -1,17 +1,17 @@
 # System and utils for preprocessing
-import logging
-import os
-from pathlib import Path
-# Deep learning libs
-import numpy as np
-import pandas as pd
-import torch
-from PIL import Image
-# Custom libs
-from torch.utils.data import DataLoader, Dataset
-from utils.dataloader import RSNATestDataset, RSNATrainDataset
-from models.ResNet import ResNet18, ResNet50
-from models.MobileNet import MobileNetV2
+# import logging
+# import os
+# from pathlib import Path
+# # Deep learning libs
+# import numpy as np
+# import pandas as pd
+# import torch
+# from PIL import Image
+# # Custom libs
+# from torch.utils.data import DataLoader, Dataset
+# from utils.dataloader import RSNATestDataset, RSNATrainDataset
+# from models.ResNet import ResNet18, ResNet50
+# from models.MobileNet import MobileNetV2
 
 
 # if __name__ == '__main__':
@@ -70,21 +70,22 @@ from models.MobileNet import MobileNetV2
 
 
 
-from datetime import datetime
-
-now = datetime.now() # current date and time
-
-year = now.strftime("%Y")
-print("year:", year)
-
-month = now.strftime("%m")
-print("month:", month)
-
-day = now.strftime("%d")
-print("day:", day)
-
-time = now.strftime("%H:%M:%S")
-print("time:", time)
-
-date_time = now.strftime("%Y%m%d_%H%M%S") + "_Model"
-print("date and time:",date_time)
+global_step = 4414
+n_train = 8828
+batch_size = 2
+n = 2
+es = 0
+# n_train = n_train // batch_size
+# # point = [0 if item == n else (n_train//n) * item  for item in range(1, n + 1)]
+# co = 0
+# print(point)
+for i in range(n_train // batch_size):
+    es += 1
+    global_step += 1
+    epoch_step = (global_step % (n_train // batch_size)) if global_step > (n_train // batch_size) else global_step
+#     epoch_step = (global_step % n_train) if global_step >= n_train else global_step
+#     if epoch_step in point:
+#         print(global_step*batch_size)
+#         co += 1
+    print(epoch_step, es)
+# print(co)

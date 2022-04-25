@@ -7,3 +7,4 @@ checkpoints
 checkpoints/*
 .checkpoints/*
 wandb
+# tensorboard

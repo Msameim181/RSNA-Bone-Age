@@ -8,10 +8,10 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-import wandb
 # Custom libs
 from utils.rich_progress_bar import make_bar
-from utils.wandb_logger import wandb_setup
+from utils.wandb_logger import *
+from utils.tensorboard_logger import *
 from Validation import validate
 
 
@@ -26,6 +26,7 @@ def trainer(
     batch_size:int = None, 
     learning_rate:float = None,
     run_name:str = None,
+    WandB_usage:bool = False,
     amp:bool = False, 
     save_checkpoint:bool = True, 
     dir_checkpoint:str = './checkpoints/',) -> None:
@@ -59,7 +60,7 @@ def trainer(
     n_val = len(val_loader.dataset)
 
     # Initiate WandB
-    wandb_logger = wandb_setup(dict(
+    config = dict(
         epochs = epochs, 
         batch_size = batch_size, 
         learning_rate = learning_rate,
@@ -69,8 +70,11 @@ def trainer(
         name = run_name,
         device = device,
         optimizer = optimizer.__class__.__name__,
-        criterion = criterion.__class__.__name__))
+        criterion = criterion.__class__.__name__)
 
+    wandb_logger = wandb_setup(config) if WandB_usage else None
+    
+    tb_logger = tb_setup(config)
 
     logging.info(f'''Training Settings:
         Device:             {device}
@@ -95,7 +99,7 @@ def trainer(
         net.to(device = device, dtype = torch.float32)
         net.train()
         epoch_loss = 0
-
+        epoch_step = 0
         # Reading data and Training
         with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
             for _, images, boneage, boneage_onehot, gender, _ in train_loader:
@@ -129,26 +133,29 @@ def trainer(
                 # Add the loss to epoch_loss
                 pbar.update(images.shape[0])
                 global_step += 1
+                epoch_step += 1
                 epoch_loss += loss.item()
-                wandb_logger.log({
-                    'train loss': loss.item(),
-                    'step': global_step,
-                    'epoch': epoch
-                })
-                pbar.set_postfix(**{'loss (batch)': loss.item()})
-
-
+                
+                # Update the progress bar
+                pbar.set_postfix(**{'Step Loss (Batch)': loss.item(), 'Epoch Loss (Train)': epoch_loss / (epoch_step * batch_size)})
+                # Logging
+                if WandB_usage:
+                    wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss / (epoch_step * batch_size))
+                
+                tb_log_training_step(tb_logger, loss, global_step, epoch, epoch_loss / (epoch_step * batch_size))
+                
                 # Validation
-                validation(wandb_logger, net, device, optimizer, scheduler, criterion, 
-                    epoch,global_step,  n_train, batch_size,val_loader, images, 
-                    boneage, age_pred, gender)
+                val_loss = validation(wandb_logger, tb_logger, net, device, optimizer, scheduler, criterion, 
+                    epoch, global_step, epoch_step, n_train, batch_size,val_loader, images, 
+                    boneage, age_pred, gender, WandB_usage)
 
                 net.train()
 
         # Logging
-        wandb_logger.log({
-            'epoch loss': epoch_loss / n_train,
-        })
+        if WandB_usage:
+            wandb_log_training(wandb_logger, epoch_loss / n_train, val_loss, epoch)
+
+        tb_log_training(tb_logger, epoch_loss / n_train, val_loss, epoch)
 
         # Save the model checkpoint
         if save_checkpoint:
@@ -159,60 +166,55 @@ def trainer(
 # Validation Worker
 def validation(
     wandb_logger, 
+    tb_logger,
     net, 
     device:torch.device, 
     optimizer, 
     scheduler, 
     criterion, 
     epoch:int,
-    global_step,  
+    global_step:int, 
+    epoch_step:int, 
     n_train:int, 
     batch_size:int,
     val_loader:DataLoader, 
     images:torch.Tensor, 
     boneage:torch.Tensor, 
     age_pred:torch.Tensor, 
-    gender:torch.Tensor) -> None:
+    gender:torch.Tensor,
+    WandB_usage:bool,
+    val_repeat:int = 2) -> None:
     """Validation Worker
     """
-
+    val_loss = None
     # Evaluation round
     # Let's See if is it evaluation time or not
-    division_step = (n_train // (2 * batch_size))
-    if division_step > 0 and global_step % division_step == 0:
+    n_train_batch = n_train // batch_size
+    val_point = [0 if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
+    epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
+    if epoch_step in val_point:
+        logging.info(f'Val accept on {global_step}')
 
         # WandB Storing the model parameters
-        histograms = {}
-        for tag, value in net.named_parameters():
-            tag = tag.replace('/', '.')
-            histograms[f'Weights/{tag}'] = wandb.Histogram(value.data.cpu())
-            histograms[f'Gradients/{tag}'] = wandb.Histogram(value.grad.data.cpu())
+        if WandB_usage:
+            histograms = wandb_log_histogram(net)
 
 
         # Evaluating the model
-        val_loss, acc, _, mae, mse = validate(net, val_loader, device, criterion)
+        val_loss, acc, _ = validate(net, val_loader, device, criterion)
         # 
         scheduler.step(val_loss)
 
         # WandB Storing the results
-        wandb_logger.log({
-            'learning rate': optimizer.param_groups[0]['lr'], 
-            'validation Loss': val_loss, 
-            # 'validation Loss (MAE)': mae, 
-            # 'validation Loss (MSE)': mse, 
-            'validation Correct': acc, 
-            'Correct %': acc * 100,
-            'Images': wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
-            'Gender': gender if batch_size == 1 else list(gender), 
-            'Age': {
-                'True': boneage.float().cpu() if batch_size == 1 else [age.float().cpu() for age in boneage], 
-                'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age for age in age_pred.argmax(dim=1, keepdim=True).float().cpu()],
-            }, 
-            'step': global_step, 
-            'epoch': epoch, 
-            **histograms
-        })
+        if WandB_usage:
+            wandb_log_validation(wandb_logger, optimizer, val_loss, acc, 
+                images, batch_size, gender, boneage, age_pred, 
+                global_step, epoch, histograms)
+
+        tb_log_validation(tb_logger, optimizer, val_loss, acc, 
+            images, batch_size, global_step, epoch)
 
         logging.info('Validation completed.')
         logging.info('Result Saved.')
 
+    return val_loss

@@ -7,17 +7,12 @@ from pathlib import Path
 # Deep learning libs
 import torch
 
-import wandb
 # Models
 from models.MobileNet import MobileNet_V2
 from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 # Custom libs
 from Train import trainer
 from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
-
-# Sign in to wandb
-wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
-
 
 
 if __name__ == '__main__':
@@ -62,6 +57,7 @@ if __name__ == '__main__':
     epochs = 10
     batch_size = 2
     val_percent = 0.3
+    WandB_usage = True
 
     # Packaging the data
     logging.info('Packaging the data...')
@@ -99,6 +95,7 @@ if __name__ == '__main__':
         amp = False, 
         save_checkpoint = True, 
         dir_checkpoint = './checkpoints/',
-        run_name = run_name)
+        run_name = run_name,
+        WandB_usage = WandB_usage)
 
     
