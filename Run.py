@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     # Loading NN model
     logging.info('Loading NN Model...')
-    net = MobileNet_V2(pretrained = True, image_channels=1, num_classes=num_classes)
+    net = ResNet50(pretrained = True, image_channels=1, num_classes=num_classes)
     logging.info(f'Model loaded as "{net.name}"')
     logging.info(f'Network:\n'
                  f'\t{net.in_channels} input channels\n'

@@ -197,7 +197,6 @@ def validation(
     val_point = [0 if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
     epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
     if epoch_step in val_point:
-        logging.info(f'Val accept on {global_step}')
 
         # WandB Storing the model parameters
         if WandB_usage:
