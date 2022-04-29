@@ -27,7 +27,7 @@ def wandb_setup(config) -> wandb:
             f'{device}'
         ],)
     
-    # wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboardX=True)
+    # wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboard_x=False)
     # Configure wandb
     wandb_logger.config.update(config)
     # Logging
@@ -38,9 +38,9 @@ def wandb_setup(config) -> wandb:
 def wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss_step):
     # Logging
     wandb_logger.log({
-        'Loss/Step_Loss':            loss.item(),
+        'Loss/Step Loss':            loss.item(),
         'Process/Step':                 global_step,
-        'Loss/Train_Loss_(Step)':    epoch_loss_step,
+        'Loss/Train Loss (Step)':    epoch_loss_step,
         'Process/Epoch':                epoch
     })
 

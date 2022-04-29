@@ -68,22 +68,45 @@
 #     # train_net(net, device, train_loader, test_loader, 
 #     #         epochs, batch_size, learning_rate)
 
-import argparse
-def get_args():
-    parser = argparse.ArgumentParser(description='Train the UNet on images and target masks')
-    parser.add_argument('--epochs', '-e', metavar='E', type=int, default=50, help='Number of epochs')
-    parser.add_argument('--batch-size', '-b', dest='batch_size', metavar='B', type=int, default=1, help='Batch size')
-    parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=0.00001,
-                        help='Learning rate', dest='lr')
-    parser.add_argument('--load', '-f', type=str, default=False, help='Load model from a .pth file')
-    parser.add_argument('--scale', '-s', type=float, default=0.5, help='Downscaling factor of the images')
-    parser.add_argument('--validation', '-v', dest='val', type=float, default=10.0,
-                        help='Percent of the data that is used as validation (0-100)')
-    parser.add_argument('--amp', action='store_true', default=False, help='Use mixed precision')
 
-    return parser.parse_args()
 
-if __name__ == '__main__':
-    # Test
-    arg = get_args()
-    print(arg)
+# def packaging(batch_size, n_train):
+#     batch_num = n_train // batch_size
+#     if n_train % batch_size != 0:
+#         batch_num += 1
+#     return batch_num
+
+# def vel_section(batch_size, n_train, val_repeat, global_step):
+#     n_train_batch = n_train // batch_size
+#     val_point = [0 if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
+#     n_train_batch += 1
+#     epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
+#     if epoch_step in val_point:
+#         print('val_point(epoch_step):', epoch_step)
+#         print('val_point(global_step): ', global_step)
+#         return True
+# if __name__ == '__main__':
+#     # Test
+
+
+
+#     val_repeat = 2
+#     batch_size = 6
+#     n_train = 8828
+#     global_step = 0
+
+
+#     print(f"n_train // batch_size: {n_train // batch_size}")
+#     print(f"n_train % batch_size: {n_train % batch_size}")
+#     print(packaging(batch_size=batch_size, n_train=n_train))
+#     # print(8828 % 2)
+#     for epoch in range(1):
+#         print(f"epoch: {epoch}")
+#         epoch_step = 0
+#         for i in range(packaging(batch_size, n_train)):
+#             global_step += 1
+#             epoch_step += 1
+#             if ch := vel_section(batch_size, n_train, val_repeat, global_step):
+#                 log_epoch_loss = ((((epoch_step - 1) * batch_size) + (n_train % batch_size))) if n_train // batch_size == (epoch_step - 1) else ((epoch_step * batch_size))
+#                 print(f"val_loss T {epoch_step} / {epoch_step * batch_size} / {global_step} / {log_epoch_loss}")
+#             # print(i)

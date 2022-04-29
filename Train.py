@@ -136,20 +136,22 @@ def trainer(
                 global_step += 1
                 epoch_step += 1
                 epoch_loss += loss.item()
-                
+
+                # Logging
+                log_epoch_loss = (epoch_loss / (((epoch_step - 1) * batch_size) + (n_train % batch_size))) if n_train // batch_size == (epoch_step - 1) else (epoch_loss / (epoch_step * batch_size))
                 # Update the progress bar
-                pbar.set_postfix(**{'Step Loss (Batch)': loss.item(), 'Epoch Loss (Train)': epoch_loss / (epoch_step * batch_size)})
+                pbar.set_postfix(**{'Step Loss (Batch)': loss.item(), 'Epoch Loss (Train)': log_epoch_loss})
                 # Logging
                 if WandB_usage:
-                    wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss / (epoch_step * batch_size))
+                    wandb_log_training_step(wandb_logger, loss, global_step, epoch, log_epoch_loss)
                 
-                tb_log_training_step(tb_logger, loss, global_step, epoch, epoch_loss / (epoch_step * batch_size))
+                tb_log_training_step(tb_logger, loss, global_step, epoch, log_epoch_loss)
                 
                 # Validation
                 val_loss = validation(wandb_logger, tb_logger, net, device, optimizer, scheduler, criterion, 
                     epoch, global_step, epoch_step, n_train, batch_size,val_loader, images, 
                     boneage, age_pred, gender, WandB_usage)
-
+                
                 net.train()
 
         # Logging
@@ -190,11 +192,12 @@ def validation(
     val_repeat:int = 2) -> None:
     """Validation Worker
     """
-    val_loss = None
+
     # Evaluation round
     # Let's See if is it evaluation time or not
     n_train_batch = n_train // batch_size
     val_point = [0 if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
+    n_train_batch += 1
     epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
     if epoch_step in val_point:
 
@@ -219,5 +222,6 @@ def validation(
 
         logging.info('Validation completed.')
         logging.info('Result Saved.')
+        return val_loss
 
-    return val_loss
+    return None
