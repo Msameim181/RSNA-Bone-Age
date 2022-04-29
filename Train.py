@@ -137,7 +137,7 @@ def trainer(
                 epoch_step += 1
                 epoch_loss += loss.item()
 
-                # Logging
+                # Logging: Solving the number of trained item for epoch loss to divide by the number of items
                 log_epoch_loss = (epoch_loss / (((epoch_step - 1) * batch_size) + (n_train % batch_size))) if n_train // batch_size == (epoch_step - 1) else (epoch_loss / (epoch_step * batch_size))
                 # Update the progress bar
                 pbar.set_postfix(**{'Step Loss (Batch)': loss.item(), 'Epoch Loss (Train)': log_epoch_loss})
@@ -197,6 +197,7 @@ def validation(
     # Let's See if is it evaluation time or not
     n_train_batch = n_train // batch_size
     val_point = [0 if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
+    # Solving The Validation in end of epoch problem and tensorboard overflow problem
     n_train_batch += 1
     epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
     if epoch_step in val_point:
