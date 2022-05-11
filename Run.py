@@ -1,6 +1,7 @@
 # System and utils for preprocessing
 import logging
 import sys
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -14,6 +15,8 @@ from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 from Train import trainer
 from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
 from utils.get_args import get_args
+
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 def select_model(args, image_channels, num_classes):
     if args.model == 'ResNet18':
