@@ -3,8 +3,8 @@ temp/*
 .temp/*
 dataset/rsna-bone-age
 dataset/rsna-bone-age/*
-checkpoints
-checkpoints/*
-.checkpoints/*
-wandb
+# checkpoints
+# checkpoints/*
+# .checkpoints/*
+# wandb
 # tensorboard
