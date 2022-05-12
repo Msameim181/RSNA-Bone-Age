@@ -113,7 +113,7 @@ if __name__ == '__main__':
         batch_size = batch_size, 
         learning_rate = learning_rate, 
         val_percent = val_percent,
-        amp = args.amp == 'True', 
+        amp = args.amp, 
         save_checkpoint = args.checkpoint == 'True', 
         dir_checkpoint = './checkpoints/',
         run_name = run_name,
