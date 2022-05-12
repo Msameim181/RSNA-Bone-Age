@@ -19,17 +19,17 @@ def get_args():
                         default="ResNet18", help='The name of the model to use')
 
     parser.add_argument('--pretrained', '-p', dest='pretrained', metavar='P', type=str, 
-                        default=True, help='Using pretrained model')
+                        default='True', help='Using pretrained model')
 
     parser.add_argument('--wandb', '-w', dest='wandb', metavar='W', type=str, 
-                        default=True, help='Using WandB')
+                        default='True', help='Using WandB')
 
     parser.add_argument('--amp', action='store_true', default=False, help='Use mixed precision')
 
     parser.add_argument('--checkpoint', '-c', dest='checkpoint', metavar='C', type=str, 
-                        default=True, help='Saving checkpoints')
+                        default='True', help='Saving checkpoints')
 
-    parser.add_argument('--load', '-f', type=str, default=False, help='Load model from a .pth file')
+    parser.add_argument('--load', '-f', action='store_true', default=False, help='Load model from a .pth file')
 
     return parser.parse_args()
 
@@ -38,8 +38,9 @@ if __name__ == '__main__':
     # Test
     arg = get_args()
     print(arg.epochs)
-    print(arg.wandb)
-    print(arg.feature)
+    print(arg.wandb, type(arg.wandb))
+    print(arg.amp, type(arg.amp))
+    print(arg.load, type(arg.load))
 
 
 
