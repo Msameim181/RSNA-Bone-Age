@@ -1,0 +1,35 @@
+{
+    "os": "Windows-10-10.0.19041-SP0",
+    "python": "3.8.5",
+    "heartbeatAt": "2022-05-12T06:41:33.008547",
+    "startedAt": "2022-05-12T06:41:31.571062",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3060",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "-e",
+        "50",
+        "-b",
+        "10",
+        "-l",
+        "0.001",
+        "-m",
+        "ResNet101",
+        "-w",
+        "False"
+    ],
+    "state": "running",
+    "program": "Run.py",
+    "codePath": "Run.py",
+    "git": {
+        "remote": "https://github.com/Msameim181/RSNA-Bone-Age.git",
+        "commit": "fe7d8cbcc33f85916378e1d044dc2f81d72e7927"
+    },
+    "email": "9259samei@gmail.com",
+    "root": "G:/Samei/Repo/RSNA-Bone-Age",
+    "host": "DESKTOP-ISIIVT7",
+    "username": "sameie",
+    "executable": "C:\\ProgramData\\Anaconda3\\python.exe"
+}
