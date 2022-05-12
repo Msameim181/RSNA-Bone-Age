@@ -1,0 +1,15 @@
+diff --git a/utils/__pycache__/wandb_logger.cpython-39.pyc b/utils/__pycache__/wandb_logger.cpython-39.pyc
+index 4cd466b..8bb9424 100644
+Binary files a/utils/__pycache__/wandb_logger.cpython-39.pyc and b/utils/__pycache__/wandb_logger.cpython-39.pyc differ
+diff --git a/utils/wandb_logger.py b/utils/wandb_logger.py
+index eddf262..b059810 100644
+--- a/utils/wandb_logger.py
++++ b/utils/wandb_logger.py
+@@ -19,6 +19,7 @@ def wandb_setup(config) -> wandb:
+     experiment = wandb.init(
+         project = "Bone-Age-RSNA", 
+         entity = "rsna-bone-age", 
++        sync_tensorboard = True,
+         name = run_name, 
+         tags = [
+             'bone-age', 

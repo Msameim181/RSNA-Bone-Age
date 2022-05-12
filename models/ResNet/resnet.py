@@ -348,6 +348,8 @@ class ResNet_Pre2(torch.nn.Module):
             self.resnet = models.resnet50(pretrained=True)
         elif name == "ResNet101":
             self.resnet = models.resnet101(pretrained=True)
+        elif name == "ResNet152":
+            self.resnet = models.resnet152(pretrained=True)
 
         self.resnet.conv1 = torch.nn.Conv2d(self.in_channels, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
 

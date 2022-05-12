@@ -1,4 +1,5 @@
 import argparse
+from xmlrpc.client import Boolean
 
 
 def get_args():
@@ -17,15 +18,15 @@ def get_args():
     parser.add_argument('--model-type', '-m', dest='model', metavar='M', type=str, 
                         default="ResNet18", help='The name of the model to use')
 
-    parser.add_argument('--pretrained', '-p', dest='pretrained', metavar='P', type=bool, 
+    parser.add_argument('--pretrained', '-p', dest='pretrained', metavar='P', type=str, 
                         default=True, help='Using pretrained model')
 
-    parser.add_argument('--wandb', '-w', dest='wandb', metavar='W', type=bool, 
+    parser.add_argument('--wandb', '-w', dest='wandb', metavar='W', type=str, 
                         default=True, help='Using WandB')
 
     parser.add_argument('--amp', action='store_true', default=False, help='Use mixed precision')
 
-    parser.add_argument('--checkpoint', '-c', dest='checkpoint', metavar='C', type=bool, 
+    parser.add_argument('--checkpoint', '-c', dest='checkpoint', metavar='C', type=str, 
                         default=True, help='Saving checkpoints')
 
     parser.add_argument('--load', '-f', type=str, default=False, help='Load model from a .pth file')
@@ -36,7 +37,9 @@ def get_args():
 if __name__ == '__main__':
     # Test
     arg = get_args()
-    print(arg.amp)
+    print(arg.epochs)
+    print(arg.wandb)
+    print(arg.feature)
 
 
 

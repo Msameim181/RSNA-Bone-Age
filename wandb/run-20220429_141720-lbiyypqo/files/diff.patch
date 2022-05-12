@@ -1,0 +1,76 @@
+diff --git a/Run.py b/Run.py
+index 40e19ed..556f215 100644
+--- a/Run.py
++++ b/Run.py
+@@ -45,7 +45,7 @@ if __name__ == '__main__':
+ 
+     # Loading NN model
+     logging.info('Loading NN Model...')
+-    net = ResNet50(pretrained = True, image_channels=1, num_classes=num_classes)
++    net = ResNet18(pretrained = True, image_channels=1, num_classes=num_classes)
+     logging.info(f'Model loaded as "{net.name}"')
+     logging.info(f'Network:\n'
+                  f'\t{net.in_channels} input channels\n'
+@@ -55,7 +55,7 @@ if __name__ == '__main__':
+     logging.info('Reading hyperparameters...')
+     learning_rate = 0.001
+     epochs = 10
+-    batch_size = 2
++    batch_size = 6
+     val_percent = 0.3
+     WandB_usage = True
+ 
+diff --git a/utils/__pycache__/tensorboard_logger.cpython-39.pyc b/utils/__pycache__/tensorboard_logger.cpython-39.pyc
+index a0f5daa..efef3b1 100644
+Binary files a/utils/__pycache__/tensorboard_logger.cpython-39.pyc and b/utils/__pycache__/tensorboard_logger.cpython-39.pyc differ
+diff --git a/utils/__pycache__/wandb_logger.cpython-39.pyc b/utils/__pycache__/wandb_logger.cpython-39.pyc
+index 882779e..06109aa 100644
+Binary files a/utils/__pycache__/wandb_logger.cpython-39.pyc and b/utils/__pycache__/wandb_logger.cpython-39.pyc differ
+diff --git a/utils/tensorboard_logger.py b/utils/tensorboard_logger.py
+index 03fea7d..d7b7bce 100644
+--- a/utils/tensorboard_logger.py
++++ b/utils/tensorboard_logger.py
+@@ -2,7 +2,8 @@ import logging
+ from pathlib import Path
+ 
+ import torch
+-from torch.utils.tensorboard import SummaryWriter
++# from torch.utils.tensorboard import SummaryWriter
++from tensorboardX import SummaryWriter
+ 
+ def tb_setup(config, log_dir:str = './tensorboard/'):
+     """
+diff --git a/utils/wandb_logger.py b/utils/wandb_logger.py
+index 313d393..3748990 100644
+--- a/utils/wandb_logger.py
++++ b/utils/wandb_logger.py
+@@ -17,7 +17,7 @@ def wandb_setup(config) -> wandb:
+     wandb_logger = wandb.init(
+         project = "Bone-Age-RSNA", 
+         entity = "rsna-bone-age", 
+-        sync_tensorboard = True,
++        # sync_tensorboard = True,
+         name = run_name, 
+         tags = [
+             'bone-age', 
+@@ -27,7 +27,7 @@ def wandb_setup(config) -> wandb:
+             f'{device}'
+         ],)
+     
+-    # wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboardX=True)
++    wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboard_x=True)
+     # Configure wandb
+     wandb_logger.config.update(config)
+     # Logging
+@@ -38,9 +38,9 @@ def wandb_setup(config) -> wandb:
+ def wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss_step):
+     # Logging
+     wandb_logger.log({
+-        'Loss/Step_Loss':            loss.item(),
++        'Loss/Step Loss':            loss.item(),
+         'Process/Step':                 global_step,
+-        'Loss/Train_Loss_(Step)':    epoch_loss_step,
++        'Loss/Train Loss (Step)':    epoch_loss_step,
+         'Process/Epoch':                epoch
+     })
+ 

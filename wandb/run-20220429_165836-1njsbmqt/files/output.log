@@ -1,0 +1,45 @@
+
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              ResNet18_Pre2
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.0001
+        Training Size:      10089
+        validation Size:    2522
+        validation %:       0.2
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          Adam
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220429_165831_ResNet18_Pre2" ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 1/10:   5%|███████▏                                                                                                                                 | 530/10089 [00:44<13:22, 11.91img/s, Epoch Loss (Train)=0.0575, Step Loss (Batch)=0.019]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 104, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 138, in trainer
+    epoch_loss += loss.item()
+KeyboardInterrupt

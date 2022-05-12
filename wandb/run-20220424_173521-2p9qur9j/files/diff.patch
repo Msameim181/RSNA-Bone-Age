@@ -1,0 +1,93 @@
+diff --git a/Run.py b/Run.py
+index e2d31c1..0776c9c 100644
+--- a/Run.py
++++ b/Run.py
+@@ -15,10 +15,6 @@ from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+ from Train import trainer
+ from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
+ 
+-# Sign in to wandb
+-wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
+-
+-
+ 
+ if __name__ == '__main__':
+ 
+diff --git a/Validation.py b/Validation.py
+index 74f541c..b23daf6 100644
+--- a/Validation.py
++++ b/Validation.py
+@@ -12,13 +12,9 @@ def validate(net, val_loader, device, criterion):
+     """
+     net.eval()
+     n_val = len(val_loader.dataset)
+-    val_loss = 0
+-    val_loss_mae = 0
+-    val_loss_mse = 0
++    val_loss = 0.0
+     correct = 0
+ 
+-    # cmae = torch.nn.L1Loss()
+-    # cmse = torch.nn.MSELoss()
+ 
+     for _, images, boneage, boneage_onehot, sex, _ in tqdm(val_loader, total = n_val, desc='Validation Round...', unit = 'img', leave=False):
+ 
+@@ -35,15 +31,11 @@ def validate(net, val_loader, device, criterion):
+             
+             # val_loss += torch.nn.functional.cross_entropy(output_age, target_age, reduction='sum').item()  # sum up batch loss
+             pred = output_age.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
+-            # val_loss_mae += cmae(pred, t_age)  # sum up batch loss MAE
+-            # val_loss_mse += cmse(pred, t_age)  # sum up batch loss MSE
+             correct += pred.eq(t_age.view_as(pred)).sum().item()
+     
+     acc = correct
+     if n_val != 0:
+         val_loss /= n_val
+-        # val_loss_mae /= n_val
+-        # val_loss_mse /= n_val
+         acc /= n_val
+ 
+     # Logging
+@@ -52,4 +44,4 @@ def validate(net, val_loader, device, criterion):
+                  f'\tAccuracy: {acc * 100:.2f}%\tCorrect = {correct}/{n_val}\n')
+     
+     # return val_loss, acc, correct
+-    return val_loss, acc, correct, val_loss_mae, val_loss_mse
++    return val_loss, acc, correct
+diff --git a/__pycache__/Train.cpython-39.pyc b/__pycache__/Train.cpython-39.pyc
+index d7d744f..2628629 100644
+Binary files a/__pycache__/Train.cpython-39.pyc and b/__pycache__/Train.cpython-39.pyc differ
+diff --git a/__pycache__/Validation.cpython-39.pyc b/__pycache__/Validation.cpython-39.pyc
+index dc084c1..e371d5c 100644
+Binary files a/__pycache__/Validation.cpython-39.pyc and b/__pycache__/Validation.cpython-39.pyc differ
+diff --git a/checkpoints/checkpoint_epoch1.pth b/checkpoints/checkpoint_epoch1.pth
+index e01d92f..eff2c40 100644
+Binary files a/checkpoints/checkpoint_epoch1.pth and b/checkpoints/checkpoint_epoch1.pth differ
+diff --git a/checkpoints/checkpoint_epoch2.pth b/checkpoints/checkpoint_epoch2.pth
+index 6a32070..38f1c84 100644
+Binary files a/checkpoints/checkpoint_epoch2.pth and b/checkpoints/checkpoint_epoch2.pth differ
+diff --git a/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc b/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc
+index 6ba3fdc..90476e2 100644
+Binary files a/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc and b/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc differ
+diff --git a/models/ResNet/__pycache__/resnet.cpython-39.pyc b/models/ResNet/__pycache__/resnet.cpython-39.pyc
+index d049fbc..690f075 100644
+Binary files a/models/ResNet/__pycache__/resnet.cpython-39.pyc and b/models/ResNet/__pycache__/resnet.cpython-39.pyc differ
+diff --git a/utils/__pycache__/wandb_logger.cpython-39.pyc b/utils/__pycache__/wandb_logger.cpython-39.pyc
+index 61f0053..1eedfb6 100644
+Binary files a/utils/__pycache__/wandb_logger.cpython-39.pyc and b/utils/__pycache__/wandb_logger.cpython-39.pyc differ
+diff --git a/utils/wandb_logger.py b/utils/wandb_logger.py
+index 633c305..f16de08 100644
+--- a/utils/wandb_logger.py
++++ b/utils/wandb_logger.py
+@@ -4,8 +4,9 @@ import wandb
+ 
+ 
+ 
+-# sign in to wandb
+-# wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
++# Sign in to wandb
++wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
++
+ 
+ def wandb_setup(config) -> wandb:
+     model = config['model']

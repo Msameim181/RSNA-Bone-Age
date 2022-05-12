@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 86, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 76, in trainer
+    wandb_logger = wandb_setup(config) if WandB_usage else None
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\utils\wandb_logger.py", line 29, in wandb_setup
+    wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboardX=True)
+TypeError: patch() got an unexpected keyword argument 'tensorboardX'

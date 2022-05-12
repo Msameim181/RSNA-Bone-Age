@@ -1,0 +1,339 @@
+diff --git a/Run.py b/Run.py
+index e2d31c1..aa72560 100644
+--- a/Run.py
++++ b/Run.py
+@@ -7,7 +7,6 @@ from pathlib import Path
+ # Deep learning libs
+ import torch
+ 
+-import wandb
+ # Models
+ from models.MobileNet import MobileNet_V2
+ from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+@@ -15,10 +14,6 @@ from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+ from Train import trainer
+ from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
+ 
+-# Sign in to wandb
+-wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
+-
+-
+ 
+ if __name__ == '__main__':
+ 
+diff --git a/T.py b/T.py
+index 0fb0fbf..8ae7bef 100644
+--- a/T.py
++++ b/T.py
+@@ -1,17 +1,17 @@
+ # System and utils for preprocessing
+-import logging
+-import os
+-from pathlib import Path
+-# Deep learning libs
+-import numpy as np
+-import pandas as pd
+-import torch
+-from PIL import Image
+-# Custom libs
+-from torch.utils.data import DataLoader, Dataset
+-from utils.dataloader import RSNATestDataset, RSNATrainDataset
+-from models.ResNet import ResNet18, ResNet50
+-from models.MobileNet import MobileNetV2
++# import logging
++# import os
++# from pathlib import Path
++# # Deep learning libs
++# import numpy as np
++# import pandas as pd
++# import torch
++# from PIL import Image
++# # Custom libs
++# from torch.utils.data import DataLoader, Dataset
++# from utils.dataloader import RSNATestDataset, RSNATrainDataset
++# from models.ResNet import ResNet18, ResNet50
++# from models.MobileNet import MobileNetV2
+ 
+ 
+ # if __name__ == '__main__':
+@@ -70,21 +70,18 @@ from models.MobileNet import MobileNetV2
+ 
+ 
+ 
+-from datetime import datetime
++global_step = 0
++n_train = 8828
++n = 6
++point = [0 if item == n else (n_train//n) * item  for item in range(1, n + 1)]
++co = 0
++print(point)
++for i in range(n_train):
++    global_step += 1
+ 
+-now = datetime.now() # current date and time
++    epoch_step = (global_step % n_train) if global_step >= n_train else global_step
++    if epoch_step in point:
++        print(global_step)
++        co += 1
+ 
+-year = now.strftime("%Y")
+-print("year:", year)
+-
+-month = now.strftime("%m")
+-print("month:", month)
+-
+-day = now.strftime("%d")
+-print("day:", day)
+-
+-time = now.strftime("%H:%M:%S")
+-print("time:", time)
+-
+-date_time = now.strftime("%Y%m%d_%H%M%S") + "_Model"
+-print("date and time:",date_time)
+\ No newline at end of file
++print(co)
+\ No newline at end of file
+diff --git a/Train.py b/Train.py
+index c0ed794..0e62d7e 100644
+--- a/Train.py
++++ b/Train.py
+@@ -8,10 +8,9 @@ import torch
+ from torch.utils.data import DataLoader
+ from tqdm import tqdm
+ 
+-import wandb
+ # Custom libs
+ from utils.rich_progress_bar import make_bar
+-from utils.wandb_logger import wandb_setup
++from utils.wandb_logger import *
+ from Validation import validate
+ 
+ 
+@@ -130,25 +129,22 @@ def trainer(
+                 pbar.update(images.shape[0])
+                 global_step += 1
+                 epoch_loss += loss.item()
+-                wandb_logger.log({
+-                    'train loss': loss.item(),
+-                    'step': global_step,
+-                    'epoch': epoch
+-                })
+-                pbar.set_postfix(**{'loss (batch)': loss.item()})
++                # Logging
++                wandb_log_training_step(wandb_logger, loss, global_step, epoch)
++                # Update the progress bar
++                epoch_step = (global_step % n_train) if global_step > n_train else global_step
++                pbar.set_postfix(**{'Step Loss (Batch)': loss.item(), 'Epoch Loss (Train)': epoch_loss / epoch_step})
+ 
+ 
+                 # Validation
+-                validation(wandb_logger, net, device, optimizer, scheduler, criterion, 
+-                    epoch,global_step,  n_train, batch_size,val_loader, images, 
++                val_loss = validation(wandb_logger, net, device, optimizer, scheduler, criterion, 
++                    epoch, global_step, n_train, batch_size,val_loader, images, 
+                     boneage, age_pred, gender)
+ 
+                 net.train()
+ 
+         # Logging
+-        wandb_logger.log({
+-            'epoch loss': epoch_loss / n_train,
+-        })
++        wandb_log_training(wandb_logger, epoch_loss, val_loss, epoch)
+ 
+         # Save the model checkpoint
+         if save_checkpoint:
+@@ -172,47 +168,33 @@ def validation(
+     images:torch.Tensor, 
+     boneage:torch.Tensor, 
+     age_pred:torch.Tensor, 
+-    gender:torch.Tensor) -> None:
++    gender:torch.Tensor,
++    val_repeat:int = 6) -> None:
+     """Validation Worker
+     """
+-
++    val_loss = None
+     # Evaluation round
+     # Let's See if is it evaluation time or not
+-    division_step = (n_train // (2 * batch_size))
+-    if division_step > 0 and global_step % division_step == 0:
++    val_point = [0 if item == val_repeat else ((n_train//val_repeat) * item)  for item in range(1, val_repeat + 1)]
++    epoch_step = (global_step % n_train) if global_step >= n_train else global_step
++    if epoch_step in val_point:
++        logging.info(f'Val accept on {global_step}')
+ 
+         # WandB Storing the model parameters
+-        histograms = {}
+-        for tag, value in net.named_parameters():
+-            tag = tag.replace('/', '.')
+-            histograms[f'Weights/{tag}'] = wandb.Histogram(value.data.cpu())
+-            histograms[f'Gradients/{tag}'] = wandb.Histogram(value.grad.data.cpu())
++        histograms = wandb_log_histogram(net)
+ 
+ 
+         # Evaluating the model
+-        val_loss, acc, _, mae, mse = validate(net, val_loader, device, criterion)
++        val_loss, acc, _ = validate(net, val_loader, device, criterion)
+         # 
+         scheduler.step(val_loss)
+ 
+         # WandB Storing the results
+-        wandb_logger.log({
+-            'learning rate': optimizer.param_groups[0]['lr'], 
+-            'validation Loss': val_loss, 
+-            # 'validation Loss (MAE)': mae, 
+-            # 'validation Loss (MSE)': mse, 
+-            'validation Correct': acc, 
+-            'Correct %': acc * 100,
+-            'Images': wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
+-            'Gender': gender if batch_size == 1 else list(gender), 
+-            'Age': {
+-                'True': boneage.float().cpu() if batch_size == 1 else [age.float().cpu() for age in boneage], 
+-                'Pred': age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age for age in age_pred.argmax(dim=1, keepdim=True).float().cpu()],
+-            }, 
+-            'step': global_step, 
+-            'epoch': epoch, 
+-            **histograms
+-        })
++        wandb_log_validation(wandb_logger, optimizer, val_loss, acc, 
++            images, batch_size, gender, boneage, age_pred, 
++            global_step, epoch, histograms)
+ 
+         logging.info('Validation completed.')
+         logging.info('Result Saved.')
+ 
++    return val_loss
+diff --git a/Validation.py b/Validation.py
+index 74f541c..b23daf6 100644
+--- a/Validation.py
++++ b/Validation.py
+@@ -12,13 +12,9 @@ def validate(net, val_loader, device, criterion):
+     """
+     net.eval()
+     n_val = len(val_loader.dataset)
+-    val_loss = 0
+-    val_loss_mae = 0
+-    val_loss_mse = 0
++    val_loss = 0.0
+     correct = 0
+ 
+-    # cmae = torch.nn.L1Loss()
+-    # cmse = torch.nn.MSELoss()
+ 
+     for _, images, boneage, boneage_onehot, sex, _ in tqdm(val_loader, total = n_val, desc='Validation Round...', unit = 'img', leave=False):
+ 
+@@ -35,15 +31,11 @@ def validate(net, val_loader, device, criterion):
+             
+             # val_loss += torch.nn.functional.cross_entropy(output_age, target_age, reduction='sum').item()  # sum up batch loss
+             pred = output_age.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
+-            # val_loss_mae += cmae(pred, t_age)  # sum up batch loss MAE
+-            # val_loss_mse += cmse(pred, t_age)  # sum up batch loss MSE
+             correct += pred.eq(t_age.view_as(pred)).sum().item()
+     
+     acc = correct
+     if n_val != 0:
+         val_loss /= n_val
+-        # val_loss_mae /= n_val
+-        # val_loss_mse /= n_val
+         acc /= n_val
+ 
+     # Logging
+@@ -52,4 +44,4 @@ def validate(net, val_loader, device, criterion):
+                  f'\tAccuracy: {acc * 100:.2f}%\tCorrect = {correct}/{n_val}\n')
+     
+     # return val_loss, acc, correct
+-    return val_loss, acc, correct, val_loss_mae, val_loss_mse
++    return val_loss, acc, correct
+diff --git a/__pycache__/Train.cpython-39.pyc b/__pycache__/Train.cpython-39.pyc
+index d7d744f..a4af3cd 100644
+Binary files a/__pycache__/Train.cpython-39.pyc and b/__pycache__/Train.cpython-39.pyc differ
+diff --git a/__pycache__/Validation.cpython-39.pyc b/__pycache__/Validation.cpython-39.pyc
+index dc084c1..e371d5c 100644
+Binary files a/__pycache__/Validation.cpython-39.pyc and b/__pycache__/Validation.cpython-39.pyc differ
+diff --git a/checkpoints/checkpoint_epoch1.pth b/checkpoints/checkpoint_epoch1.pth
+index e01d92f..39271ca 100644
+Binary files a/checkpoints/checkpoint_epoch1.pth and b/checkpoints/checkpoint_epoch1.pth differ
+diff --git a/checkpoints/checkpoint_epoch2.pth b/checkpoints/checkpoint_epoch2.pth
+index 6a32070..38f1c84 100644
+Binary files a/checkpoints/checkpoint_epoch2.pth and b/checkpoints/checkpoint_epoch2.pth differ
+diff --git a/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc b/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc
+index 6ba3fdc..90476e2 100644
+Binary files a/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc and b/models/MobileNet/__pycache__/mobilenet.cpython-39.pyc differ
+diff --git a/models/ResNet/__pycache__/resnet.cpython-39.pyc b/models/ResNet/__pycache__/resnet.cpython-39.pyc
+index d049fbc..690f075 100644
+Binary files a/models/ResNet/__pycache__/resnet.cpython-39.pyc and b/models/ResNet/__pycache__/resnet.cpython-39.pyc differ
+diff --git a/utils/__pycache__/wandb_logger.cpython-39.pyc b/utils/__pycache__/wandb_logger.cpython-39.pyc
+index 61f0053..32642b5 100644
+Binary files a/utils/__pycache__/wandb_logger.cpython-39.pyc and b/utils/__pycache__/wandb_logger.cpython-39.pyc differ
+diff --git a/utils/wandb_logger.py b/utils/wandb_logger.py
+index 633c305..af225ee 100644
+--- a/utils/wandb_logger.py
++++ b/utils/wandb_logger.py
+@@ -4,8 +4,9 @@ import wandb
+ 
+ 
+ 
+-# sign in to wandb
+-# wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
++# Sign in to wandb
++wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
++
+ 
+ def wandb_setup(config) -> wandb:
+     model = config['model']
+@@ -36,4 +37,51 @@ def wandb_setup(config) -> wandb:
+     experiment.config.update(config)
+     # Logging
+     logging.info("WandB setup completed.")
+-    return experiment
+\ No newline at end of file
++    return experiment
++
++
++def wandb_log_training_step(wandb_logger, loss, global_step, epoch):
++    wandb_logger.log({
++        'Step Loss': loss.item(),
++        'Step': global_step,
++        'Epoch': epoch
++    })
++
++def wandb_log_training(wandb_logger, epoch_loss, val_loss, epoch):
++    # Logging
++    wandb_logger.log({
++        'Train Loss':               epoch_loss,
++        'Epoch Loss':               epoch_loss,
++        'Validation Loss/Epoch':    val_loss,
++        'Epoch':                    epoch,
++    })
++
++def wandb_log_histogram(net):
++    # WandB Storing the model parameters
++    histograms = {}
++    for tag, value in net.named_parameters():
++        tag = tag.replace('/', '.')
++        histograms[f'Weights/{tag}'] = wandb.Histogram(value.data.cpu())
++        histograms[f'Gradients/{tag}'] = wandb.Histogram(value.grad.data.cpu())
++
++    return histograms
++
++def wandb_log_validation(wandb_logger, optimizer, val_loss, acc, 
++    images, batch_size, gender, boneage, age_pred, 
++    global_step, epoch, histograms):
++    # WandB Storing the results
++    wandb_logger.log({
++        'Learning Rate':        optimizer.param_groups[0]['lr'], 
++        'Validation Loss':      val_loss, 
++        'Validation Correct':   acc, 
++        'Correct %':            acc * 100,
++        'Images':               wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
++        'Gender':               gender if batch_size == 1 else list(gender), 
++        'Age': {
++            'True':             boneage.float().cpu() if batch_size == 1 else [age.float().cpu() for age in boneage], 
++            'Pred':             age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age for age in age_pred.argmax(dim=1, keepdim=True).float().cpu()],
++        }, 
++        'Step':                 global_step, 
++        'Epoch':                epoch, 
++        **histograms
++    })
+\ No newline at end of file

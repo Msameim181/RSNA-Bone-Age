@@ -1,0 +1,31 @@
+INFO: WandB setup completed.
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 88, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 78, in trainer
+    tb_logger = tb_setup(config)
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\utils\tensorboard_logger.py", line 36, in tb_setup
+    tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size).cuda()], ))
+  File "C:\Python\Python39\lib\site-packages\torch\utils\tensorboard\writer.py", line 736, in add_graph
+    self._get_file_writer().add_graph(graph(model, input_to_model, verbose, use_strict_trace))
+  File "C:\Python\Python39\lib\site-packages\torch\utils\tensorboard\_pytorch_graph.py", line 291, in graph
+    trace = torch.jit.trace(model, args, strict=use_strict_trace)
+  File "C:\Python\Python39\lib\site-packages\torch\jit\_trace.py", line 741, in trace
+    return trace_module(
+  File "C:\Python\Python39\lib\site-packages\torch\jit\_trace.py", line 958, in trace_module
+    module._c._create_method_from_trace(
+  File "C:\Python\Python39\lib\site-packages\torch\nn\modules\module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "C:\Python\Python39\lib\site-packages\torch\nn\modules\module.py", line 1098, in _slow_forward
+    result = self.forward(*input, **kwargs)
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\models\ResNet\resnet.py", line 369, in forward
+    x = self.resnet.conv1(x)
+  File "C:\Python\Python39\lib\site-packages\torch\nn\modules\module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "C:\Python\Python39\lib\site-packages\torch\nn\modules\module.py", line 1098, in _slow_forward
+    result = self.forward(*input, **kwargs)
+  File "C:\Python\Python39\lib\site-packages\torch\nn\modules\conv.py", line 447, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "C:\Python\Python39\lib\site-packages\torch\nn\modules\conv.py", line 443, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+KeyboardInterrupt

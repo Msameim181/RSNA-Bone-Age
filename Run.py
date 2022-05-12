@@ -20,17 +20,17 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 def select_model(args, image_channels, num_classes):
     if args.model == 'ResNet18':
-        return ResNet18(pretrained = args.pretrained, image_channels = 1, num_classes = num_classes)
+        return ResNet18(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
     elif args.model == 'ResNet34':
-        return ResNet34(pretrained = args.pretrained, image_channels = 1, num_classes = num_classes)
+        return ResNet34(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
     elif args.model == 'ResNet50':
-        return ResNet50(pretrained = args.pretrained, image_channels = 1, num_classes = num_classes)
+        return ResNet50(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
     elif args.model == 'ResNet101':
-        return ResNet101(pretrained = args.pretrained, image_channels = 1, num_classes = num_classes)
+        return ResNet101(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
     elif args.model == 'ResNet152':
-        return ResNet152(pretrained = args.pretrained, image_channels = 1, num_classes = num_classes)
+        return ResNet152(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
     elif args.model == 'MobileNet_V2':
-        return MobileNet_V2(pretrained = args.pretrained, image_channels = 1, num_classes = num_classes)
+        return MobileNet_V2(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
     else:
         assert None, 'Model not supported.'
 
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     epochs = args.epochs
     batch_size = args.batch_size
     val_percent = args.val_percent
-    WandB_usage = args.wandb
+    WandB_usage = args.wandb == 'True'
 
     # Packaging the data
     logging.info('Packaging the data...')
@@ -113,8 +113,8 @@ if __name__ == '__main__':
         batch_size = batch_size, 
         learning_rate = learning_rate, 
         val_percent = val_percent,
-        amp = args.amp, 
-        save_checkpoint = args.checkpoint, 
+        amp = args.amp == 'True', 
+        save_checkpoint = args.checkpoint == 'True', 
         dir_checkpoint = './checkpoints/',
         run_name = run_name,
         WandB_usage = WandB_usage)

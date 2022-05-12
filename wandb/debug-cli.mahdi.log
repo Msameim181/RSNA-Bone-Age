@@ -1,0 +1,68 @@
+2022-04-21 17:22:46 ERROR 403 response executing GraphQL.
+2022-04-21 17:22:46 ERROR 
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/graphql</code> from this server.</h2>
+<h2></h2>
+</body></html>
+
+2022-04-25 04:54:50 INFO open for scan: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\run-39mvdofd.wandb
+2022-04-25 04:54:51 ERROR 403 response executing GraphQL.
+2022-04-25 04:54:51 ERROR 
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/graphql</code> from this server.</h2>
+<h2></h2>
+</body></html>
+
+2022-04-25 04:55:03 INFO open for scan: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\run-39mvdofd.wandb
+2022-04-25 04:55:04 INFO watching files in: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files
+2022-04-25 04:55:04 INFO run started: 39mvdofd with start time 1650845991
+2022-04-25 04:55:04 INFO saving file wandb-metadata.json with policy now
+2022-04-25 04:55:04 INFO saving file wandb-summary.json with policy end
+2022-04-25 04:55:04 INFO handling exit code: 255
+2022-04-25 04:55:04 INFO handling runtime: 269
+2022-04-25 04:55:04 INFO saving file wandb-summary.json with policy end
+2022-04-25 04:55:04 INFO send defer
+2022-04-25 04:55:04 INFO handle sender defer: 0
+2022-04-25 04:55:04 INFO send defer: 1
+2022-04-25 04:55:04 INFO handle sender defer: 1
+2022-04-25 04:55:04 INFO send defer: 2
+2022-04-25 04:55:04 INFO handle sender defer: 2
+2022-04-25 04:55:04 INFO send defer: 3
+2022-04-25 04:55:04 INFO handle sender defer: 3
+2022-04-25 04:55:04 INFO send defer: 4
+2022-04-25 04:55:04 INFO handle sender defer: 4
+2022-04-25 04:55:04 INFO send defer: 5
+2022-04-25 04:55:04 INFO handle sender defer: 5
+2022-04-25 04:55:04 INFO send defer: 6
+2022-04-25 04:55:04 INFO handle sender defer: 6
+2022-04-25 04:55:04 INFO shutting down directory watcher
+2022-04-25 04:55:05 INFO file/dir modified: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\wandb-summary.json
+2022-04-25 04:55:05 INFO file/dir modified: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\config.yaml
+2022-04-25 04:55:05 INFO scan: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files
+2022-04-25 04:55:05 INFO scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\config.yaml config.yaml
+2022-04-25 04:55:05 INFO scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\output.log output.log
+2022-04-25 04:55:05 INFO scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\requirements.txt requirements.txt
+2022-04-25 04:55:05 INFO scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\wandb-metadata.json wandb-metadata.json
+2022-04-25 04:55:05 INFO scan save: C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\wandb-summary.json wandb-summary.json
+2022-04-25 04:55:05 INFO send defer: 7
+2022-04-25 04:55:05 INFO handle sender defer: 7
+2022-04-25 04:55:05 INFO shutting down file pusher
+2022-04-25 04:55:05 INFO shutting down sender
+2022-04-25 04:55:05 INFO shutting down file pusher
+2022-04-25 04:55:05 INFO waiting for file pusher
+2022-04-25 04:55:06 INFO Uploaded file C:\Users\mahdi\AppData\Local\Temp\tmp9rpm5p70wandb\1eenxwtn-wandb-metadata.json
+2022-04-25 04:55:06 INFO Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\requirements.txt
+2022-04-25 04:55:06 INFO Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\output.log
+2022-04-25 04:55:06 INFO Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\config.yaml
+2022-04-25 04:55:06 INFO Uploaded file C:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\wandb\offline-run-20220425_044950-39mvdofd\files\wandb-summary.json
+2022-04-25 04:55:07 INFO send defer: 8

@@ -1,0 +1,152 @@
+
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2_Pre2
+        Image Channel:      1
+        Epochs:             10
+        Batch Size:         2
+        Learning Rate:      0.001
+        Training Size:      8828
+        validation Size:    3783
+        validation %:       0.3
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          Adam
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220425_163054_MobileNetV2_Pre2" ...
+Epoch 1/10:   0%|                                                                                                        | 2/8828 [00:02<3:28:07,  1.41s/img, Epoch Loss (Train)=0.351, Step Loss (Batch)=0.701]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|                                                                                                        | 4/8828 [00:03<1:31:48,  1.60img/s, Epoch Loss (Train)=0.335, Step Loss (Batch)=0.641]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|                                                                                                          | 6/8828 [00:03<55:15,  2.66img/s, Epoch Loss (Train)=0.312, Step Loss (Batch)=0.533]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|                                                                                                          | 8/8828 [00:03<39:01,  3.77img/s, Epoch Loss (Train)=0.286, Step Loss (Batch)=0.413]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|                                                                                                         | 10/8828 [00:03<29:18,  5.01img/s, Epoch Loss (Train)=0.258, Step Loss (Batch)=0.296]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▏                                                                                                        | 12/8828 [00:03<22:30,  6.53img/s, Epoch Loss (Train)=0.232, Step Loss (Batch)=0.196]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▏                                                                                                          | 14/8828 [00:03<19:19,  7.60img/s, Epoch Loss (Train)=0.21, Step Loss (Batch)=0.16]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▏                                                                                                       | 16/8828 [00:04<16:48,  8.74img/s, Epoch Loss (Train)=0.189, Step Loss (Batch)=0.0857]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▏                                                                                                        | 18/8828 [00:04<15:03,  9.75img/s, Epoch Loss (Train)=0.17, Step Loss (Batch)=0.0413]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▏                                                                                                       | 20/8828 [00:04<14:01, 10.47img/s, Epoch Loss (Train)=0.156, Step Loss (Batch)=0.0526]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▎                                                                                                       | 22/8828 [00:04<13:24, 10.95img/s, Epoch Loss (Train)=0.143, Step Loss (Batch)=0.0312]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▎                                                                                                       | 24/8828 [00:04<12:58, 11.31img/s, Epoch Loss (Train)=0.133, Step Loss (Batch)=0.0374]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▎                                                                                                       | 26/8828 [00:04<12:40, 11.57img/s, Epoch Loss (Train)=0.124, Step Loss (Batch)=0.0443]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▎                                                                                                       | 28/8828 [00:05<12:29, 11.74img/s, Epoch Loss (Train)=0.117, Step Loss (Batch)=0.0454]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▎                                                                                                       | 30/8828 [00:05<12:05, 12.12img/s, Epoch Loss (Train)=0.111, Step Loss (Batch)=0.0521]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▍                                                                                                        | 32/8828 [00:05<12:02, 12.18img/s, Epoch Loss (Train)=0.106, Step Loss (Batch)=0.064]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▍                                                                                                        | 34/8828 [00:05<11:58, 12.25img/s, Epoch Loss (Train)=0.101, Step Loss (Batch)=0.055]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▍                                                                                                      | 36/8828 [00:05<11:53, 12.32img/s, Epoch Loss (Train)=0.0972, Step Loss (Batch)=0.0503]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▍                                                                                                      | 38/8828 [00:05<12:13, 11.98img/s, Epoch Loss (Train)=0.0933, Step Loss (Batch)=0.0443]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▍                                                                                                      | 40/8828 [00:05<11:59, 12.21img/s, Epoch Loss (Train)=0.0898, Step Loss (Batch)=0.0487]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▍                                                                                                      | 42/8828 [00:06<11:51, 12.35img/s, Epoch Loss (Train)=0.0866, Step Loss (Batch)=0.0444]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   0%|▌                                                                                                       | 44/8828 [00:06<12:10, 12.02img/s, Epoch Loss (Train)=0.0835, Step Loss (Batch)=0.035]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▌                                                                                                      | 46/8828 [00:06<11:58, 12.22img/s, Epoch Loss (Train)=0.0807, Step Loss (Batch)=0.0388]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▌                                                                                                      | 48/8828 [00:06<11:36, 12.61img/s, Epoch Loss (Train)=0.0784, Step Loss (Batch)=0.0544]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▌                                                                                                      | 50/8828 [00:06<11:43, 12.47img/s, Epoch Loss (Train)=0.0762, Step Loss (Batch)=0.0434]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▌                                                                                                      | 52/8828 [00:06<11:42, 12.49img/s, Epoch Loss (Train)=0.0744, Step Loss (Batch)=0.0608]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▋                                                                                                      | 54/8828 [00:07<11:44, 12.46img/s, Epoch Loss (Train)=0.0721, Step Loss (Batch)=0.0229]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▋                                                                                                        | 56/8828 [00:07<11:36, 12.60img/s, Epoch Loss (Train)=0.07, Step Loss (Batch)=0.0277]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▋                                                                                                      | 58/8828 [00:07<11:53, 12.30img/s, Epoch Loss (Train)=0.0683, Step Loss (Batch)=0.0437]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▋                                                                                                      | 60/8828 [00:07<11:58, 12.21img/s, Epoch Loss (Train)=0.0668, Step Loss (Batch)=0.0431]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▋                                                                                                      | 62/8828 [00:07<11:47, 12.40img/s, Epoch Loss (Train)=0.0652, Step Loss (Batch)=0.0344]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▋                                                                                                      | 64/8828 [00:07<11:47, 12.39img/s, Epoch Loss (Train)=0.0635, Step Loss (Batch)=0.0201]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▊                                                                                                      | 66/8828 [00:08<11:42, 12.48img/s, Epoch Loss (Train)=0.0619, Step Loss (Batch)=0.0237]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▊                                                                                                      | 68/8828 [00:08<11:43, 12.45img/s, Epoch Loss (Train)=0.0604, Step Loss (Batch)=0.0219]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▊                                                                                                      | 70/8828 [00:08<12:13, 11.94img/s, Epoch Loss (Train)=0.0589, Step Loss (Batch)=0.0188]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▊                                                                                                      | 72/8828 [00:08<12:04, 12.09img/s, Epoch Loss (Train)=0.0578, Step Loss (Batch)=0.0386]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▊                                                                                                      | 74/8828 [00:08<11:38, 12.54img/s, Epoch Loss (Train)=0.0568, Step Loss (Batch)=0.0358]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▉                                                                                                      | 76/8828 [00:08<11:36, 12.56img/s, Epoch Loss (Train)=0.0555, Step Loss (Batch)=0.0209]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▉                                                                                                      | 78/8828 [00:09<11:43, 12.44img/s, Epoch Loss (Train)=0.0545, Step Loss (Batch)=0.0318]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▉                                                                                                        | 80/8828 [00:09<11:43, 12.44img/s, Epoch Loss (Train)=0.0535, Step Loss (Batch)=0.03]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▉                                                                                                      | 82/8828 [00:09<11:32, 12.63img/s, Epoch Loss (Train)=0.0525, Step Loss (Batch)=0.0199]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|▉                                                                                                      | 84/8828 [00:09<11:30, 12.67img/s, Epoch Loss (Train)=0.0515, Step Loss (Batch)=0.0231]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█                                                                                                      | 86/8828 [00:09<11:39, 12.49img/s, Epoch Loss (Train)=0.0506, Step Loss (Batch)=0.0233]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█                                                                                                      | 88/8828 [00:09<12:01, 12.12img/s, Epoch Loss (Train)=0.0498, Step Loss (Batch)=0.0333]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█                                                                                                      | 90/8828 [00:10<11:35, 12.56img/s, Epoch Loss (Train)=0.0489, Step Loss (Batch)=0.0218]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█                                                                                                       | 92/8828 [00:10<11:33, 12.60img/s, Epoch Loss (Train)=0.048, Step Loss (Batch)=0.0141]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█                                                                                                      | 94/8828 [00:10<11:36, 12.53img/s, Epoch Loss (Train)=0.0472, Step Loss (Batch)=0.0217]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█                                                                                                      | 96/8828 [00:10<11:39, 12.49img/s, Epoch Loss (Train)=0.0466, Step Loss (Batch)=0.0297]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▏                                                                                                      | 98/8828 [00:10<11:34, 12.57img/s, Epoch Loss (Train)=0.0459, Step Loss (Batch)=0.033]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▏                                                                                                    | 100/8828 [00:10<12:06, 12.02img/s, Epoch Loss (Train)=0.0453, Step Loss (Batch)=0.0289]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▏                                                                                                    | 102/8828 [00:10<11:29, 12.66img/s, Epoch Loss (Train)=0.0447, Step Loss (Batch)=0.0321]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▏                                                                                                    | 104/8828 [00:11<11:41, 12.44img/s, Epoch Loss (Train)=0.0442, Step Loss (Batch)=0.0317]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▏                                                                                                     | 106/8828 [00:11<11:27, 12.68img/s, Epoch Loss (Train)=0.0435, Step Loss (Batch)=0.011]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▏                                                                                                    | 108/8828 [00:11<11:51, 12.26img/s, Epoch Loss (Train)=0.0428, Step Loss (Batch)=0.0209]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▎                                                                                                    | 110/8828 [00:11<12:05, 12.01img/s, Epoch Loss (Train)=0.0423, Step Loss (Batch)=0.0258]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▎                                                                                                    | 112/8828 [00:11<11:37, 12.50img/s, Epoch Loss (Train)=0.0418, Step Loss (Batch)=0.0306]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▎                                                                                                    | 114/8828 [00:11<11:20, 12.80img/s, Epoch Loss (Train)=0.0413, Step Loss (Batch)=0.0188]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▎                                                                                                    | 116/8828 [00:12<11:34, 12.55img/s, Epoch Loss (Train)=0.0407, Step Loss (Batch)=0.0165]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▎                                                                                                    | 118/8828 [00:12<11:31, 12.59img/s, Epoch Loss (Train)=0.0402, Step Loss (Batch)=0.0269]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▍                                                                                                    | 120/8828 [00:12<11:40, 12.43img/s, Epoch Loss (Train)=0.0397, Step Loss (Batch)=0.0207]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▍                                                                                                    | 122/8828 [00:12<11:45, 12.35img/s, Epoch Loss (Train)=0.0393, Step Loss (Batch)=0.0237]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▍                                                                                                    | 124/8828 [00:12<11:31, 12.59img/s, Epoch Loss (Train)=0.0389, Step Loss (Batch)=0.0324]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▍                                                                                                    | 126/8828 [00:12<11:32, 12.57img/s, Epoch Loss (Train)=0.0385, Step Loss (Batch)=0.0284]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▍                                                                                                     | 128/8828 [00:13<11:35, 12.51img/s, Epoch Loss (Train)=0.0381, Step Loss (Batch)=0.023]INFO: Summary name tLoss/Step Loss is illegal; using tLoss/Step_Loss instead.
+INFO: Summary name tLoss/Train Loss (Step) is illegal; using tLoss/Train_Loss__Step_ instead.
+Epoch 1/10:   1%|█▌                                                                                                     | 130/8828 [00:13<15:01,  9.65img/s, Epoch Loss (Train)=0.0381, Step Loss (Batch)=0.023]
+Traceback (most recent call last):
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Run.py", line 86, in <module>
+    trainer(
+  File "c:\Users\mahdi\Desktop\Github_Work\1\RSNA-Bone-Age\Train.py", line 138, in trainer
+    epoch_loss += loss.item()
+KeyboardInterrupt

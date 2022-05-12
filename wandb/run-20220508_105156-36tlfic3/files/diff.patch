@@ -1,0 +1,28 @@
+diff --git a/Temp.py b/Temp.py
+index d76bb57..09599c1 100644
+--- a/Temp.py
++++ b/Temp.py
+@@ -109,4 +109,11 @@
+ #             if ch := vel_section(batch_size, n_train, val_repeat, global_step):
+ #                 log_epoch_loss = ((((epoch_step - 1) * batch_size) + (n_train % batch_size))) if n_train // batch_size == (epoch_step - 1) else ((epoch_step * batch_size))
+ #                 print(f"val_loss T {epoch_step} / {epoch_step * batch_size} / {global_step} / {log_epoch_loss}")
+-#             # print(i)
+\ No newline at end of file
++#             # print(i)
++
++
++
++import wandb
++import glob
++
++wandb.save(glob.glob(f"tensorboard/*.pt.trace.json")[0], base_path=f"tensorboard")
+\ No newline at end of file
+diff --git a/__pycache__/Train.cpython-39.pyc b/__pycache__/Train.cpython-39.pyc
+index c36cba5..404aa74 100644
+Binary files a/__pycache__/Train.cpython-39.pyc and b/__pycache__/Train.cpython-39.pyc differ
+diff --git a/utils/__pycache__/get_args.cpython-39.pyc b/utils/__pycache__/get_args.cpython-39.pyc
+index f8a0192..2d5b978 100644
+Binary files a/utils/__pycache__/get_args.cpython-39.pyc and b/utils/__pycache__/get_args.cpython-39.pyc differ
+diff --git a/utils/__pycache__/tensorboard_logger.cpython-39.pyc b/utils/__pycache__/tensorboard_logger.cpython-39.pyc
+index 1ff041f..6d407aa 100644
+Binary files a/utils/__pycache__/tensorboard_logger.cpython-39.pyc and b/utils/__pycache__/tensorboard_logger.cpython-39.pyc differ

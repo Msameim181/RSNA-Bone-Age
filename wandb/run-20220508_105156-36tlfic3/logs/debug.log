@@ -1,0 +1,274 @@
+2022-05-08 10:51:56,674 INFO    MainThread:19260 [wandb_setup.py:_flush():75] Loading settings from C:\Users\mahdi\.config\wandb\settings
+2022-05-08 10:51:56,675 INFO    MainThread:19260 [wandb_setup.py:_flush():75] Loading settings from C:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\wandb\settings
+2022-05-08 10:51:56,675 INFO    MainThread:19260 [wandb_setup.py:_flush():75] Loading settings from environment variables: {}
+2022-05-08 10:51:56,675 INFO    MainThread:19260 [wandb_setup.py:_flush():75] Inferring run settings from compute environment: {'program_relpath': 'Run.py', 'program': 'c:\\Users\\mahdi\\Desktop\\Github_Work\\RSNA-Bone-Age\\Run.py'}
+2022-05-08 10:51:56,675 INFO    MainThread:19260 [wandb_setup.py:_flush():75] Applying login settings: {'api_key': '***REDACTED***'}
+2022-05-08 10:51:56,675 INFO    MainThread:19260 [wandb_setup.py:_flush():75] Applying login settings: {'api_key': '***REDACTED***'}
+2022-05-08 10:51:56,676 INFO    MainThread:19260 [wandb_init.py:_log_setup():438] Logging user logs to C:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\wandb\run-20220508_105156-36tlfic3\logs\debug.log
+2022-05-08 10:51:56,676 INFO    MainThread:19260 [wandb_init.py:_log_setup():439] Logging internal logs to C:\Users\mahdi\Desktop\Github_Work\RSNA-Bone-Age\wandb\run-20220508_105156-36tlfic3\logs\debug-internal.log
+2022-05-08 10:51:56,676 INFO    MainThread:19260 [wandb_init.py:init():472] calling init triggers
+2022-05-08 10:51:56,676 INFO    MainThread:19260 [wandb_init.py:init():475] wandb.init called with sweep_config: {}
+config: {}
+2022-05-08 10:51:56,676 INFO    MainThread:19260 [wandb_init.py:init():525] starting backend
+2022-05-08 10:51:56,676 INFO    MainThread:19260 [backend.py:_multiprocessing_setup():99] multiprocessing start_methods=spawn, using: spawn
+2022-05-08 10:51:56,688 INFO    MainThread:19260 [backend.py:ensure_launched():219] starting backend process...
+2022-05-08 10:51:56,767 INFO    MainThread:19260 [backend.py:ensure_launched():224] started backend process with pid: 18076
+2022-05-08 10:51:56,768 INFO    MainThread:19260 [wandb_init.py:init():534] backend started and connected
+2022-05-08 10:51:56,773 INFO    MainThread:19260 [wandb_init.py:init():598] updated telemetry
+2022-05-08 10:51:56,825 INFO    MainThread:19260 [wandb_init.py:init():629] communicating run to backend with 30 second timeout
+2022-05-08 10:51:59,168 INFO    MainThread:19260 [wandb_run.py:_on_init():1922] communicating current version
+2022-05-08 10:52:00,598 INFO    MainThread:19260 [wandb_run.py:_on_init():1926] got version response upgrade_message: "wandb version 0.12.16 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2022-05-08 10:52:00,599 INFO    MainThread:19260 [wandb_init.py:init():660] starting run threads in backend
+2022-05-08 10:52:01,293 INFO    MainThread:19260 [wandb_run.py:_console_start():1896] atexit reg
+2022-05-08 10:52:01,294 INFO    MainThread:19260 [wandb_run.py:_redirect():1769] redirect: SettingsConsole.WRAP
+2022-05-08 10:52:01,295 INFO    MainThread:19260 [wandb_run.py:_redirect():1806] Wrapping output streams.
+2022-05-08 10:52:01,298 INFO    MainThread:19260 [wandb_run.py:_redirect():1830] Redirects installed.
+2022-05-08 10:52:01,298 INFO    MainThread:19260 [wandb_init.py:init():685] run started, returning control to user process
+2022-05-08 10:52:01,299 INFO    MainThread:19260 [wandb_run.py:_config_callback():1129] config_cb None None {'net': 'ResNet_Pre2(\n  (resnet): ResNet(\n    (conv1): Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)\n    (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n    (relu): ReLU(inplace=True)\n    (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)\n    (layer1): Sequential(\n      (0): BasicBlock(\n        (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n      )\n      (1): BasicBlock(\n        (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n      )\n    )\n    (layer2): Sequential(\n      (0): BasicBlock(\n        (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (downsample): Sequential(\n          (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)\n          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        )\n      )\n      (1): BasicBlock(\n        (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n      )\n    )\n    (layer3): Sequential(\n      (0): BasicBlock(\n        (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (downsample): Sequential(\n          (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)\n          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        )\n      )\n      (1): BasicBlock(\n        (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n      )\n    )\n    (layer4): Sequential(\n      (0): BasicBlock(\n        (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (downsample): Sequential(\n          (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)\n          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        )\n      )\n      (1): BasicBlock(\n        (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n        (relu): ReLU(inplace=True)\n        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)\n        (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)\n      )\n    )\n    (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))\n    (fc): Sequential(\n      (0): ReLU()\n      (1): Dropout(p=0.2, inplace=False)\n      (2): Linear(in_features=513, out_features=512, bias=True)\n      (3): ReLU()\n      (4): Dropout(p=0.5, inplace=False)\n      (5): Linear(in_features=512, out_features=229, bias=True)\n    )\n  )\n)', 'epochs': 10, 'batch_size': 4, 'learning_rate': 0.0001, 'save_checkpoint': True, 'amp': False, 'model': 'ResNet18_Pre2', 'name': '20220508_105151_ResNet18_Pre2', 'device': 'cuda', 'optimizer': 'Adam', 'criterion': 'BCEWithLogitsLoss'}
+2022-05-08 10:52:01,300 INFO    MainThread:19260 [wandb_run.py:_tensorboard_callback():1242] tensorboard callback: tensorboard\20220508_105151_ResNet18_Pre2, True
+2022-05-08 10:55:38,845 INFO    MainThread:19260 [wandb_run.py:_atexit_cleanup():1865] got exitcode: 255
+2022-05-08 10:55:38,846 INFO    MainThread:19260 [wandb_run.py:_restore():1837] restore
+2022-05-08 10:55:39,203 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 2
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 7282
+}
+
+2022-05-08 10:55:44,322 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: None
+2022-05-08 10:55:45,421 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 2
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 7282
+}
+
+2022-05-08 10:55:46,415 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 2
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 7282
+}
+
+2022-05-08 10:55:46,521 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:46,630 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:46,736 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:46,845 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:46,953 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,062 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,173 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,283 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,390 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,500 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,609 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,718 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,827 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:47,936 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 7282
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:48,047 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:48,158 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:48,265 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:48,375 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:48,487 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:48,593 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:48,702 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:50,139 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+
+2022-05-08 10:55:52,105 INFO    MainThread:19260 [wandb_run.py:_on_finish():1995] got exit ret: done: true
+exit_result {
+}
+file_counts {
+  wandb_count: 6
+  other_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 18322
+  total_bytes: 18322
+}
+local_info {
+}
+
+2022-05-08 10:55:53,319 INFO    MainThread:19260 [wandb_run.py:_footer_history_summary_info():3087] rendering history
+2022-05-08 10:55:53,320 INFO    MainThread:19260 [wandb_run.py:_footer_history_summary_info():3116] rendering summary
+2022-05-08 10:55:53,329 INFO    MainThread:19260 [wandb_run.py:_footer_sync_info():3044] logging synced files
