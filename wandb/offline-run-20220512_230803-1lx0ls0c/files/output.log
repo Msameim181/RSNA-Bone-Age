@@ -1,0 +1,34 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2_Pre2
+        Image Channel:      1
+        Epochs:             50
+        Batch Size:         10
+        Learning Rate:      0.001
+        Training Size:      8828
+        validation Size:    3783
+        validation %:       0.3
+        Checkpoints:        True
+        Mixed Precision:    True
+        optimizer:          Adam
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220512_230802_MobileNetV2_Pre2" ...
+Epoch 1/50:  50%|█████▍     | 4410/8828 [04:40<04:31, 16.27img/s, Epoch Loss (Train)=0.00267, Step Loss (Batch)=0.0199]                                 INFO:
+Validation set:
+	Average loss: 0.0199	Accuracy: 8.56%	Correct = 324/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 1/50: 100%|██████████▉| 8800/8828 [12:42<00:02, 11.53img/s, Epoch Loss (Train)=0.00234, Step Loss (Batch)=0.0186]
+Traceback (most recent call last):
+  File "Run.py", line 107, in <module>
+    trainer(
+  File "G:\Samei\Repo\RSNA-Bone-Age\Train.py", line 130, in trainer
+    grad_scaler.step(optimizer)
+  File "C:\ProgramData\Anaconda3\lib\site-packages\torch\cuda\amp\grad_scaler.py", line 338, in step
+    retval = self._maybe_opt_step(optimizer, optimizer_state, *args, **kwargs)
+  File "C:\ProgramData\Anaconda3\lib\site-packages\torch\cuda\amp\grad_scaler.py", line 284, in _maybe_opt_step
+    if not sum(v.item() for v in optimizer_state["found_inf_per_device"].values()):
+  File "C:\ProgramData\Anaconda3\lib\site-packages\torch\cuda\amp\grad_scaler.py", line 284, in <genexpr>
+    if not sum(v.item() for v in optimizer_state["found_inf_per_device"].values()):
+KeyboardInterrupt

@@ -1,0 +1,184 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2
+        Image Channel:      1
+        Epochs:             50
+        Batch Size:         10
+        Learning Rate:      0.001
+        Training Size:      8828
+        validation Size:    3783
+        validation %:       0.3
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          Adam
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220512_232157_MobileNetV2" ...
+Epoch 1/50:  50%|██████████████████████▉                       | 4410/8828 [02:30<02:09, 34.08img/s, Epoch Loss (Train)=0.0025, Step Loss (Batch)=0.018]INFO:
+Validation set:
+	Average loss: 0.0198	Accuracy: 8.96%	Correct = 339/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 1/50: 100%|████████████████████████████████████████████| 8828/8828 [06:40<00:00, 22.62img/s, Epoch Loss (Train)=0.00223, Step Loss (Batch)=0.0199]INFO:
+Validation set:
+	Average loss: 0.0191	Accuracy: 10.55%	Correct = 399/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 1/50: 100%|████████████████████████████████████████████| 8828/8828 [08:26<00:00, 17.42img/s, Epoch Loss (Train)=0.00223, Step Loss (Batch)=0.0199]
+INFO:
+Epoch: 1 | Train Loss: 0.0022 | Validation Loss: 0.0191
+Epoch 2/50:  50%|█████████████████████▉                      | 4410/8828 [02:23<02:05, 35.33img/s, Epoch Loss (Train)=0.00188, Step Loss (Batch)=0.0157]INFO:
+Validation set:
+	Average loss: 0.0197	Accuracy: 7.75%	Correct = 293/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 2/50: 100%|████████████████████████████████████████████| 8828/8828 [06:34<00:00, 33.32img/s, Epoch Loss (Train)=0.00184, Step Loss (Batch)=0.0189]INFO:
+Validation set:
+	Average loss: 0.0171	Accuracy: 16.15%	Correct = 611/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 2/50: 100%|████████████████████████████████████████████| 8828/8828 [08:23<00:00, 17.54img/s, Epoch Loss (Train)=0.00184, Step Loss (Batch)=0.0189]
+INFO:
+Epoch: 2 | Train Loss: 0.0018 | Validation Loss: 0.0171
+Epoch 3/50:  50%|█████████████████████▉                      | 4410/8828 [02:21<02:08, 34.51img/s, Epoch Loss (Train)=0.00167, Step Loss (Batch)=0.0155]INFO:
+Validation set:
+	Average loss: 0.0159	Accuracy: 21.12%	Correct = 799/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 3/50: 100%|█████████████████████████████████████████████| 8828/8828 [06:21<00:00, 35.03img/s, Epoch Loss (Train)=0.00164, Step Loss (Batch)=0.018]INFO:
+Validation set:
+	Average loss: 0.0158	Accuracy: 21.91%	Correct = 829/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 3/50: 100%|█████████████████████████████████████████████| 8828/8828 [08:09<00:00, 18.03img/s, Epoch Loss (Train)=0.00164, Step Loss (Batch)=0.018]
+INFO:
+Epoch: 3 | Train Loss: 0.0016 | Validation Loss: 0.0158
+Epoch 4/50:  50%|█████████████████████▉                      | 4410/8828 [02:22<02:03, 35.81img/s, Epoch Loss (Train)=0.00161, Step Loss (Batch)=0.0148]INFO:
+Validation set:
+	Average loss: 0.0155	Accuracy: 22.02%	Correct = 833/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 4/50: 100%|████████████████████████████████████████████| 8828/8828 [06:22<00:00, 35.30img/s, Epoch Loss (Train)=0.00158, Step Loss (Batch)=0.0169]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 22.71%	Correct = 859/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 4/50: 100%|████████████████████████████████████████████| 8828/8828 [08:10<00:00, 18.00img/s, Epoch Loss (Train)=0.00158, Step Loss (Batch)=0.0169]
+INFO:
+Epoch: 4 | Train Loss: 0.0016 | Validation Loss: 0.0154
+Epoch 5/50:  50%|█████████████████████▉                      | 4410/8828 [02:22<02:04, 35.63img/s, Epoch Loss (Train)=0.00155, Step Loss (Batch)=0.0149]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.82%	Correct = 901/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 5/50: 100%|████████████████████████████████████████████| 8828/8828 [06:22<00:00, 34.99img/s, Epoch Loss (Train)=0.00155, Step Loss (Batch)=0.0169]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 22.81%	Correct = 863/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 5/50: 100%|████████████████████████████████████████████| 8828/8828 [08:11<00:00, 17.96img/s, Epoch Loss (Train)=0.00155, Step Loss (Batch)=0.0169]
+INFO:
+Epoch: 5 | Train Loss: 0.0015 | Validation Loss: 0.0154
+Epoch 6/50:  50%|█████████████████████▉                      | 4410/8828 [02:21<02:03, 35.68img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0146]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.82%	Correct = 901/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 6/50: 100%|████████████████████████████████████████████| 8828/8828 [06:21<00:00, 34.36img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0165]INFO:
+Validation set:
+	Average loss: 0.0153	Accuracy: 22.87%	Correct = 865/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 6/50: 100%|████████████████████████████████████████████| 8828/8828 [08:10<00:00, 18.00img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0165]
+INFO:
+Epoch: 6 | Train Loss: 0.0015 | Validation Loss: 0.0153
+Epoch 7/50:  50%|█████████████████████▉                      | 4410/8828 [02:21<02:00, 36.66img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0147]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.90%	Correct = 904/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 7/50: 100%|████████████████████████████████████████████| 8828/8828 [06:21<00:00, 35.46img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0167]INFO:
+Validation set:
+	Average loss: 0.0153	Accuracy: 22.89%	Correct = 866/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 7/50: 100%|████████████████████████████████████████████| 8828/8828 [08:08<00:00, 18.09img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0167]
+INFO:
+Epoch: 7 | Train Loss: 0.0015 | Validation Loss: 0.0153
+Epoch 8/50:  50%|█████████████████████▉                      | 4410/8828 [02:24<01:59, 36.95img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0149]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.79%	Correct = 900/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 8/50: 100%|████████████████████████████████████████████| 8828/8828 [06:24<00:00, 34.74img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0165]INFO:
+Validation set:
+	Average loss: 0.0153	Accuracy: 22.84%	Correct = 864/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 8/50: 100%|████████████████████████████████████████████| 8828/8828 [08:13<00:00, 17.88img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0165]
+INFO:
+Epoch: 8 | Train Loss: 0.0015 | Validation Loss: 0.0153
+Epoch 9/50:  50%|█████████████████████▉                      | 4410/8828 [02:20<02:04, 35.45img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0146]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.76%	Correct = 899/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 9/50: 100%|████████████████████████████████████████████| 8828/8828 [06:21<00:00, 36.75img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0165]INFO:
+Validation set:
+	Average loss: 0.0153	Accuracy: 22.87%	Correct = 865/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 9/50: 100%|████████████████████████████████████████████| 8828/8828 [08:14<00:00, 17.84img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0165]
+INFO:
+Epoch: 9 | Train Loss: 0.0015 | Validation Loss: 0.0153
+Epoch 10/50:  50%|█████████████████████▍                     | 4410/8828 [02:26<02:01, 36.43img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0149]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.74%	Correct = 898/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 10/50: 100%|███████████████████████████████████████████| 8828/8828 [06:27<00:00, 35.74img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0167]INFO:
+Validation set:
+	Average loss: 0.0153	Accuracy: 22.87%	Correct = 865/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 10/50: 100%|███████████████████████████████████████████| 8828/8828 [08:17<00:00, 17.75img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0167]
+INFO:
+Epoch: 10 | Train Loss: 0.0015 | Validation Loss: 0.0153
+Epoch 11/50:  50%|█████████████████████▍                     | 4410/8828 [02:19<02:04, 35.40img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0143]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.74%	Correct = 898/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 11/50: 100%|███████████████████████████████████████████| 8828/8828 [06:30<00:00, 36.86img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0169]INFO:
+Validation set:
+	Average loss: 0.0153	Accuracy: 22.87%	Correct = 865/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 11/50: 100%|███████████████████████████████████████████| 8828/8828 [08:13<00:00, 17.88img/s, Epoch Loss (Train)=0.00153, Step Loss (Batch)=0.0169]
+INFO:
+Epoch: 11 | Train Loss: 0.0015 | Validation Loss: 0.0153
+Epoch 12/50:  50%|█████████████████████▍                     | 4410/8828 [02:16<02:08, 34.36img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0151]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.74%	Correct = 898/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 12/50: 100%|███████████████████████████████████████████| 8828/8828 [06:27<00:00, 35.43img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0169]INFO:
+Validation set:
+	Average loss: 0.0153	Accuracy: 22.87%	Correct = 865/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 12/50: 100%|███████████████████████████████████████████| 8828/8828 [08:16<00:00, 17.77img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0169]
+INFO:
+Epoch: 12 | Train Loss: 0.0015 | Validation Loss: 0.0153
+Epoch 13/50:  50%|█████████████████████▍                     | 4410/8828 [02:20<02:13, 33.12img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0146]INFO:
+Validation set:
+	Average loss: 0.0154	Accuracy: 23.74%	Correct = 898/3783
+INFO: Validation completed.
+INFO: Result Saved.
+Epoch 13/50:  64%|███████████████████████████▍               | 5630/8828 [04:52<02:45, 19.27img/s, Epoch Loss (Train)=0.00154, Step Loss (Batch)=0.0165]
+Traceback (most recent call last):
+  File "Run.py", line 107, in <module>
+    trainer(
+  File "G:\Samei\Repo\RSNA-Bone-Age\Train.py", line 138, in trainer
+    epoch_loss += loss.item()
+KeyboardInterrupt

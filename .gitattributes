@@ -1,0 +1,2 @@
+*.wandb filter=lfs diff=lfs merge=lfs -text
+*0 filter=lfs diff=lfs merge=lfs -text
