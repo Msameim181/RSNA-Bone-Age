@@ -6,5 +6,7 @@ dataset/rsna-bone-age/*
 checkpoints
 checkpoints/*
 .checkpoints/*
+tensorboardLocal
+tensorboardLocal/*
 # wandb
 # tensorboard

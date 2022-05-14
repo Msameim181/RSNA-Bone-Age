@@ -72,7 +72,8 @@ def wandb_log_validation(wandb_logger, optimizer, val_loss, acc,
         'Loss/Validation Loss':      val_loss, 
         'Accuracy/Validation Correct':   acc, 
         'Accuracy/Correct %':            acc * 100,
-        'Images':               wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
+        # Disable image uploading due to the size of the data and network traffic usage
+        # 'Images':               wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
         'Gender':               gender if batch_size == 1 else list(gender), 
         'Age': {
             'True':             boneage.float().cpu() if batch_size == 1 else [age.float().cpu() for age in boneage], 
