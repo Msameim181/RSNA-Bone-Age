@@ -8,5 +8,7 @@ checkpoints/*
 .checkpoints/*
 tensorboardLocal
 tensorboardLocal/*
+wandb/debug-cli.mahdi.log
+wandb/*.log
 # wandb
 # tensorboard
