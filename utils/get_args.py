@@ -16,7 +16,7 @@ def get_args():
                         help='Percent of the data that is used as validation (0-1)')
     
     parser.add_argument('--model-type', '-m', dest='model', metavar='M', type=str, 
-                        default="ResNet18", help='The name of the model to use')
+                        default="MobileNet_V2", help='The name of the model to use')
 
     parser.add_argument('--pretrained', '-p', dest='pretrained', metavar='P', type=str, 
                         default='True', help='Using pretrained model')
