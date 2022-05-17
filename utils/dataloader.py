@@ -81,7 +81,7 @@ class RSNATrainDataset(Dataset):
         onehot_index = self.train_data_filtered.iloc[index]['indx']
         boneage_onehot = self.age_onehot[onehot_index]
 
-        sex = 1 if self.train_data.iloc[index].male else 0
+        sex = 1 if self.train_data_filtered.iloc[index].male else 0
 
         num_classes = self.num_classes
 
@@ -100,7 +100,7 @@ class RSNATrainDataset(Dataset):
 
 
 class RSNATestDataset(Dataset):
-    def __init__(self, data_file: str, image_dir: str, transform = None, 
+    def __init__(self, data_file: str, image_dir: str, train_num_classes: int, transform = None, 
                 scale: float = 1.0, basedOnSex: bool=False, gender:str='male'):
         self.data_file = Path(data_file)
         self.image_dir = Path(image_dir)
@@ -121,6 +121,11 @@ class RSNATestDataset(Dataset):
         else:
             self.test_data_filtered = self.test_data
 
+        if 'boneage' in self.test_data.keys():
+            # One Hoting the bone age
+            self.age_onehot  = torch.nn.functional.one_hot(torch.tensor(self.test_data['boneage']), num_classes = train_num_classes)
+
+
         if not os.path.exists(self.data_file):
             raise RuntimeError(f'No data file found in {data_file}.')
         if self.test_data.empty:
@@ -136,7 +141,15 @@ class RSNATestDataset(Dataset):
         img_id = self.test_data_filtered.iloc[index]['Case ID']
         img_addr = Path(self.image_dir, f'{str(img_id)}.png')
 
-        sex = 1 if self.test_data_filtered.iloc[index]['Sex'] == 'M' else 0
+        sex = 1 if self.test_data_filtered.iloc[index].male else 0
+
+        boneage = 0
+        boneage_onehot = 0
+        if 'boneage' in self.test_data_filtered.keys():
+            boneage = self.train_data_filtered.iloc[index].boneage
+
+            onehot_index = self.train_data_filtered.iloc[index]['indx']
+            boneage_onehot = self.age_onehot[onehot_index]
 
         assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
 
@@ -148,11 +161,11 @@ class RSNATestDataset(Dataset):
             augmentations = self.transform(image=img)
             img = augmentations["image"]
 
-        return img_id, img, sex
+        return img_id, img, boneage, boneage_onehot, sex
 
 
 # Data Packaging
-def data_wrapper(train_dataset, test_dataset, batch_size: int, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
+def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size = 0, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
     """ Generate the train, validation and test dataloader for model.
 
     Args:
@@ -172,7 +185,7 @@ def data_wrapper(train_dataset, test_dataset, batch_size: int, val_percent: floa
     train_loader = DataLoader(dataset = train_set, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
     val_loader = DataLoader(dataset = val_set, batch_size = 1, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
 
-    test_loader = DataLoader(dataset = test_dataset, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+    test_loader = DataLoader(dataset = test_dataset, batch_size = test_batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
 
     return train_loader, val_loader, test_loader
 
@@ -182,11 +195,11 @@ if __name__ == '__main__':
     defualt_path = ''
     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
-                            basedOnSex=True, gender='female')
-
-    test_dataset = RSNATestDataset(data_file = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset.csv',
-                            image_dir = defualt_path + 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/',
-                            basedOnSex=True, gender='male')
+                            basedOnSex=False, gender='female')
+    # print(train_dataset.num_classes)
+    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'), 
+                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
+                            train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
 
     train_loader = DataLoader(dataset=train_dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=8, pin_memory=True)
