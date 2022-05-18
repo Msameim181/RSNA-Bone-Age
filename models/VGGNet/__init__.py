@@ -1,1 +1,1 @@
-from .vggnet_model import VGGNet
+from .vggnet import VGGNet
