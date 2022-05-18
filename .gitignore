@@ -9,8 +9,6 @@ dataset/rsna-bone-age-kaggle/boneage-training-dataset
 dataset/rsna-bone-age/boneage-test-dataset
 dataset/rsna-bone-age/boneage-training-dataset
 
-
-
 # CheckPoints
 checkpoints
 checkpoints/*
@@ -35,9 +33,13 @@ wandb/*.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+__pycache__
 *.py[cod]
 *$py.class
-
+utils/__pycache__
+models/MobileNet/__pycache__
+models/ResNet/__pycache__
+utils/__pycache__/
 # C extensions
 *.so
 
