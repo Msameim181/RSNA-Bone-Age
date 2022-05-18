@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'),
                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'),
-                           basedOnSex = basedOnSex, gender = gender)
+                           train_num_classes = train_dataset.num_classes, basedOnSex = basedOnSex, gender = gender)
     num_classes = train_dataset.num_classes
 
     # Loading NN model
