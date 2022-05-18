@@ -1,0 +1,35 @@
+INFO: WandB setup completed.
+INFO: Training Settings:
+        Device:             cuda
+        Model:              MobileNetV2_Pre2
+        Image Channel:      1
+        Epochs:             50
+        Batch Size:         10
+        Learning Rate:      0.001
+        Training Size:      8828
+        validation Size:    3783
+        validation %:       0.3
+        Checkpoints:        True
+        Mixed Precision:    False
+        optimizer:          Adam
+        criterion:          BCEWithLogitsLoss
+INFO: Start training as "20220518_170414_MobileNetV2_Pre2" ...
+Epoch 1/50:  12%|█▍          | 1090/8828 [02:58<21:04,  6.12img/s, Epoch Loss (Train)=0.00442, Step Loss (Batch)=0.021]
+Traceback (most recent call last):
+  File "Run.py", line 107, in <module>
+    trainer(
+  File "G:\Samei\Repo\RSNA-Bone-Age\Train.py", line 106, in trainer
+    for _, images, boneage, boneage_onehot, gender, _ in train_loader:
+  File "C:\ProgramData\Anaconda3\lib\site-packages\torch\utils\data\dataloader.py", line 530, in __next__
+    data = self._next_data()
+  File "C:\ProgramData\Anaconda3\lib\site-packages\torch\utils\data\dataloader.py", line 1207, in _next_data
+    idx, data = self._get_data()
+  File "C:\ProgramData\Anaconda3\lib\site-packages\torch\utils\data\dataloader.py", line 1163, in _get_data
+    success, data = self._try_get_data()
+  File "C:\ProgramData\Anaconda3\lib\site-packages\torch\utils\data\dataloader.py", line 1011, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+  File "C:\ProgramData\Anaconda3\lib\queue.py", line 179, in get
+    self.not_empty.wait(remaining)
+  File "C:\ProgramData\Anaconda3\lib\threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt

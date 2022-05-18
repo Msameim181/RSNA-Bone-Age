@@ -1,0 +1,93 @@
+2022-05-18 17:04:15,800 INFO    MainThread:10032 [internal.py:wandb_internal():87] W&B internal server running at pid: 10032, started at: 2022-05-18 17:04:15.800612
+2022-05-18 17:04:15,800 INFO    WriterThread:10032 [datastore.py:open_for_write():77] open: G:\Samei\Repo\RSNA-Bone-Age\wandb\offline-run-20220518_170414-dhdc4yi5\run-dhdc4yi5.wandb
+2022-05-18 17:04:15,800 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: run_start
+2022-05-18 17:04:15,909 DEBUG   HandlerThread:10032 [meta.py:__init__():40] meta init
+2022-05-18 17:04:15,909 DEBUG   HandlerThread:10032 [meta.py:__init__():54] meta init done
+2022-05-18 17:04:15,909 DEBUG   HandlerThread:10032 [meta.py:probe():214] probe
+2022-05-18 17:04:15,925 DEBUG   HandlerThread:10032 [meta.py:_setup_git():204] setup git
+2022-05-18 17:04:16,003 DEBUG   HandlerThread:10032 [meta.py:_setup_git():211] setup git done
+2022-05-18 17:04:16,003 DEBUG   HandlerThread:10032 [meta.py:_save_pip():58] save pip
+2022-05-18 17:04:16,003 DEBUG   HandlerThread:10032 [meta.py:_save_pip():72] save pip done
+2022-05-18 17:04:16,003 DEBUG   HandlerThread:10032 [meta.py:_save_conda():79] save conda
+2022-05-18 17:04:19,425 DEBUG   HandlerThread:10032 [meta.py:_save_conda():89] save conda done
+2022-05-18 17:04:19,425 DEBUG   HandlerThread:10032 [meta.py:probe():252] probe done
+2022-05-18 17:04:19,550 INFO    HandlerThread:10032 [handler.py:handle_tbrecord():640] handling tbrecord: tbrecord {
+  log_dir: "tensorboard\\20220518_170414_MobileNetV2_Pre2"
+  save: true
+}
+
+2022-05-18 17:04:19,550 DEBUG   HandlerThread:10032 [config_util.py:dict_from_config_file():102] no default config file found in config-defaults.yaml
+2022-05-18 17:04:19,831 DEBUG   Thread-12 :10032 [tb_watcher.py:_process_events():269] Encountered tensorboard directory watcher error: [WinError 1314] A required privilege is not held by the client: 'G:\\Samei\\Repo\\RSNA-Bone-Age\\tensorboard\\20220518_170414_MobileNetV2_Pre2\\events.out.tfevents.1652877259.DESKTOP-ISIIVT7.2908.0' -> 'G:\\Samei\\Repo\\RSNA-Bone-Age\\wandb\\offline-run-20220518_170414-dhdc4yi5\\files\\events.out.tfevents.1652877259.DESKTOP-ISIIVT7.2908.0'
+2022-05-18 17:07:50,238 WARNING MainThread:10032 [internal.py:wandb_internal():146] Internal process interrupt: 1
+2022-05-18 17:07:55,441 DEBUG   SenderThread:10032 [sender.py:send():234] send: exit
+2022-05-18 17:07:55,441 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: poll_exit
+2022-05-18 17:07:55,441 INFO    SenderThread:10032 [sender.py:send_exit():366] handling exit code: 255
+2022-05-18 17:07:55,441 INFO    SenderThread:10032 [sender.py:send_exit():368] handling runtime: 219
+2022-05-18 17:07:55,441 INFO    SenderThread:10032 [sender.py:_save_file():939] saving file wandb-summary.json with policy end
+2022-05-18 17:07:55,441 INFO    SenderThread:10032 [sender.py:send_exit():374] send defer
+2022-05-18 17:07:55,441 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: poll_exit
+2022-05-18 17:07:55,441 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:07:55,441 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 0
+2022-05-18 17:07:55,441 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:07:55,441 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 0
+2022-05-18 17:07:55,441 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 1
+2022-05-18 17:07:55,441 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:07:55,441 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 1
+2022-05-18 17:07:55,582 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:07:55,582 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 1
+2022-05-18 17:07:55,582 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: poll_exit
+2022-05-18 17:07:55,582 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 2
+2022-05-18 17:07:55,582 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: poll_exit
+2022-05-18 17:07:55,582 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:07:55,582 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 2
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 2
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: poll_exit
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 3
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: poll_exit
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: poll_exit
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: poll_exit
+2022-05-18 17:08:01,940 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 3
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 3
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 4
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:08:01,940 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 4
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 4
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 5
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:08:01,940 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 5
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 5
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 6
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:08:01,940 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 6
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 6
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 7
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:08:01,940 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 7
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 7
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 8
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:08:01,940 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 8
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 8
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:transition_state():387] send defer: 9
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send():234] send: final
+2022-05-18 17:08:01,940 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: defer
+2022-05-18 17:08:01,940 INFO    HandlerThread:10032 [handler.py:handle_request_defer():147] handle defer: 9
+2022-05-18 17:08:01,940 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: defer
+2022-05-18 17:08:01,940 INFO    SenderThread:10032 [sender.py:send_request_defer():383] handle sender defer: 9
+2022-05-18 17:08:02,050 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: poll_exit
+2022-05-18 17:08:02,050 DEBUG   SenderThread:10032 [sender.py:send_request():248] send_request: poll_exit
+2022-05-18 17:08:02,050 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: get_summary
+2022-05-18 17:08:02,050 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: sampled_history
+2022-05-18 17:08:02,081 DEBUG   HandlerThread:10032 [handler.py:handle_request():130] handle_request: shutdown
+2022-05-18 17:08:02,081 INFO    HandlerThread:10032 [handler.py:finish():731] shutting down handler
+2022-05-18 17:08:02,956 INFO    WriterThread:10032 [datastore.py:close():281] close: G:\Samei\Repo\RSNA-Bone-Age\wandb\offline-run-20220518_170414-dhdc4yi5\run-dhdc4yi5.wandb
+2022-05-18 17:08:03,065 INFO    SenderThread:10032 [sender.py:finish():1070] shutting down sender
+2022-05-18 17:08:03,065 INFO    MainThread:10032 [internal.py:handle_exit():77] Internal process exited
