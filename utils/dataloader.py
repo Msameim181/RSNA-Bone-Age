@@ -165,7 +165,7 @@ class RSNATestDataset(Dataset):
 
 
 # Data Packaging
-def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size = 0, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
+def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: int = 1, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
     """ Generate the train, validation and test dataloader for model.
 
     Args:
