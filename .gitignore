@@ -13,5 +13,8 @@ tensorboardLocal
 tensorboardLocal/*
 wandb/debug-cli.mahdi.log
 wandb/*.log
+# **__pycache__
+# **/__pycache__
+# **/**/__pycache__
 # wandb
 # tensorboard

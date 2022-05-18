@@ -1,19 +1,24 @@
+
 # System and utils for preprocessing
-# import logging
-# import os
-# from pathlib import Path
-# # Deep learning libs
-# import numpy as np
-# import pandas as pd
-# import torch
-# from PIL import Image
-# # Custom libs
-# from torch.utils.data import DataLoader, Dataset
-# from utils.dataloader import RSNATestDataset, RSNATrainDataset
-# from models.ResNet import ResNet18, ResNet50
-# from models.MobileNet import MobileNetV2
+import logging
+import sys
+import os
+from datetime import datetime
+from pathlib import Path
 
+# Deep learning libs
+import torch
 
+# Models
+from models.MobileNet import MobileNet_V2
+from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+# Custom libs
+from Train import trainer
+from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
+from utils.get_args import get_args
+from Validation import validate
+from Evaluation import evaluate
+from utils.config_model import reload_model
 # if __name__ == '__main__':
 #     model = ResNet18(img_channel=1, num_classes=229)
 #     print(model)
@@ -113,7 +118,36 @@
 
 
 
-import wandb
-import glob
+# import wandb
+# import glob
 
-wandb.save(glob.glob(f"tensorboard/*.pt.trace.json")[0], base_path=f"tensorboard")
+# wandb.save(glob.glob(f"tensorboard/*.pt.trace.json")[0], base_path=f"tensorboard")
+
+
+
+if __name__ == '__main__':
+
+    defualt_path = ''
+    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
+                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
+                            basedOnSex=False, gender='female')
+    # print(train_dataset.num_classes)
+    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'), 
+                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
+                            train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
+
+    _, _, test_loader = data_wrapper(
+                                                train_dataset, 
+                                                test_dataset, 
+                                                1, 
+                                                val_percent = 0.3, 
+                                                shuffle = False, 
+                                                num_workers = 1)
+    net = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes)
+    reload_model(net, "./ResultModels/20220511_043706_MobileNetV2_Pre2/checkpoint_epoch18.pth")
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    criterion = torch.nn.BCEWithLogitsLoss()
+    
+    print(evaluate(net, test_loader, device, criterion))
+    
