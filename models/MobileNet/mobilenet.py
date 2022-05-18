@@ -123,7 +123,7 @@ class MobileNetV2_Pre2(torch.nn.Module):
 
 class MobileNetV2_Pre3(torch.nn.Module):
     def __init__(self, image_channels, num_classes = 100, name: str='MobileNetV2_Pre31') -> None:
-        super(MobileNetV2_Pre2, self).__init__()
+        super(MobileNetV2_Pre3, self).__init__()
 
         self.name = name
         self.in_channels = image_channels
