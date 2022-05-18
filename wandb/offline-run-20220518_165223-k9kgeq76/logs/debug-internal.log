@@ -1,5 +1,0 @@
-2022-05-18 16:52:25,397 INFO    MainThread:12784 [internal.py:wandb_internal():87] W&B internal server running at pid: 12784, started at: 2022-05-18 16:52:25.397710
-2022-05-18 16:52:25,397 INFO    WriterThread:12784 [datastore.py:open_for_write():77] open: G:\Samei\Repo\RSNA-Bone-Age\wandb\offline-run-20220518_165223-k9kgeq76\run-k9kgeq76.wandb
-2022-05-18 16:52:25,397 DEBUG   HandlerThread:12784 [handler.py:handle_request():130] handle_request: run_start
-2022-05-18 16:52:25,497 DEBUG   HandlerThread:12784 [meta.py:__init__():40] meta init
-2022-05-18 16:52:25,497 DEBUG   HandlerThread:12784 [meta.py:__init__():54] meta init done
