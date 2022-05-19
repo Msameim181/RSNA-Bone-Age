@@ -143,7 +143,7 @@ if __name__ == '__main__':
                                                 val_percent = 0.3, 
                                                 shuffle = False, 
                                                 num_workers = 1)
-    net = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes)
+    net = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
     reload_model(net, "./ResultModels/20220511_043706_MobileNetV2_Pre2/checkpoint_epoch18.pth")
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
