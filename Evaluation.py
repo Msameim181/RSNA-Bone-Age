@@ -35,7 +35,7 @@ def evaluate(net, test_loader, device, criterion):
             pred = output_age.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(t_age.view_as(pred)).sum().item()
             
-            test_loss_second += torch.nn.functional.mse_loss(pred, t_age)
+            test_loss_second += torch.nn.functional.mse_loss(pred, t_age.view_as(pred))
     
     acc = correct
     if n_eval != 0:
