@@ -112,6 +112,7 @@ class RSNATestDataset(Dataset):
 
         # Proccessing data and csv file
         self.test_data = pd.read_csv(self.data_file)
+        self.test_data['indx'] = range(len(self.test_data))
 
         # Dividing data based on gender
         if self.basedOnSex and self.gender == 'male':
@@ -218,7 +219,7 @@ if __name__ == '__main__':
 
 
     # with progress:
-    #     for img_id, img, sex in progress.track(test_loader):
+    #     for img_id, img, boneage, boneage_onehot, sex in progress.track(test_loader):
     #         # print(img_id, img, sex)
     #         ...
 
