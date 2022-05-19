@@ -125,29 +125,50 @@ from utils.config_model import reload_model
 
 
 
+# if __name__ == '__main__':
+
+#     defualt_path = ''
+#     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
+#                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
+#                             basedOnSex=False, gender='female')
+#     # print(train_dataset.num_classes)
+#     test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'), 
+#                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
+#                             train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
+
+#     _, _, test_loader = data_wrapper(
+#                                                 train_dataset, 
+#                                                 test_dataset, 
+#                                                 1, 
+#                                                 val_percent = 0.3, 
+#                                                 shuffle = False, 
+#                                                 num_workers = 1)
+#     net = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
+#     reload_model(net, "./ResultModels/20220511_043706_MobileNetV2_Pre2/checkpoint_epoch18.pth")
+
+#     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+#     criterion = torch.nn.BCEWithLogitsLoss()
+    
+#     print(evaluate(net, test_loader, device, criterion))
+    
+
+from utils.rich_logger import make_console
+
 if __name__ == '__main__':
+    dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
+    basedOnSex = False
+    gender = 'male'
+    test_data = [
+    {"jsonrpc": "2.0", "method": "sum", "params": [None, 1, 2, 4, False, True], "id": "1",},
+    {"jsonrpc": "2.0", "method": "notify_hello", "params": [7]},
+    {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": "2"},
+    ]
+    console = make_console()
+    console.print("Hello World (sdf) !asda 2%")
+    console.log(test_data)
+    console.print(f'\nDataSet: <{dataset_name}>\n'
+                 f'Based On Gender: {basedOnSex}\n'
+                 f'Targeted Gender: {gender}\n')
+    console.out("DataSet", dataset_name)
+    console.rule("[bold red]Chapter 2")
 
-    defualt_path = ''
-    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
-                            basedOnSex=False, gender='female')
-    # print(train_dataset.num_classes)
-    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'), 
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
-                            train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
-
-    _, _, test_loader = data_wrapper(
-                                                train_dataset, 
-                                                test_dataset, 
-                                                1, 
-                                                val_percent = 0.3, 
-                                                shuffle = False, 
-                                                num_workers = 1)
-    net = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
-    reload_model(net, "./ResultModels/20220511_043706_MobileNetV2_Pre2/checkpoint_epoch18.pth")
-
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    criterion = torch.nn.BCEWithLogitsLoss()
-    
-    print(evaluate(net, test_loader, device, criterion))
-    

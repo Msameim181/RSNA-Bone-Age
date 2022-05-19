@@ -3,7 +3,14 @@ from pathlib import Path
 
 import torch
 from torch.utils.tensorboard import SummaryWriter
+
+from utils.rich_logger import make_console
+
 # from tensorboardX import SummaryWriter
+
+
+
+console = make_console()
 
 def tb_setup(config, log_dir:str = './tensorboard/'):
     """
@@ -56,7 +63,7 @@ def tb_log_training(tb_logger, epoch_loss, val_loss, epoch):
     tb_logger.add_scalar('Loss/Train Loss', epoch_loss, epoch)
     tb_logger.add_scalar('Loss/Epoch Loss', epoch_loss, epoch)
     tb_logger.add_scalar('Loss/Validation Loss (Epoch)', val_loss, epoch)
-    logging.info(f'\nEpoch: {epoch + 1} | Train Loss: {epoch_loss:.4f} | Validation Loss: {val_loss:.4f}\n')
+    console.print(f'\n[INFO]: Epoch: {epoch + 1} | Train Loss: {epoch_loss:.4f} | Validation Loss: {val_loss:.4f}\n')
 
     tb_logger.flush()
     

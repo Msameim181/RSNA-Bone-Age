@@ -9,11 +9,12 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 # Custom libs
-from utils.rich_progress_bar import make_bar
-from utils.wandb_logger import *
+from utils.rich_logger import make_bar, make_console
 from utils.tensorboard_logger import *
+from utils.wandb_logger import *
 from Validation import validate
 
+console = make_console()
 
 # Training Worker
 def trainer(
@@ -29,7 +30,8 @@ def trainer(
     WandB_usage:bool = False,
     amp:bool = False, 
     save_checkpoint:bool = True, 
-    dir_checkpoint:str = './checkpoints/',) -> None:
+    dir_checkpoint:str = './checkpoints/',
+    dataset_name:str = "rsna") -> None:
     """The Trainer for model"""
 
     # Handling exeptions and inputs
@@ -71,13 +73,15 @@ def trainer(
         name = run_name,
         device = device,
         optimizer = optimizer.__class__.__name__,
-        criterion = criterion.__class__.__name__)
+        criterion = criterion.__class__.__name__,
+        dataset_name = dataset_name,)
 
     wandb_logger = wandb_setup(config) if WandB_usage else None
     
     tb_logger = tb_setup(config)
 
-    logging.info(f'''Training Settings:
+    console.print(f'''\n[INFO]: Training Settings:
+        DataSet:            {dataset_name}
         Device:             {device}
         Model:              {net.name}
         Image Channel:      {net.in_channels}
@@ -92,7 +96,7 @@ def trainer(
         optimizer:          {optimizer.__class__.__name__}
         criterion:          {criterion.__class__.__name__}
     ''')
-    logging.info(f'Start training as "{run_name}" ...')
+    console.print(f'\n[INFO]: Start training as "{run_name}" ...')
 
     # Start training
 
@@ -165,9 +169,10 @@ def trainer(
             Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
             torch.save(net.state_dict(), str(f"{dir_checkpoint}/checkpoint_epoch{epoch + 1}.pth"))
 
-    logging.info(f'Finished Training Course. \n')
+    time_now = datetime.now().strftime("%Y%m%d_%H%M%S")
+    console.print(f'\n[INFO]: Finished Training Course at {time_now}.')
     tb_logger.close()
-    logging.info(f'Shutting Down... \n')
+    console.print(f'\n[INFO]: Shutting Down...')
 
 # Validation Worker
 def validation(
@@ -221,8 +226,8 @@ def validation(
         tb_log_validation(tb_logger, optimizer, val_loss, acc, 
             images, batch_size, global_step, epoch, net)
 
-        logging.info('Validation completed.')
-        logging.info('Result Saved.')
+        console.print('\n[INFO]: Validation completed.')
+        console.print('[INFO]: Result Saved.')
         return val_loss
 
     return None

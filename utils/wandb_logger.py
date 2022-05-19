@@ -1,11 +1,14 @@
 
 import logging
+
 import wandb
 
+from utils.rich_logger import make_console
 
+console = make_console()
 
 def wandb_setup(config) -> wandb:
-    logging.info("Setting up WandB...")
+    console.print("\n[INFO]: Setting up WandB...")
 
     # Sign in to wandb
     wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
@@ -13,6 +16,7 @@ def wandb_setup(config) -> wandb:
     model = config['model']
     run_name = config['name']
     device = config['device']
+    dataset_name = config['dataset_name']
     # Create a run
     wandb_logger = wandb.init(
         project = "Bone-Age-RSNA", 
@@ -24,14 +28,15 @@ def wandb_setup(config) -> wandb:
             'rsna', 
             f'{model}', 
             f'{run_name}', 
-            f'{device}'
+            f'{device}',
+            f'{dataset_name}'
         ],)
     
     # wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboard_x=False)
     # Configure wandb
     wandb_logger.config.update(config)
     # Logging
-    logging.info("WandB setup completed.")
+    console.print("[INFO]: WandB setup completed.")
     return wandb_logger
 
 

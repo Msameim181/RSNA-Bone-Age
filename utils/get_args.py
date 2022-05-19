@@ -29,6 +29,9 @@ def get_args():
     parser.add_argument('--checkpoint', '-c', dest='checkpoint', metavar='C', type=str, 
                         default='True', help='Saving checkpoints')
 
+    parser.add_argument('--dataset', '-d', dest='dataset', metavar='C', type=str, 
+                        default='rsna', help='DataSet to use')
+
     parser.add_argument('--load', '-f', action='store_true', default=False, help='Load model from a .pth file')
 
     return parser.parse_args()

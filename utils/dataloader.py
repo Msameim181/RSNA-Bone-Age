@@ -13,7 +13,10 @@ from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
 from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision import transforms
 
+from utils.rich_logger import make_console
+
 # Pre-initializing the loggers
+console = make_console()
 progress = Progress(
     SpinnerColumn(finished_text="[bold blue]:heavy_check_mark:", style='blue'),
     TextColumn("[bold blue]{task.description}", justify="right"),
@@ -67,7 +70,7 @@ class RSNATrainDataset(Dataset):
         if self.train_data.empty:
             raise RuntimeError('train data is empty file')
 
-        logging.info(f'Creating dataset with {len(self.train_data)} samples')
+        console.print(f'[INFO]: Creating dataset with {len(self.train_data)} samples')
 
     def __len__(self):
         return len(self.train_data_filtered)
@@ -116,9 +119,9 @@ class RSNATestDataset(Dataset):
 
         # Dividing data based on gender
         if self.basedOnSex and self.gender == 'male':
-            self.test_data_filtered = self.test_data[self.test_data['Sex'] == 'M']
+            self.test_data_filtered = self.test_data[self.test_data['male'] == True]
         elif self.basedOnSex and self.gender == 'female':
-            self.test_data_filtered = self.test_data[self.test_data['male'] == 'F']
+            self.test_data_filtered = self.test_data[self.test_data['male'] == False]
         else:
             self.test_data_filtered = self.test_data
 
@@ -132,7 +135,7 @@ class RSNATestDataset(Dataset):
         if self.test_data.empty:
             raise RuntimeError('train data is empty file')
 
-        logging.info(f'Creating dataset with {len(self.test_data)} samples')
+        console.print(f'[INFO]: Creating dataset with {len(self.test_data)} samples')
 
     def __len__(self):
         return len(self.test_data_filtered)

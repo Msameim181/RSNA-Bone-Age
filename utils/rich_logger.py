@@ -1,7 +1,7 @@
 
 from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
                            TimeElapsedColumn, TimeRemainingColumn)
-
+from rich.console import Console
 
 
 
@@ -20,3 +20,6 @@ def make_bar():
         "•",
         "[progress.filesize.total]Total: {task.total} item",
     )
+
+def make_console():
+    return Console()

@@ -5,6 +5,9 @@ import logging
 import torch
 from tqdm import tqdm
 
+from utils.rich_logger import make_console
+
+console = make_console()
 
 def validate(net, val_loader, device, criterion):
     """
@@ -40,7 +43,7 @@ def validate(net, val_loader, device, criterion):
 
     # Logging
     print("\n")
-    logging.info(f'\nValidation set:\n'
+    console.print(f'\n[INFO]: Validation set:\n'
                  f'\tAverage loss: {val_loss:.4f}'
                  f'\tAccuracy: {acc * 100:.2f}%\tCorrect = {correct}/{n_val}\n')
     

@@ -5,6 +5,9 @@ import logging
 import torch
 from tqdm import tqdm
 
+from utils.rich_logger import make_console
+
+console = make_console()
 
 def evaluate(net, test_loader, device, criterion):
     """
@@ -44,7 +47,7 @@ def evaluate(net, test_loader, device, criterion):
         acc /= n_eval
 
     # Logging
-    logging.info(f'\nEvaluation set:\n'
+    console.print(f'\n[INFO]: Evaluation set:\n'
                  f'\tAverage loss (criterion): {test_loss_first:.4f}'
                  f'\tAverage loss (MSE): {test_loss_second:.4f}'
                  f'\tAccuracy: {acc * 100:.2f}% \t Correct = {correct}/{n_eval}\n')
