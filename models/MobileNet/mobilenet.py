@@ -173,7 +173,7 @@ def MobileNet_V2(*, pretrained:bool = False, **kwargs) -> MobileNetV2:
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
     """
-    return MobileNetV2_Pre2(**kwargs) if pretrained else MobileNetV2(**kwargs)
+    return MobileNetV2_Pre3(**kwargs) if pretrained else MobileNetV2(**kwargs)
 
 
 if __name__ == '__main__':
