@@ -146,9 +146,9 @@ class RSNATestDataset(Dataset):
         boneage = 0
         boneage_onehot = 0
         if 'boneage' in self.test_data_filtered.keys():
-            boneage = self.train_data_filtered.iloc[index].boneage
+            boneage = self.test_data_filtered.iloc[index].boneage
 
-            onehot_index = self.train_data_filtered.iloc[index]['indx']
+            onehot_index = self.test_data_filtered.iloc[index]['indx']
             boneage_onehot = self.age_onehot[onehot_index]
 
         assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
