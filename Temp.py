@@ -75,46 +75,48 @@ from utils.config_model import reload_model
 
 
 
-# def packaging(batch_size, n_train):
-#     batch_num = n_train // batch_size
-#     if n_train % batch_size != 0:
-#         batch_num += 1
-#     return batch_num
+def packaging(batch_size, n_train):
+    batch_num = n_train // batch_size
+    if n_train % batch_size != 0:
+        batch_num += 1
+    return batch_num
 
-# def vel_section(batch_size, n_train, val_repeat, global_step):
-#     n_train_batch = n_train // batch_size
-#     val_point = [0 if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
-#     n_train_batch += 1
-#     epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
-#     if epoch_step in val_point:
-#         print('val_point(epoch_step):', epoch_step)
-#         print('val_point(global_step): ', global_step)
-#         return True
-# if __name__ == '__main__':
-#     # Test
-
-
-
-#     val_repeat = 2
-#     batch_size = 6
-#     n_train = 8828
-#     global_step = 0
+def vel_section(batch_size, n_train, val_repeat, global_step):
+    n_train_batch = n_train // batch_size
+    val_point = [n_train_batch if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
+    
+    # n_train_batch += 1
+    # epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
+    if epoch_step in val_point:
+        print(val_point)
+        print('val_point(epoch_step):', epoch_step)
+        print('val_point(global_step): ', global_step)
+        return True
+if __name__ == '__main__':
+    # Test
 
 
-#     print(f"n_train // batch_size: {n_train // batch_size}")
-#     print(f"n_train % batch_size: {n_train % batch_size}")
-#     print(packaging(batch_size=batch_size, n_train=n_train))
-#     # print(8828 % 2)
-#     for epoch in range(1):
-#         print(f"epoch: {epoch}")
-#         epoch_step = 0
-#         for i in range(packaging(batch_size, n_train)):
-#             global_step += 1
-#             epoch_step += 1
-#             if ch := vel_section(batch_size, n_train, val_repeat, global_step):
-#                 log_epoch_loss = ((((epoch_step - 1) * batch_size) + (n_train % batch_size))) if n_train // batch_size == (epoch_step - 1) else ((epoch_step * batch_size))
-#                 print(f"val_loss T {epoch_step} / {epoch_step * batch_size} / {global_step} / {log_epoch_loss}")
-#             # print(i)
+
+    val_repeat = 3
+    batch_size = 1
+    n_train = 8828
+    global_step = 0
+
+
+    print(f"n_train // batch_size: {n_train // batch_size}")
+    print(f"n_train % batch_size: {n_train % batch_size}")
+    print(packaging(batch_size=batch_size, n_train=n_train))
+    # print(8828 % 2)
+    for epoch in range(2):
+        print(f"epoch: {epoch}")
+        epoch_step = 0
+        for _ in range(packaging(batch_size, n_train)):
+            global_step += 1
+            epoch_step += 1
+            if ch := vel_section(batch_size, n_train, val_repeat, global_step):
+                log_epoch_loss = ((((epoch_step - 1) * batch_size) + (n_train % batch_size))) if n_train // batch_size == (epoch_step - 1) else ((epoch_step * batch_size))
+                print(f"val_loss T {epoch_step} / {epoch_step * batch_size} / {global_step} / {log_epoch_loss}")
+            # print(i)
 
 
 
@@ -152,23 +154,23 @@ from utils.config_model import reload_model
 #     print(evaluate(net, test_loader, device, criterion))
     
 
-from utils.rich_logger import make_console
+# from utils.rich_logger import make_console
 
-if __name__ == '__main__':
-    dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
-    basedOnSex = False
-    gender = 'male'
-    test_data = [
-    {"jsonrpc": "2.0", "method": "sum", "params": [None, 1, 2, 4, False, True], "id": "1",},
-    {"jsonrpc": "2.0", "method": "notify_hello", "params": [7]},
-    {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": "2"},
-    ]
-    console = make_console()
-    console.print("Hello World (sdf) !asda 2%")
-    console.log(test_data)
-    console.print(f'\nDataSet: <{dataset_name}>\n'
-                 f'Based On Gender: {basedOnSex}\n'
-                 f'Targeted Gender: {gender}\n')
-    console.out("DataSet", dataset_name)
-    console.rule("[bold red]Chapter 2")
+# if __name__ == '__main__':
+#     dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
+#     basedOnSex = False
+#     gender = 'male'
+#     test_data = [
+#     {"jsonrpc": "2.0", "method": "sum", "params": [None, 1, 2, 4, False, True], "id": "1",},
+#     {"jsonrpc": "2.0", "method": "notify_hello", "params": [7]},
+#     {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": "2"},
+#     ]
+#     console = make_console()
+#     console.print("Hello World (sdf) !asda 2%")
+#     console.log(test_data)
+#     console.print(f'\nDataSet: <{dataset_name}>\n'
+#                  f'Based On Gender: {basedOnSex}\n'
+#                  f'Targeted Gender: {gender}\n')
+#     console.out("DataSet", dataset_name)
+#     console.rule("[bold red]Chapter 2")
 

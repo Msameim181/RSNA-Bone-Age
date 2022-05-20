@@ -8,15 +8,14 @@ import numpy as np
 import pandas as pd
 import torch
 from PIL import Image
+from rich.console import Console
 from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
                            TimeElapsedColumn, TimeRemainingColumn)
 from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision import transforms
 
-from utils.rich_logger import make_console
-
 # Pre-initializing the loggers
-console = make_console()
+console = Console()
 progress = Progress(
     SpinnerColumn(finished_text="[bold blue]:heavy_check_mark:", style='blue'),
     TextColumn("[bold blue]{task.description}", justify="right"),
@@ -197,28 +196,28 @@ def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: 
 
 if __name__ == '__main__':
     defualt_path = ''
-    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
+    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset.csv'),
+                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset/boneage-training-dataset/'),
                             basedOnSex=False, gender='female')
     # print(train_dataset.num_classes)
-    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'), 
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
+    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset.csv'), 
+                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset/boneage-test-dataset/'), 
                             train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False, num_workers=1, pin_memory=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=8, pin_memory=True)
 
 
 
 
 
-    # with progress:
-    #     for img_id, img, boneage, sex, num_classes in progress.track(train_loader):
-    #         # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
-    #         # images = torch.unsqueeze(img, 1)
-    #         print(int(num_classes))
-    #         break
-    #         ...
+    with progress:
+        for img_id, img, boneage, boneage_onehot, sex, num_classes in progress.track(train_loader):
+            # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
+            # images = torch.unsqueeze(img, 1)
+            print(img.shape[0])
+            break
+            ...
 
 
     # with progress:
