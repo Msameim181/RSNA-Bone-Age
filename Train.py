@@ -169,7 +169,7 @@ def trainer(
             Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
             torch.save(net.state_dict(), str(f"{dir_checkpoint}/checkpoint_epoch{epoch + 1}.pth"))
 
-    time_now = datetime.now().strftime("%Y%m%d_%H%M%S")
+    time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     console.print(f'\n[INFO]: Finished Training Course at {time_now}.')
     tb_logger.close()
     console.print(f'\n[INFO]: Shutting Down...')
