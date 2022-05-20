@@ -215,8 +215,8 @@ if __name__ == '__main__':
         for img_id, img, boneage, boneage_onehot, sex, num_classes in progress.track(train_loader):
             # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
             # images = torch.unsqueeze(img, 1)
-            print(img.shape[0])
-            break
+            # print(img.shape[0])
+            # break
             ...
 
 

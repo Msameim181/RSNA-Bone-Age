@@ -15,7 +15,7 @@ from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 from Train import trainer
 from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
 from utils.get_args import get_args
-from utils.rich_logger import make_console
+from utils.rich_logger import *
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
