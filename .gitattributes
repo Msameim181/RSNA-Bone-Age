@@ -1,3 +1,0 @@
-*.wandb filter=lfs diff=lfs merge=lfs -text
-*0 filter=lfs diff=lfs merge=lfs -text
-wandb/*.log filter=lfs diff=lfs merge=lfs -text
