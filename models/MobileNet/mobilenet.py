@@ -122,7 +122,7 @@ class MobileNetV2_Pre2(torch.nn.Module):
 
 
 class MobileNetV2_Pre3(torch.nn.Module):
-    def __init__(self, image_channels, num_classes = 100, name: str='MobileNetV2_Pre33') -> None:
+    def __init__(self, image_channels, num_classes = 100, name: str='MobileNetV2_Pre331') -> None:
         super(MobileNetV2_Pre3, self).__init__()
 
         self.name = name
@@ -145,9 +145,7 @@ class MobileNetV2_Pre3(torch.nn.Module):
             torch.nn.ReLU(),
             torch.nn.Linear(1024, 512),
             torch.nn.ReLU(),
-            torch.nn.Linear(512, 256),
-            torch.nn.ReLU(),
-            torch.nn.Linear(256, num_classes),
+            torch.nn.Linear(512, num_classes),
 
             # torch.nn.Linear(256, 128),
             # torch.nn.Linear(128, 64),
