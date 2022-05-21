@@ -143,7 +143,7 @@ class MobileNetV2_Pre3(torch.nn.Module):
 
             torch.nn.Linear(1281, 1024),
             torch.nn.ReLU(),
-            torch.nn.Linear(1025, 512),
+            torch.nn.Linear(1024, 512),
             torch.nn.ReLU(),
             torch.nn.Linear(512, 256),
             torch.nn.ReLU(),
