@@ -41,6 +41,8 @@ if __name__ == '__main__':
     dataset_name = "rsna-bone-age" if args.dataset == "rsna" else "rsna-bone-age-kaggle" # rsna-bone-age-kaggle or rsna-bone-age
     basedOnSex = args.basedOnSex
     gender = 'male' if args.gender == 'male' else 'female'
+    vars(args)['dataset_name'] = dataset_name
+    vars(args)['gender'] = gender
 
     console.print(f'[INFO]: DataSet: <{dataset_name}>\n'
                 f'\tBased On Gender: {basedOnSex}\n'
@@ -55,6 +57,8 @@ if __name__ == '__main__':
                            image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset/boneage-test-dataset/'),
                            train_num_classes = train_dataset.num_classes, basedOnSex = basedOnSex, gender = gender)
     num_classes = train_dataset.num_classes
+    vars(args)['train_dataset_size'] = len(train_dataset)
+    vars(args)['test_dataset_size'] = len(test_dataset)
 
     # Loading NN model
     console.print('\n[INFO]: Loading NN Model...')

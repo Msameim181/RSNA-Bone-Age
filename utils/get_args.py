@@ -59,6 +59,8 @@ if __name__ == '__main__':
     print(arg.basedOnSex, type(arg.basedOnSex))
     print(arg.gender, type(arg.gender))
     print(arg.notes, type(arg.notes))
+    # vars(arg)['kkp'] = "loop"
+    # print(arg.kkp, type(arg.kkp))
 
     if arg.notes:
         print("hi")

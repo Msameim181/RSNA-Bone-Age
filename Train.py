@@ -76,28 +76,42 @@ def trainer(
         device = device,
         optimizer = optimizer.__class__.__name__,
         criterion = criterion.__class__.__name__,
-        dataset_name = dataset_name,)
+        WandB_usage = WandB_usage,
+        dataset_name = dataset_name,
+        basedOnSex = args.basedOnSex,
+        gender = args.gender,
+        train_dataset_size = args.train_dataset_size,
+        test_dataset_size = args.test_dataset_size)
 
     wandb_logger = wandb_setup(config, notes = notes) if WandB_usage else None
-    
+
     tb_logger = tb_setup(config, args = args, notes = notes)
 
     console.print(f'''\n[INFO]: Training Settings:
-        DataSet:            {dataset_name}
-        Device:             {device}
-        Model:              {net.name}
-        Image Channel:      {net.in_channels}
-        Epochs:             {epochs}
-        Batch Size:         {batch_size}
-        Learning Rate:      {learning_rate}
-        Training Size:      {n_train}
-        validation Size:    {n_val}
-        validation %:       {val_percent}
-        Checkpoints:        {save_checkpoint}
-        Mixed Precision:    {amp}
-        optimizer:          {optimizer.__class__.__name__}
-        criterion:          {criterion.__class__.__name__}
-    ''')
+        DataSet:                <{dataset_name}>
+        Device:                 "{device}"
+        Model:                  <{net.name}>
+        Image Channel:          {net.in_channels}
+        Model Output (Ch):      {net.num_classes}
+        Epochs:                 {epochs}
+        Batch Size:             {batch_size}
+        Learning Rate:          {learning_rate}
+        Training Size:          {n_train}
+        validation Size:        {n_val}
+        validation %:           {val_percent}
+        Checkpoints:            {save_checkpoint}
+        Mixed Precision:        {amp}
+        optimizer:              {optimizer.__class__.__name__}
+        criterion:              {criterion.__class__.__name__}
+        ------------------------------------------------------
+        wandb:                  {WandB_usage}
+        Tensorboard:            {True}
+        Based On Gender:        {args.basedOnSex}
+        Targeted Gender:        "{args.gender}"
+        Train Dataset Sample:   {args.train_dataset_size}
+        Test Dataset Sample:    {args.test_dataset_size}
+        ------------------------------------------------------
+        Notes: {notes}''')
     console.print(f'\n[INFO]: Start training as "{run_name}" ...')
 
     # Start training
