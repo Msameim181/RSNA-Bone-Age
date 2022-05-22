@@ -1,5 +1,6 @@
 
 import logging
+from pathlib import Path
 
 import wandb
 
@@ -18,6 +19,7 @@ def wandb_setup(config, notes: str = '') -> wandb:
     device = config['device']
     dataset_name = config['dataset_name']
     # Create a run
+    wandb.tensorboard.patch(root_logdir="./tensorboard")
     wandb_logger = wandb.init(
         project = "Bone-Age-RSNA", 
         entity = "rsna-bone-age", 

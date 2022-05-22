@@ -207,10 +207,9 @@ def validation(
     # Evaluation round
     # Let's See if is it evaluation time or not
     n_train_batch = n_train // batch_size
-    val_point = [0 if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
+    last_point = (n_train_batch + 1) if n_train % batch_size else n_train_batch
+    val_point = [last_point if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
     # Solving The Validation in end of epoch problem and tensorboard overflow problem
-    n_train_batch += 1
-    epoch_step = (global_step % n_train_batch) if global_step >= n_train_batch else global_step
     if epoch_step in val_point:
 
         # WandB Storing the model parameters
