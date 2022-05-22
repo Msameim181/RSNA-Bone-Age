@@ -99,6 +99,7 @@ if __name__ == '__main__':
     # Initiate training
     trainer(
         net = net,
+        args = args,
         device = device,
         train_loader = train_loader, 
         val_loader = val_loader, 
@@ -112,6 +113,7 @@ if __name__ == '__main__':
         run_name = run_name,
         WandB_usage = WandB_usage,
         dataset_name = dataset_name,
-        notes = args.notes)
+        notes = args.notes,
+    )
 
     

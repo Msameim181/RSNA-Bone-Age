@@ -19,6 +19,7 @@ console = make_console()
 # Training Worker
 def trainer(
     net,
+    args,
     device:torch.device,
     train_loader:DataLoader, 
     val_loader:DataLoader,
@@ -126,7 +127,10 @@ def trainer(
 
                 # Forward pass
                 with torch.cuda.amp.autocast(enabled = amp):
-                    age_pred = net([images, gender])
+                    if args.basedOnSex and args.input_size == 1:
+                        age_pred = net(images)
+                    else:
+                        age_pred = net([images, gender])
                     loss = criterion(age_pred, age)
 
                 # Backward and optimize
@@ -153,7 +157,7 @@ def trainer(
                 tb_log_training_step(tb_logger, loss, global_step, epoch, log_epoch_loss)
                 
                 # Validation
-                val_loss = validation(wandb_logger, tb_logger, net, device, optimizer, scheduler, criterion, 
+                val_loss = validation(wandb_logger, tb_logger, net, args, device, optimizer, scheduler, criterion, 
                     epoch, global_step, epoch_step, n_train, batch_size,val_loader, images, 
                     boneage, age_pred, gender, WandB_usage)
                 
@@ -180,6 +184,7 @@ def validation(
     wandb_logger, 
     tb_logger,
     net, 
+    args, 
     device:torch.device, 
     optimizer, 
     scheduler, 
@@ -214,7 +219,7 @@ def validation(
 
 
         # Evaluating the model
-        val_loss, acc, _ = validate(net, val_loader, device, criterion)
+        val_loss, acc, _ = validate(net, args, val_loader, device, criterion)
         # 
         scheduler.step(val_loss)
 

@@ -9,7 +9,12 @@ from utils.rich_logger import make_console
 
 console = make_console()
 
-def validate(net, val_loader, device, criterion):
+def validate(
+        net, 
+        args, 
+        val_loader, 
+        device, 
+        criterion):
     """
     Validate the model on the validation set
     """
@@ -29,7 +34,10 @@ def validate(net, val_loader, device, criterion):
         t_age = boneage.to(device = device, dtype = torch.float32)
 
         with torch.no_grad():
-            output_age = net([images, sex])
+            if args.basedOnSex and args.input_size == 1:
+                output_age = net(images)
+            else:
+                output_age = net([images, sex])
             val_loss += criterion(output_age, target_age)  # sum up batch loss
             
             # val_loss += torch.nn.functional.cross_entropy(output_age, target_age, reduction='sum').item()  # sum up batch loss
