@@ -12,7 +12,7 @@ from utils.rich_logger import make_console
 
 console = make_console()
 
-def tb_setup(config, log_dir:str = './tensorboard/', notes: str = '') -> SummaryWriter:
+def tb_setup(config, args, log_dir:str = './tensorboard/', notes: str = '') -> SummaryWriter:
     """
     Setup tensorboard logger
     """
@@ -41,7 +41,10 @@ def tb_setup(config, log_dir:str = './tensorboard/', notes: str = '') -> Summary
     tb_logger.add_text(tag='save_checkpoint', text_string=str(save_checkpoint), global_step=0)
     tb_logger.add_text(tag='notes', text_string=notes, global_step=0)
 
-    tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size).cuda()], ))
+    if args.basedOnSex and args.input_size == 1:
+        tb_logger.add_graph(net.cuda(), (torch.randn(batch_size, 1, 500, 625).cuda(), ))
+    else:
+        tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size).cuda()], ))
 
     tb_logger.flush()
 

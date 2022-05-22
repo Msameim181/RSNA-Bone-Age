@@ -80,7 +80,7 @@ def trainer(
 
     wandb_logger = wandb_setup(config, notes = notes) if WandB_usage else None
     
-    tb_logger = tb_setup(config, notes = notes)
+    tb_logger = tb_setup(config, args = args, notes = notes)
 
     console.print(f'''\n[INFO]: Training Settings:
         DataSet:            {dataset_name}
