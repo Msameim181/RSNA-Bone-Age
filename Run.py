@@ -13,27 +13,12 @@ from models.MobileNet import MobileNet_V2
 from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 # Custom libs
 from Train import trainer
+from utils.config_model import *
 from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
 from utils.get_args import get_args
 from utils.rich_logger import *
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
-
-def select_model(args, image_channels, num_classes):
-    if args.model == 'ResNet18':
-        return ResNet18(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
-    elif args.model == 'ResNet34':
-        return ResNet34(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
-    elif args.model == 'ResNet50':
-        return ResNet50(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
-    elif args.model == 'ResNet101':
-        return ResNet101(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
-    elif args.model == 'ResNet152':
-        return ResNet152(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
-    elif args.model == 'MobileNet_V2':
-        return MobileNet_V2(pretrained = args.pretrained == 'True', image_channels = 1, num_classes = num_classes)
-    else:
-        assert None, 'Model not supported.'
 
 if __name__ == '__main__':
     # Get args
@@ -54,11 +39,13 @@ if __name__ == '__main__':
     # Load data
     console.print('\n[INFO]: Loading data...')
     dataset_name = "rsna-bone-age" if args.dataset == "rsna" else "rsna-bone-age-kaggle" # rsna-bone-age-kaggle or rsna-bone-age
-    basedOnSex = False
-    gender = 'male'
+    basedOnSex = args.basedOnSex
+    gender = 'male' if args.gender == 'male' else 'female'
+
     console.print(f'[INFO]: DataSet: <{dataset_name}>\n'
                 f'\tBased On Gender: {basedOnSex}\n'
                 f'\tTargeted Gender: "{gender}"')
+
     defualt_path = ''
     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset.csv'),
                            image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset/boneage-training-dataset/'),
@@ -124,6 +111,7 @@ if __name__ == '__main__':
         dir_checkpoint = './checkpoints/',
         run_name = run_name,
         WandB_usage = WandB_usage,
-        dataset_name = dataset_name,)
+        dataset_name = dataset_name,
+        notes = args.notes)
 
     

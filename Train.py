@@ -31,7 +31,8 @@ def trainer(
     amp:bool = False, 
     save_checkpoint:bool = True, 
     dir_checkpoint:str = './checkpoints/',
-    dataset_name:str = "rsna") -> None:
+    dataset_name:str = "rsna",
+    notes:str = '') -> None:
     """The Trainer for model"""
 
     # Handling exeptions and inputs
@@ -76,9 +77,9 @@ def trainer(
         criterion = criterion.__class__.__name__,
         dataset_name = dataset_name,)
 
-    wandb_logger = wandb_setup(config) if WandB_usage else None
+    wandb_logger = wandb_setup(config, notes = notes) if WandB_usage else None
     
-    tb_logger = tb_setup(config)
+    tb_logger = tb_setup(config, notes = notes)
 
     console.print(f'''\n[INFO]: Training Settings:
         DataSet:            {dataset_name}
