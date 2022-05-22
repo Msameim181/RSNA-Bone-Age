@@ -10,15 +10,15 @@ from pathlib import Path
 import torch
 
 # Models
-from models.MobileNet import MobileNet_V2
-from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+# from models.MobileNet import MobileNet_V2
+# from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 # Custom libs
 from Train import trainer
 from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
 from utils.get_args import get_args
 from Validation import validate
 from Evaluation import evaluate
-from utils.config_model import reload_model
+from utils.config_model import *
 # if __name__ == '__main__':
 #     model = ResNet18(img_channel=1, num_classes=229)
 #     print(model)
@@ -153,24 +153,3 @@ if __name__ == '__main__':
     
 #     print(evaluate(net, test_loader, device, criterion))
     
-
-# from utils.rich_logger import make_console
-
-# if __name__ == '__main__':
-#     dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
-#     basedOnSex = False
-#     gender = 'male'
-#     test_data = [
-#     {"jsonrpc": "2.0", "method": "sum", "params": [None, 1, 2, 4, False, True], "id": "1",},
-#     {"jsonrpc": "2.0", "method": "notify_hello", "params": [7]},
-#     {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": "2"},
-#     ]
-#     console = make_console()
-#     console.print("Hello World (sdf) !asda 2%")
-#     console.log(test_data)
-#     console.print(f'\nDataSet: <{dataset_name}>\n'
-#                  f'Based On Gender: {basedOnSex}\n'
-#                  f'Targeted Gender: {gender}\n')
-#     console.out("DataSet", dataset_name)
-#     console.rule("[bold red]Chapter 2")
-
