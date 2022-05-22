@@ -13,8 +13,9 @@ class MobileNetV3(torch.nn.Module):
         name: str = 'MobileNetV3', 
         pretrained: bool = True,
         input_size: int = 2,
+        name_suffix: str = '',
     ) -> None:
-        """MobileNetV2 class.
+        """MobileNetV3 class.
 
         Args:
             image_channels (int): Number of channels in the input image.
@@ -27,15 +28,19 @@ class MobileNetV3(torch.nn.Module):
         super(MobileNetV3, self).__init__()
 
         self.type = '_Pre' if pretrained else ""
-        self.name = name + self.type
+        self.name = name + self.type + name_suffix
         self.in_channels = image_channels
         self.num_classes = num_classes
 
         self.mobilenet_v2 = models.mobilenet_v3_large(pretrained=pretrained)
 
         self.mobilenet_v2.features[0][0] = torch.nn.Conv2d(image_channels, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+
         self.avgpool = torch.nn.AdaptiveAvgPool2d(1)
+
         in_features = self.mobilenet_v2.classifier[0].in_features
+        self.add_feature = 0 if input_size <= 1 else input_size - 1
+
         self.mobilenet_v2.classifier = torch.nn.Sequential(
 
             # torch.nn.Dropout(0.2),
@@ -49,17 +54,18 @@ class MobileNetV3(torch.nn.Module):
         )
 
     def forward(self, x) -> torch.Tensor:
-        y = x[1]
-        x = x[0]
+        if self.add_feature > 0:
+            y = x[1]
+            x = x[0]
         
         x = self.mobilenet_v2.features(x)
 
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
 
-        z = x
-        y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
-        x = torch.cat((z, y), dim=1)
+        if self.add_feature > 0:
+            y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
+            x = torch.cat((x, y), dim=1)
 
         x = self.mobilenet_v2.classifier(x)
 
@@ -82,9 +88,9 @@ if __name__ == '__main__':
     # print(models.mobilenet_v3_large(pretrained=False))
     print(model.name)
     
-    model.cuda()
-    inp = torch.randn(1, 1, 500, 625).cuda()
-    sx = torch.randn(1).cuda()
-    out = model([inp, sx])
-    print(out.shape)
+    # model.cuda()
+    # inp = torch.randn(1, 1, 500, 625).cuda()
+    # sx = torch.randn(1).cuda()
+    # out = model([inp, sx])
+    # print(out.shape)
     

@@ -13,6 +13,7 @@ class MobileNetV2(torch.nn.Module):
         name: str = 'MobileNetV2', 
         pretrained: bool = True,
         input_size: int = 2,
+        name_suffix: str = '',
     ) -> None:
         """MobileNetV2 class.
 
@@ -27,7 +28,7 @@ class MobileNetV2(torch.nn.Module):
         super(MobileNetV2, self).__init__()
 
         self.type = '_Pre' if pretrained else ""
-        self.name = name + self.type
+        self.name = name + self.type + name_suffix
         self.in_channels = image_channels
         self.num_classes = num_classes
 
@@ -36,10 +37,12 @@ class MobileNetV2(torch.nn.Module):
         self.mobilenet_v2.features[0][0] = torch.nn.Conv2d(image_channels, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
 
         in_features = self.mobilenet_v2.classifier[1].in_features
+        self.add_feature = 0 if input_size <= 1 else input_size - 1
+        
         self.mobilenet_v2.classifier = torch.nn.Sequential(
 
             # torch.nn.Dropout(0.2),
-            torch.nn.Linear(in_features + 1, 512),
+            torch.nn.Linear(in_features + self.add_feature, 512),
 
             torch.nn.ReLU(),
             # torch.nn.Dropout(0.5),
@@ -47,17 +50,18 @@ class MobileNetV2(torch.nn.Module):
         )
 
     def forward(self, x) -> torch.Tensor:
-        y = x[1]
-        x = x[0]
+        if self.add_feature > 0:
+            y = x[1]
+            x = x[0]
         
         x = self.mobilenet_v2.features(x)
 
         x = torch.nn.functional.adaptive_avg_pool2d(x, (1, 1))
         x = torch.flatten(x, 1)
 
-        z = x
-        y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
-        x = torch.cat((z, y), dim=1)
+        if self.add_feature > 0:
+            y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
+            x = torch.cat((x, y), dim=1)
 
         x = self.mobilenet_v2.classifier(x)
 
@@ -76,13 +80,13 @@ def MobileNet_V2(**kwargs) -> MobileNetV2:
 
 
 if __name__ == '__main__':
-    model = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = 229)
-    print(model)
+    model = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = 229, input_size = 2)
+    # print(model)
     print(model.name)
     
-    model.cuda()
-    inp = torch.randn(1, 1, 500, 625).cuda()
-    sx = torch.randn(1).cuda()
-    out = model([inp, sx])
-    print(out.shape)
+    # model.cuda()
+    # inp = torch.randn(1, 1, 500, 625).cuda()
+    # sx = torch.randn(1).cuda()
+    # out = model([inp, sx])
+    # print(out.shape)
     
