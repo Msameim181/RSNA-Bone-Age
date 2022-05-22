@@ -7,7 +7,7 @@ from utils.rich_logger import make_console
 
 console = make_console()
 
-def wandb_setup(config) -> wandb:
+def wandb_setup(config, notes: str = '') -> wandb:
     console.print("\n[INFO]: Setting up WandB...")
 
     # Sign in to wandb
@@ -30,7 +30,8 @@ def wandb_setup(config) -> wandb:
             f'{run_name}', 
             f'{device}',
             f'{dataset_name}'
-        ],)
+        ],
+        notes = notes)
     
     # wandb.tensorboard.patch(root_logdir="./tensorboard", tensorboard_x=False)
     # Configure wandb

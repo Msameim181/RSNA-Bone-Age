@@ -12,7 +12,7 @@ from utils.rich_logger import make_console
 
 console = make_console()
 
-def tb_setup(config, log_dir:str = './tensorboard/'):
+def tb_setup(config, log_dir:str = './tensorboard/', notes: str = '') -> SummaryWriter:
     """
     Setup tensorboard logger
     """
@@ -39,6 +39,7 @@ def tb_setup(config, log_dir:str = './tensorboard/'):
     tb_logger.add_text(tag='learning_rate', text_string=str(learning_rate), global_step=0)
     tb_logger.add_text(tag='amp', text_string=str(amp), global_step=0)
     tb_logger.add_text(tag='save_checkpoint', text_string=str(save_checkpoint), global_step=0)
+    tb_logger.add_text(tag='notes', text_string=notes, global_step=0)
 
     tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size).cuda()], ))
 
