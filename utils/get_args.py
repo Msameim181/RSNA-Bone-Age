@@ -9,6 +9,8 @@ def get_args():
 
     parser.add_argument('--batch-size', '-b', dest='batch_size', metavar='B', type=int, default=4, help='Batch size')
 
+    parser.add_argument('--input-size', '-i', dest='input_size', metavar='I', type=int, default=2, help='Input size')
+
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=0.0001,
                         help='Learning rate', dest='learning_rate')
 
@@ -34,16 +36,32 @@ def get_args():
 
     parser.add_argument('--load', '-f', action='store_true', default=False, help='Load model from a .pth file')
 
+    parser.add_argument('--bge', dest='basedOnSex', action='store_true', default=False, help='Based on gender.')
+
+    parser.add_argument('--gender', '-g', dest='gender', type=str, 
+                        default="male", help='The gender of dataset.')
+
+    parser.add_argument('--note', '-n', dest='notes', type=str, 
+                        default="", help='Run description for add to logger.')
+
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     # Test
     arg = get_args()
+    print(type(arg))
     print(arg.epochs)
     print(arg.wandb, type(arg.wandb))
     print(arg.amp, type(arg.amp))
     print(arg.load, type(arg.load))
+    print(arg.input_size, type(arg.input_size))
+    print(arg.basedOnSex, type(arg.basedOnSex))
+    print(arg.gender, type(arg.gender))
+    print(arg.notes, type(arg.notes))
+
+    if arg.notes:
+        print("hi")
 
 
 
