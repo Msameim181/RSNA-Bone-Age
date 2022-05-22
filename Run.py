@@ -62,8 +62,8 @@ if __name__ == '__main__':
 
     # Loading NN model
     console.print('\n[INFO]: Loading NN Model...')
-    # net = ResNet18(pretrained = True, image_channels=1, num_classes=num_classes)
-    net = select_model(args = args, image_channels=1, num_classes=num_classes)
+    name_suffix = f"_{gender}" if basedOnSex else ''
+    net = select_model(args = args, image_channels=1, num_classes=num_classes, name_suffix = name_suffix)
     console.print(f'[INFO]: Model loaded as <{net.name}>')
     console.print(f'[INFO]: Network:\n'
                  f'\t{net.in_channels} input channels\n'
