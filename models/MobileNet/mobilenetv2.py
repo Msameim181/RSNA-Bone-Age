@@ -48,10 +48,7 @@ class MobileNetV2(torch.nn.Module):
             torch.nn.Linear(2048, 1024),
 
             torch.nn.ReLU(),
-            torch.nn.Linear(1024, 512),
-
-            torch.nn.ReLU(),
-            torch.nn.Linear(512, num_classes)
+            torch.nn.Linear(1024, num_classes)
         )
 
     def forward(self, x) -> torch.Tensor:
