@@ -96,7 +96,8 @@ if __name__ == '__main__':
 
     # Set up Time
     time_now = datetime.now()
-    run_name = time_now.strftime("%Y%m%d_%H%M%S") + f"_{net.name}"
+    name_suffix = f"_{args.name_suffix}" if args.name_suffix else ''
+    run_name = time_now.strftime("%Y%m%d_%H%M%S") + f"_{net.name}" + name_suffix
     console.print(f'[INFO]: Program started at {time_now.strftime("%Y-%m-%d %H:%M:%S")}, Setup completed.')
     console.print("\n[INFO]: Initiating training phase...")
 

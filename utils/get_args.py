@@ -44,6 +44,9 @@ def get_args():
     parser.add_argument('--note', '-n', dest='notes', type=str, 
                         default="", help='Run description for add to logger.')
 
+    parser.add_argument('--name-suffix', '-ns', dest='name_suffix', type=str, 
+                        default="", help='Suffix for the name of the run.')
+
     return parser.parse_args()
 
 
