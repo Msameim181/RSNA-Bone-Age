@@ -27,6 +27,7 @@ def validate(
     for _, images, boneage, boneage_onehot, sex, _ in tqdm(val_loader, total = n_val, desc='Validation Round...', unit = 'img', leave=False):
 
         images = torch.unsqueeze(images, 1)
+        sex = torch.unsqueeze(sex, 1)
         images = images.to(device = device, dtype = torch.float32)
         sex = sex.to(device = device, dtype = torch.float32)
         # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))

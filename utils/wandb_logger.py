@@ -10,9 +10,11 @@ console = make_console()
 
 def wandb_setup(config, notes: str = '') -> wandb:
     console.print("\n[INFO]: Setting up WandB...")
-
+    # Reading the config file, Key: Value
+    f = open("temp/key/key.txt", "r")
+    key = f.read()
     # Sign in to wandb
-    wandb.login(key='0257777f14fecbf445207a8fdacdee681c72113a')
+    wandb.login(key=key)
 
     model = config['model']
     run_name = config['name']

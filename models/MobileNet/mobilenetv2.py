@@ -62,7 +62,7 @@ class MobileNetV2(torch.nn.Module):
         x = torch.flatten(x, 1)
 
         if self.add_feature > 0:
-            y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
+
             x = torch.cat((x, y), dim=1)
 
         x = self.mobilenet_v2.classifier(x)
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     
     # model.cuda()
     # inp = torch.randn(1, 1, 500, 625).cuda()
-    # sx = torch.randn(1).cuda()
+    # sx = torch.randn(1, 1).cuda()
     # out = model([inp, sx])
     # print(out.shape)
     

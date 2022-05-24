@@ -22,6 +22,7 @@ def evaluate(net, test_loader, device, criterion):
     for _, images, boneage, boneage_onehot, gender in tqdm(test_loader, total = n_eval, desc='Evaluation Round...', unit = 'img', leave=False):
 
         images = torch.unsqueeze(images, 1)
+        gender = torch.unsqueeze(gender, 1)
         images = images.to(device = device, dtype = torch.float32)
 
         gender = gender.to(device = device, dtype = torch.float32)
