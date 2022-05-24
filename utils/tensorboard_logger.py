@@ -44,7 +44,7 @@ def tb_setup(config, args, log_dir:str = './tensorboard/', notes: str = '') -> S
     if args.basedOnSex and args.input_size == 1:
         tb_logger.add_graph(net.cuda(), (torch.randn(batch_size, 1, 500, 625).cuda(), ))
     else:
-        tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size).cuda()], ))
+        tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size, 1).cuda()], ))
 
     tb_logger.flush()
 

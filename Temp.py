@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     
     num_classes = train_dataset.num_classes
-    net = MobileNet_V2(image_channels=1, num_classes=num_classes)
+    net = ResNet50(image_channels=1, num_classes=num_classes)
     device = 'cuda'
     # net.to(device=device, dtype=torch.float32) 
     # images = images.to(device=device, dtype=torch.float32)
@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     learning_rate = 0.0001
     epochs = 10
-    batch_size = 2
+    batch_size = 8
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
     # test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
 
