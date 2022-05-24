@@ -39,10 +39,7 @@ class ResNet(torch.nn.Module):
         self.add_feature = 0 if input_size <= 1 else input_size - 1
         self.resnet.fc = torch.nn.Sequential(
 
-            torch.nn.Linear(in_features + self.add_feature, 1024),
-            torch.nn.ReLU(),
-
-            torch.nn.Linear(1024, 512),
+            torch.nn.Linear(in_features + self.add_feature, 512),
             torch.nn.ReLU(),
 
             torch.nn.Linear(512, num_classes),
