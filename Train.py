@@ -126,7 +126,7 @@ def trainer(
             for _, images, boneage, boneage_onehot, gender, _ in train_loader:
 
                 images = torch.unsqueeze(images, 1)
-                sex = torch.unsqueeze(sex, 1)
+                gender = torch.unsqueeze(gender, 1)
 
                 assert images.shape[1] == net.in_channels, \
                     f'Network has been defined with {net.in_channels} input channels, ' \
