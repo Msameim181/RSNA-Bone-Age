@@ -2,7 +2,7 @@
 import logging
 import os
 from pathlib import Path
-
+import matplotlib.pyplot as plt
 # Deep learning libs
 import numpy as np
 import pandas as pd
@@ -12,7 +12,9 @@ from rich.console import Console
 from rich.progress import (BarColumn, Progress, SpinnerColumn, TextColumn,
                            TimeElapsedColumn, TimeRemainingColumn)
 from torch.utils.data import DataLoader, Dataset, random_split
-from torchvision import transforms
+import torchvision
+import albumentations as A
+from albumentations.pytorch.transforms import ToTensorV2
 
 # Pre-initializing the loggers
 console = Console()
@@ -37,7 +39,7 @@ progress = Progress(
 
 # Defining the dataset class
 class RSNATrainDataset(Dataset):
-    def __init__(self, data_file: str, image_dir: str, transform = None, 
+    def __init__(self, data_file: str, image_dir: str, transform = None,
                 scale: float = 1.0, basedOnSex: bool=False, gender:str='male'):
         self.data_file = Path(data_file)
         self.image_dir = Path(image_dir)
@@ -49,6 +51,13 @@ class RSNATrainDataset(Dataset):
 
         # Proccessing data and csv file
         self.train_data = pd.read_csv(data_file)
+
+        a_min, a_max = 1, 228
+        ba_norm = self.train_data['boneage'].copy()
+        ba_norm -= a_min
+        ba_norm /= a_max
+        self.train_data['ba_norm'] = ba_norm
+
         self.train_data['indx'] = range(len(self.train_data))
 
         # Dividing data based on gender
@@ -79,6 +88,7 @@ class RSNATrainDataset(Dataset):
         img_addr = Path(self.image_dir, f'{str(img_id)}.png')
 
         boneage = self.train_data_filtered.iloc[index].boneage
+        ba_norm = self.train_data_filtered.iloc[index].ba_norm
 
         onehot_index = self.train_data_filtered.iloc[index]['indx']
         boneage_onehot = self.age_onehot[onehot_index]
@@ -90,15 +100,15 @@ class RSNATrainDataset(Dataset):
         assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
 
         img = Image.open(img_addr)
-        img = img.resize((500, 625))
-        img = np.array(img)
 
+        img = np.array(img)
+        
         if self.transform is not None:
             augmentations = self.transform(image=img)
             img = augmentations["image"]
 
         # return img_id, img, boneage, boneage_onehot, sex
-        return img_id, img, boneage, boneage_onehot, sex, num_classes
+        return img_id, img, boneage, boneage_onehot, ba_norm, sex, num_classes
 
 
 class RSNATestDataset(Dataset):
@@ -125,6 +135,11 @@ class RSNATestDataset(Dataset):
             self.test_data_filtered = self.test_data
 
         if 'boneage' in self.test_data.keys():
+            a_min, a_max = 1, 228
+            ba_norm = self.test_data_filtered['boneage'].copy()
+            ba_norm -= a_min
+            ba_norm /= a_max
+            self.test_data_filtered['ba_norm'] = ba_norm
             # One Hoting the bone age
             self.age_onehot  = torch.nn.functional.one_hot(torch.tensor(self.test_data['boneage']), num_classes = train_num_classes)
 
@@ -147,9 +162,11 @@ class RSNATestDataset(Dataset):
         sex = 1 if self.test_data_filtered.iloc[index].male else 0
 
         boneage = 0
+        ba_norm = 0
         boneage_onehot = 0
         if 'boneage' in self.test_data_filtered.keys():
             boneage = self.test_data_filtered.iloc[index].boneage
+            ba_norm = self.train_data_filtered.iloc[index].ba_norm
 
             onehot_index = self.test_data_filtered.iloc[index]['indx']
             boneage_onehot = self.age_onehot[onehot_index]
@@ -157,15 +174,23 @@ class RSNATestDataset(Dataset):
         assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
 
         img = Image.open(img_addr)
-        img = img.resize((500, 625))
-        img = np.array(img)
+        # img = img.resize((500, 625))
+        # img = np.array(img)
 
         if self.transform is not None:
-            augmentations = self.transform(image=img)
+            augmentations = self.transform(img)
             img = augmentations["image"]
 
-        return img_id, img, boneage, boneage_onehot, sex
+        return img_id, img, boneage, boneage_onehot, ba_norm, sex
 
+
+def data_augmentation():
+    return A.Compose([
+        A.Resize(500, 625),
+        A.ColorJitter(brightness=0.05, contrast=0.5, saturation=0.05, hue=0.05),
+        A.Rotate(limit=20, p=0.9),
+        ToTensorV2(),
+    ])
 
 # Data Packaging
 def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: int = 1, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
@@ -194,31 +219,48 @@ def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: 
 
 
 
+def plot_data(img, r, c, i):
+    plt.subplot(r, c, i)
+    plt.imshow(img, cmap='gray')
+    plt.axis('off')
+
+
+
 if __name__ == '__main__':
     defualt_path = ''
     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset.csv'),
                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset/boneage-training-dataset/'),
-                            basedOnSex=False, gender='female')
+                            basedOnSex=False, gender='female', transform=data_augmentation())
     # print(train_dataset.num_classes)
-    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset.csv'), 
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset/boneage-test-dataset/'), 
-                            train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
+    # test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset.csv'), 
+    #                         image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset/boneage-test-dataset/'), 
+    #                         train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male', transform=data_augmentation())
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False, num_workers=1, pin_memory=True)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=8, pin_memory=True)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=3, shuffle=False, num_workers=1, pin_memory=True)
+    # test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=8, pin_memory=True)
 
-
-
-
-
+    transf = torchvision.transforms.ToPILImage()
+    print(len(train_dataset))
+    # show_dataset(train_dataset)
+    count = 1
+    row = 10
+    col = 10
     with progress:
-        for img_id, img, boneage, boneage_onehot, sex, num_classes in progress.track(train_loader):
+        for img_id, img, boneage, boneage_onehot, ba_norm, sex, num_classes in progress.track(train_loader):
             # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
             # images = torch.unsqueeze(img, 1)
-            # print(img.shape[0])
-            # break
-            ...
 
+            # break
+            a_min, a_max = 1, 228
+            t = ba_norm * a_max
+            t += a_min
+            print(boneage, ba_norm, t)
+            plot_data(transf(img[0]), row, col, count)
+            count += 1
+            if count == 101:
+                break
+            ...
+    plt.show()
 
     # with progress:
     #     for img_id, img, boneage, boneage_onehot, sex in progress.track(test_loader):
