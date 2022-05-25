@@ -11,6 +11,10 @@ def get_args():
 
     parser.add_argument('--input-size', '-i', dest='input_size', metavar='I', type=int, default=2, help='Input size')
 
+    parser.add_argument('--num-classes', '-nc', dest='num_classes', type=int, default=0, help='Number of classes')
+    
+    parser.add_argument('--out-type', '-ot', dest='output_type', type=int, default=2, help='Output type (0:norm, 1:true, 2:onehot)')
+
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=0.0001,
                         help='Learning rate', dest='learning_rate')
 
