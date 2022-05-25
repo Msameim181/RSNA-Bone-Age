@@ -1,4 +1,6 @@
+# Deep learning libs
 import torch
+
 # Models
 from models.MobileNet import MobileNet_V2, MobileNet_V3
 from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
@@ -8,6 +10,9 @@ def reload_model(net, path: str):
     """ Reload model from path. """
     net.load_state_dict(torch.load(path))
 
+def conflict(args, num_classes):
+    if args.output_type not in [1, 0]:
+        assert num_classes > 1, "Output size must be match with number of classes."
 
 def select_model(args, image_channels: int, num_classes: int, **kwargs):
     """ Select model from list of available models.
@@ -20,6 +25,7 @@ def select_model(args, image_channels: int, num_classes: int, **kwargs):
     Returns:
         Torch Model: Torch Model object.
     """
+    conflict(args, num_classes)
     if args.model == 'ResNet18':
         return ResNet18(pretrained = args.pretrained == 'True', 
                     image_channels = image_channels, num_classes = num_classes, 

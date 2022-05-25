@@ -123,7 +123,7 @@ def trainer(
         epoch_step = 0
         # Reading data and Training
         with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
-            for _, images, boneage, boneage_onehot, gender, _ in train_loader:
+            for _, images, boneage, boneage_onehot, ba_norm, gender, _ in train_loader:
 
                 images = torch.unsqueeze(images, 1)
                 gender = torch.unsqueeze(gender, 1)
@@ -136,8 +136,12 @@ def trainer(
                 images = images.to(device = device, dtype = torch.float32)
                 gender = gender.to(device = device, dtype = torch.float32)
 
-                # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
-                age = boneage_onehot.to(device = device, dtype = torch.float32)
+                if args.output_type == 0:
+                    age = ba_norm.to(device = device, dtype = torch.float32)
+                elif args.output_type == 1:
+                    age = boneage.to(device = device, dtype = torch.float32)
+                elif args.output_type == 2:
+                    age = boneage_onehot.to(device = device, dtype = torch.float32)
 
 
                 # Forward pass

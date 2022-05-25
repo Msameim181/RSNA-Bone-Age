@@ -8,9 +8,6 @@ from pathlib import Path
 # Deep learning libs
 import torch
 
-# Models
-from models.MobileNet import MobileNet_V2
-from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 # Custom libs
 from Train import trainer
 from utils.config_model import *
@@ -56,7 +53,7 @@ if __name__ == '__main__':
     test_dataset = RSNATestDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset.csv'),
                            image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset/boneage-test-dataset/'),
                            train_num_classes = train_dataset.num_classes, basedOnSex = basedOnSex, gender = gender)
-    num_classes = train_dataset.num_classes
+    num_classes = train_dataset.num_classes if args.num_classes == 0 else args.num_classes
     vars(args)['train_dataset_size'] = len(train_dataset)
     vars(args)['test_dataset_size'] = len(test_dataset)
 

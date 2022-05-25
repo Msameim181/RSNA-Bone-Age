@@ -27,7 +27,6 @@ def evaluate(net, test_loader, device, criterion):
 
         gender = gender.to(device = device, dtype = torch.float32)
 
-        # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
         target_age = boneage_onehot.to(device = device, dtype = torch.float32)
         t_age = boneage.to(device = device, dtype = torch.float32)
 
