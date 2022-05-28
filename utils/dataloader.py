@@ -193,7 +193,9 @@ def data_augmentation():
     ])
 
 # Data Packaging
-def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: int = 1, val_percent: float = 0.2, shuffle: bool = True, num_workers: int = 1):
+def data_wrapper(train_dataset: Dataset, test_dataset: Dataset, 
+        batch_size: int, test_val_batch_size: int = 1, val_percent: float = 0.2, 
+        shuffle: bool = True, num_workers: int = 1) -> DataLoader:
     """ Generate the train, validation and test dataloader for model.
 
     Args:
@@ -211,11 +213,36 @@ def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: 
     n_train = len(train_dataset) - n_val
     train_set, val_set = random_split(train_dataset, [n_train, n_val], generator=torch.Generator().manual_seed(0))
     train_loader = DataLoader(dataset = train_set, batch_size = batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
-    val_loader = DataLoader(dataset = val_set, batch_size = 1, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+    val_loader = DataLoader(dataset = val_set, batch_size = test_val_batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
 
-    test_loader = DataLoader(dataset = test_dataset, batch_size = test_batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
+    test_loader = DataLoader(dataset = test_dataset, batch_size = test_val_batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
 
     return train_loader, val_loader, test_loader
+
+# Data Loading
+def data_handler(dataset_name:str = 'rsna-bone-age-kaggle', defualt_path: str = '', 
+        basedOnSex: bool = False, gender: str = 'male') -> Dataset:
+    """Load dataset class from files.
+
+    Args:
+        dataset_name (str, optional): The dataset name to use. Defaults to 'rsna-bone-age-kaggle'. [rsna-bone-age, rsna-bone-age-kaggle]
+        defualt_path (str, optional): The default path to use. Defaults to ''.
+        basedOnSex (bool, optional): If the dataset is based on the Gender or not. Defaults to False. 
+        gender (str, optional): The gender of the dataset. Defaults to 'male'.
+
+    Returns:
+        datasets: The train and test datasets.
+    """
+    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset.csv'),
+                           image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset/boneage-training-dataset/'),
+                           basedOnSex = basedOnSex, gender = gender, transform=data_augmentation())
+
+    test_dataset = RSNATestDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset.csv'),
+                           image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset/boneage-test-dataset/'),
+                           basedOnSex = basedOnSex, gender = gender, transform=data_augmentation(),
+                           train_num_classes = train_dataset.num_classes)
+    return train_dataset, test_dataset
+
 
 
 
@@ -225,7 +252,6 @@ def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: 
 # |                                                               | #
 # ----------------------------------------------------------------- #
 
-
 def plot_data(img, r, c, i):
     plt.subplot(r, c, i)
     plt.imshow(img, cmap='gray')
@@ -233,20 +259,30 @@ def plot_data(img, r, c, i):
     plt.tight_layout()
 
 
-
 if __name__ == '__main__':
     defualt_path = ''
-    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset.csv'),
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset/boneage-training-dataset/'),
-                            basedOnSex=False, gender='female', transform=data_augmentation())
-    # print(train_dataset.num_classes)
-    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset.csv'), 
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset/boneage-test-dataset/'), 
-                            train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male', 
-                            transform=data_augmentation())
+    # train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset.csv'),
+    #                         image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset/boneage-training-dataset/'),
+    #                         basedOnSex=False, gender='female', transform=data_augmentation())
+    # # print(train_dataset.num_classes)
+    # test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset.csv'), 
+    #                         image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset/boneage-test-dataset/'), 
+    #                         train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male', 
+    #                         transform=data_augmentation())
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=5, shuffle=False, num_workers=1, pin_memory=True)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=6, shuffle=False, num_workers=1, pin_memory=True)
+    train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age-kaggle', defualt_path = '', 
+        basedOnSex = False, gender = 'male')
+
+    # train_loader = DataLoader(dataset=train_dataset, batch_size=5, shuffle=False, num_workers=1, pin_memory=True)
+    # test_loader = DataLoader(dataset=test_dataset, batch_size=6, shuffle=False, num_workers=1, pin_memory=True)
+    batch_size, val_percent = 1, 0.2
+    train_loader, val_loader, test_loader = data_wrapper(
+                                                train_dataset = train_dataset, 
+                                                test_dataset = test_dataset, 
+                                                batch_size = batch_size, test_val_batch_size = 1,
+                                                val_percent = val_percent, 
+                                                shuffle = False, 
+                                                num_workers = 1)
 
     transf = torchvision.transforms.ToPILImage()
     # show_dataset(train_dataset)
@@ -272,10 +308,17 @@ if __name__ == '__main__':
     # plt.tight_layout()
     # plt.savefig("C0555.png", dpi=300)
     # plt.show()
+    print(len(train_loader.dataset))
+    print(len(val_loader.dataset))
+    print(len(test_loader.dataset))
 
     with progress:
         for img_id, img, boneage, boneage_onehot, ba_norm, sex in progress.track(test_loader):
             print(img_id, img.shape, sex, boneage, ba_norm)
             break
-            ...
+        
+
+        for img_id, img, boneage, boneage_onehot, ba_norm, sex, num_classes in progress.track(train_loader):
+            print(img_id, img.shape, sex, boneage, ba_norm)
+            break
 
