@@ -100,7 +100,7 @@ class RSNATrainDataset(Dataset):
         assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
 
         img = Image.open(img_addr)
-
+        # img = img.resize((500, 625))
         img = np.array(img)
         
         if self.transform is not None:
@@ -112,7 +112,7 @@ class RSNATrainDataset(Dataset):
 
 
 class RSNATestDataset(Dataset):
-    def __init__(self, data_file: str, image_dir: str, train_num_classes: int, transform = None, 
+    def __init__(self, data_file: str, image_dir: str, train_num_classes: int, transform = None,
                 scale: float = 1.0, basedOnSex: bool=False, gender:str='male'):
         self.data_file = Path(data_file)
         self.image_dir = Path(image_dir)
@@ -166,7 +166,7 @@ class RSNATestDataset(Dataset):
         boneage_onehot = 0
         if 'boneage' in self.test_data_filtered.keys():
             boneage = self.test_data_filtered.iloc[index].boneage
-            ba_norm = self.train_data_filtered.iloc[index].ba_norm
+            ba_norm = self.test_data_filtered.iloc[index].ba_norm
 
             onehot_index = self.test_data_filtered.iloc[index]['indx']
             boneage_onehot = self.age_onehot[onehot_index]
@@ -175,10 +175,10 @@ class RSNATestDataset(Dataset):
 
         img = Image.open(img_addr)
         # img = img.resize((500, 625))
-        # img = np.array(img)
+        img = np.array(img)
 
         if self.transform is not None:
-            augmentations = self.transform(img)
+            augmentations = self.transform(image=img)
             img = augmentations["image"]
 
         return img_id, img, boneage, boneage_onehot, ba_norm, sex
@@ -186,9 +186,9 @@ class RSNATestDataset(Dataset):
 
 def data_augmentation():
     return A.Compose([
-        A.Resize(500, 625),
-        A.ColorJitter(brightness=0.05, contrast=0.5, saturation=0.05, hue=0.05),
-        A.Rotate(limit=20, p=0.9),
+        A.Resize(625, 500),
+        A.ColorJitter(brightness=0.0, contrast=0.5, saturation=0.5, hue=0.5, p=0.9, always_apply=True),
+        A.Rotate(limit=45, p=0.5),
         ToTensorV2(),
     ])
 
@@ -219,10 +219,18 @@ def data_wrapper(train_dataset, test_dataset, batch_size: int, test_batch_size: 
 
 
 
+# ----------------------------------------------------------------- #
+# |                                                               | #
+# |                          Testing                              | #
+# |                                                               | #
+# ----------------------------------------------------------------- #
+
+
 def plot_data(img, r, c, i):
     plt.subplot(r, c, i)
     plt.imshow(img, cmap='gray')
     plt.axis('off')
+    plt.tight_layout()
 
 
 
@@ -232,38 +240,42 @@ if __name__ == '__main__':
                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset/boneage-training-dataset/'),
                             basedOnSex=False, gender='female', transform=data_augmentation())
     # print(train_dataset.num_classes)
-    # test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset.csv'), 
-    #                         image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset/boneage-test-dataset/'), 
-    #                         train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male', transform=data_augmentation())
+    test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset.csv'), 
+                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-test-dataset/boneage-test-dataset/'), 
+                            train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male', 
+                            transform=data_augmentation())
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=3, shuffle=False, num_workers=1, pin_memory=True)
-    # test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=8, pin_memory=True)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=5, shuffle=False, num_workers=1, pin_memory=True)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=6, shuffle=False, num_workers=1, pin_memory=True)
 
     transf = torchvision.transforms.ToPILImage()
-    print(len(train_dataset))
     # show_dataset(train_dataset)
-    count = 1
-    row = 10
-    col = 10
-    with progress:
-        for img_id, img, boneage, boneage_onehot, ba_norm, sex, num_classes in progress.track(train_loader):
-            # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
-            # images = torch.unsqueeze(img, 1)
-
-            # break
-            a_min, a_max = 1, 228
-            t = ba_norm * a_max
-            t += a_min
-            print(boneage, ba_norm, t)
-            plot_data(transf(img[0]), row, col, count)
-            count += 1
-            if count == 101:
-                break
-            ...
-    plt.show()
-
+    # count = 1
+    # row = 5
+    # col = 5
     # with progress:
-    #     for img_id, img, boneage, boneage_onehot, sex in progress.track(test_loader):
-    #         # print(img_id, img, sex)
+    #     for img_id, img, boneage, boneage_onehot, ba_norm, sex, num_classes in progress.track(train_loader):
+    #         # print(torch.argmax(boneage_onehot), boneage, boneage_onehot.shape)
+    #         # images = torch.unsqueeze(img, 1)
+    #         # print(img.shape)
+    #         # break
+    #         a_min, a_max = 1, 228
+    #         t = ba_norm * a_max
+    #         t += a_min
+    #         # print(boneage, ba_norm, t)
+    #         plot_data(transf(img[0]), row, col, count)
+    #         # plot_data(img[0], row, col, count)
+    #         count += 1
+    #         if count == 25:
+    #             break
     #         ...
+    # plt.tight_layout()
+    # plt.savefig("C0555.png", dpi=300)
+    # plt.show()
+
+    with progress:
+        for img_id, img, boneage, boneage_onehot, ba_norm, sex in progress.track(test_loader):
+            print(img_id, img.shape, sex, boneage, ba_norm)
+            break
+            ...
 
