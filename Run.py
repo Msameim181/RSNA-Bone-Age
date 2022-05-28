@@ -11,7 +11,7 @@ import torch
 # Custom libs
 from Train import trainer
 from utils.config_model import *
-from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
+from utils.dataloader import *
 from utils.get_args import get_args
 from utils.rich_logger import *
 
@@ -45,26 +45,11 @@ if __name__ == '__main__':
                 f'\tBased On Gender: {basedOnSex}\n'
                 f'\tTargeted Gender: "{gender}"')
 
-    defualt_path = ''
-    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset.csv'),
-                           image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset/boneage-training-dataset/'),
-                           basedOnSex = basedOnSex, gender = gender)
-
-    test_dataset = RSNATestDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset.csv'),
-                           image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset/boneage-test-dataset/'),
-                           train_num_classes = train_dataset.num_classes, basedOnSex = basedOnSex, gender = gender)
+    train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
+                                        basedOnSex = basedOnSex, gender = gender)
     num_classes = train_dataset.num_classes if args.num_classes == 0 else args.num_classes
     vars(args)['train_dataset_size'] = len(train_dataset)
     vars(args)['test_dataset_size'] = len(test_dataset)
-
-    # Loading NN model
-    console.print('\n[INFO]: Loading NN Model...')
-    name_suffix = f"_{gender}" if basedOnSex else ''
-    net = select_model(args = args, image_channels=1, num_classes=num_classes, name_suffix = name_suffix)
-    console.print(f'[INFO]: Model loaded as <{net.name}>')
-    console.print(f'[INFO]: Network:\n'
-                 f'\t{net.in_channels} input channels\n'
-                 f'\t{net.num_classes} output channels (classes)')
 
     # Set up training hyperparameters
     console.print('\n[INFO]: Reading hyperparameters...')
@@ -77,12 +62,11 @@ if __name__ == '__main__':
     # Packaging the data
     console.print('\n[INFO]: Packaging the data...')
     train_loader, val_loader, test_loader = data_wrapper(
-                                                train_dataset, 
-                                                test_dataset, 
-                                                batch_size, 
+                                                train_dataset = train_dataset, 
+                                                test_dataset = test_dataset, 
+                                                batch_size = batch_size, test_val_batch_size = 1,
                                                 val_percent = val_percent, 
-                                                shuffle = False, 
-                                                num_workers = 1)
+                                                shuffle = False, num_workers = 1)
     console.print(f'''[INFO]: Data Packaged as:
         Training Batch Size:    {batch_size}
         Training Size:          {len(train_loader.dataset)}
@@ -91,7 +75,18 @@ if __name__ == '__main__':
         Validation %:           {val_percent}
     ''')
 
-    # Set up Time
+
+    # Loading NN model
+    console.print('\n[INFO]: Loading NN Model...')
+    name_suffix = f"_{gender}" if basedOnSex else ''
+    net = select_model(args = args, image_channels=1, num_classes=num_classes, name_suffix = name_suffix)
+    console.print(f'[INFO]: Model loaded as <{net.name}>')
+    console.print(f'[INFO]: Network:\n'
+                 f'\t{net.in_channels} input channels\n'
+                 f'\t{net.num_classes} output channels (classes)')
+
+
+    # Set up Time and run name
     time_now = datetime.now()
     name_suffix = f"_{args.name_suffix}" if args.name_suffix else ''
     run_name = time_now.strftime("%Y%m%d_%H%M%S") + f"_{net.name}" + name_suffix
@@ -99,23 +94,23 @@ if __name__ == '__main__':
     console.print("\n[INFO]: Initiating training phase...")
 
     # Initiate training
-    trainer(
-        net = net,
-        args = args,
-        device = device,
-        train_loader = train_loader, 
-        val_loader = val_loader, 
-        epochs = epochs, 
-        batch_size = batch_size, 
-        learning_rate = learning_rate, 
-        val_percent = val_percent,
-        amp = args.amp, 
-        save_checkpoint = args.checkpoint == 'True', 
-        dir_checkpoint = './checkpoints/',
-        run_name = run_name,
-        WandB_usage = WandB_usage,
-        dataset_name = dataset_name,
-        notes = args.notes,
-    )
+    # trainer(
+    #     net = net,
+    #     args = args,
+    #     device = device,
+    #     train_loader = train_loader, 
+    #     val_loader = val_loader, 
+    #     epochs = epochs, 
+    #     batch_size = batch_size, 
+    #     learning_rate = learning_rate, 
+    #     val_percent = val_percent,
+    #     amp = args.amp, 
+    #     save_checkpoint = args.checkpoint == 'True', 
+    #     dir_checkpoint = './checkpoints/',
+    #     run_name = run_name,
+    #     WandB_usage = WandB_usage,
+    #     dataset_name = dataset_name,
+    #     notes = args.notes,
+    # )
 
     
