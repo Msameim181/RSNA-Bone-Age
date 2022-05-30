@@ -11,8 +11,10 @@ def reload_model(net, path: str):
     net.load_state_dict(torch.load(path))
 
 def conflict(args, num_classes):
-    if args.output_type not in [1, 0]:
+    if args.output_type == 1:
         assert num_classes > 1, "Output size must be match with number of classes."
+    else:
+        assert num_classes == 1, "Output size must be 1 for one output in the end."
 
 def select_model(args, image_channels: int, num_classes: int, **kwargs):
     """ Select model from list of available models.
