@@ -296,6 +296,16 @@ def basic_transform():
         ToTensorV2(),
     ])
 
+def data_type_interpretor(data_type):
+    if data_type == 1:
+        return 'onehot'
+    elif data_type == 2:
+        return 'minmax'
+    elif data_type == 3:
+        return 'zscore'
+    else:
+        return 'real'
+
 # Data Packaging
 def data_wrapper(train_dataset: Dataset, test_dataset: Dataset, 
         batch_size: int = 2, test_val_batch_size: int = 1, val_percent: float = 0.2, 
