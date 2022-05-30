@@ -54,12 +54,15 @@ def evaluate(
         accuracy /= n_eval
 
     # Logging
+    # Wandb and TB logger here
     if log_results:
         print("\n")
         rich_print(f'\n[INFO]: Evaluation set:\n'
                 f'\tAverage loss (criterion): {test_loss_first:.4f} \t Average loss (MSE): {test_loss_second:.4f}\n'
                 f'\tAccuracy: {accuracy * 100:.2f}% \t Correct = {correct}/{n_eval}\n')
     
+        rich_print('\n[INFO]: Finished Testing Round.')
+
     return test_loss_first, test_loss_second, accuracy, correct
 
 
