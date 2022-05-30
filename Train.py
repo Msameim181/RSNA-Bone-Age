@@ -1,5 +1,3 @@
-import logging
-import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -9,12 +7,12 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 # Custom libs
-from utils.rich_logger import make_bar, make_console
+from utils.optimize_loss import *
+from utils.rich_logger import *
 from utils.tensorboard_logger import *
 from utils.wandb_logger import *
 from Validation import validate
 
-console = make_console()
 
 # Training Worker
 def trainer(
@@ -44,19 +42,12 @@ def trainer(
         run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{net.name}"
 
     # Defining the optimizer
-    optimizer = torch.optim.Adam(
-                            net.parameters(), 
-                            lr=learning_rate, 
-                            weight_decay=1e-8)
-
     # Defining the scheduler
     # goal: maximize Dice score
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-                                                    optimizer, 
-                                                    'max', patience=2)
-    grad_scaler = torch.cuda.amp.GradScaler(enabled=amp)
+    optimizer, scheduler, grad_scaler = optimizer(net, learning_rate = learning_rate, amp = amp)
+
     # Defining the loss function
-    criterion = torch.nn.BCEWithLogitsLoss()
+    criterion = loss_funcion(type='bce_wl')
 
     # Defining the global step
     global_step = 0
@@ -87,7 +78,7 @@ def trainer(
 
     tb_logger = tb_setup(config, args = args, notes = notes)
 
-    console.print(f'''\n[INFO]: Training Settings:
+    rich_print(f'''\n[INFO]: Training Settings:
         DataSet:                <{dataset_name}>
         Device:                 "{device}"
         Model:                  <{net.name}>
@@ -110,9 +101,10 @@ def trainer(
         Targeted Gender:        "{args.gender}"
         Train Dataset Sample:   {args.train_dataset_size}
         Test Dataset Sample:    {args.test_dataset_size}
+        Target Type:            {args.target_type}
         ------------------------------------------------------
         Notes: {notes}''')
-    console.print(f'\n[INFO]: Start training as "{run_name}" ...')
+    rich_print(f'\n[INFO]: Start training as "{run_name}" ...')
 
     # Start training
 
@@ -123,10 +115,9 @@ def trainer(
         epoch_step = 0
         # Reading data and Training
         with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
-            for _, images, boneage, boneage_onehot, ba_norm, gender, _ in train_loader:
+            for _, images, gender, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in train_loader:
 
-                images = torch.unsqueeze(images, 1)
-                gender = torch.unsqueeze(gender, 1)
+                
 
                 assert images.shape[1] == net.in_channels, \
                     f'Network has been defined with {net.in_channels} input channels, ' \
@@ -134,14 +125,11 @@ def trainer(
                     'the images are loaded correctly.'
 
                 images = images.to(device = device, dtype = torch.float32)
+
+                gender = torch.unsqueeze(gender, 1)
                 gender = gender.to(device = device, dtype = torch.float32)
 
-                if args.output_type == 0:
-                    age = ba_norm.to(device = device, dtype = torch.float32)
-                elif args.output_type == 1:
-                    age = boneage.to(device = device, dtype = torch.float32)
-                elif args.output_type == 2:
-                    age = boneage_onehot.to(device = device, dtype = torch.float32)
+                target = target.to(device = device, dtype = torch.float32)
 
 
                 # Forward pass
@@ -150,7 +138,8 @@ def trainer(
                         age_pred = net(images)
                     else:
                         age_pred = net([images, gender])
-                    loss = criterion(age_pred, age)
+                    # Calculate loss
+                    loss = criterion(age_pred, target)
 
                 # Backward and optimize
                 optimizer.zero_grad()
@@ -193,10 +182,9 @@ def trainer(
             Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
             torch.save(net.state_dict(), str(f"{dir_checkpoint}/checkpoint_epoch{epoch + 1}.pth"))
 
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    console.print(f'\n[INFO]: Finished Training Course at {time_now}.')
     tb_logger.close()
-    console.print(f'\n[INFO]: Shutting Down...')
+    rich_print('\n[INFO]: Finished Training Course.')
+    return criterion, wandb_logger, tb_logger
 
 # Validation Worker
 def validation(
@@ -250,8 +238,8 @@ def validation(
         tb_log_validation(tb_logger, optimizer, val_loss, acc, 
             images, batch_size, global_step, epoch, net)
 
-        console.print('\n[INFO]: Validation completed.')
-        console.print('[INFO]: Result Saved.')
+        rich_print('\n[INFO]: Validation completed.')
+        rich_print('[INFO]: Result Saved.')
         return val_loss
 
     return None
