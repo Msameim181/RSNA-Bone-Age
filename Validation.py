@@ -4,17 +4,17 @@ import logging
 # Deep learning libs
 import torch
 from tqdm import tqdm
-
-from utils.rich_logger import make_console
-
-console = make_console()
+from utils.optimize_loss import *
+from utils.rich_logger import *
+from utils.dataloader import *
 
 def validate(
         net, 
         args, 
-        val_loader, 
+        val_loader: DataLoader, 
         device, 
-        criterion):
+        criterion,
+        log_results: bool = True):
     """
     Validate the model on the validation set
     """
@@ -24,37 +24,73 @@ def validate(
     correct = 0
 
 
-    for _, images, boneage, boneage_onehot, sex, _ in tqdm(val_loader, total = n_val, desc='Validation Round...', unit = 'img', leave=False):
+    for _, images, gender, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in tqdm(val_loader, total = n_val, desc='Validation Round...', unit = 'img', leave=False):
 
-        images = torch.unsqueeze(images, 1)
-        sex = torch.unsqueeze(sex, 1)
         images = images.to(device = device, dtype = torch.float32)
-        sex = sex.to(device = device, dtype = torch.float32)
-        # boneage_onehot = torch.nn.functional.one_hot(torch.tensor(boneage), num_classes = int(num_classes))
-        target_age = boneage_onehot.to(device = device, dtype = torch.float32)
-        t_age = boneage.to(device = device, dtype = torch.float32)
+
+        gender = torch.unsqueeze(gender, 1)
+        gender = gender.to(device = device, dtype = torch.float32)
+
+        target_age = target.to(device = device, dtype = torch.float32)
+        boneage = boneage.to(device = device, dtype = torch.float32)
 
         with torch.no_grad():
             if args.basedOnSex and args.input_size == 1:
-                output_age = net(images)
+                age_pred = net(images)
             else:
-                output_age = net([images, sex])
-            val_loss += criterion(output_age, target_age)  # sum up batch loss
+                age_pred = net([images, gender])
+            val_loss += criterion(age_pred, target_age)
             
-            # val_loss += torch.nn.functional.cross_entropy(output_age, target_age, reduction='sum').item()  # sum up batch loss
-            pred = output_age.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
-            correct += pred.eq(t_age.view_as(pred)).sum().item()
+            pred = val_loader.dataset.dataset.predict_compiler(age_pred) 
+
+            correct += pred.eq(boneage.view_as(pred)).sum().item()
     
-    acc = correct
+    accuracy = correct
     if n_val != 0:
         val_loss /= n_val
-        acc /= n_val
+        accuracy /= n_val
 
     # Logging
-    print("\n")
-    console.print(f'\n[INFO]: Validation set:\n'
-                 f'\tAverage loss: {val_loss:.4f}'
-                 f'\tAccuracy: {acc * 100:.2f}%\tCorrect = {correct}/{n_val}\n')
+    if log_results:
+        print("\n")
+        rich_print(f'\n[INFO]: Validation set:\n'
+                f'\tAverage loss: {val_loss:.4f}\n'
+                f'\tAccuracy: {accuracy * 100:.2f}% \t Correct = {correct}/{n_val}\n')
     
-    # return val_loss, acc, correct
-    return val_loss, acc, correct
+    return val_loss, accuracy, correct
+
+
+
+# Testing
+if __name__=='__main__':
+    from utils.config_model import *
+    from utils.dataloader import *
+    dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
+    basedOnSex = False
+    gender='male'
+
+    train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
+                                        basedOnSex = basedOnSex, gender = gender, transform_action = 'train', target_type = 'onehot')
+    num_classes = train_dataset.num_classes 
+
+    _, val_loader, _ = data_wrapper(train_dataset = train_dataset, 
+                            test_dataset = test_dataset, 
+                            batch_size = 1,
+                            test_val_batch_size = 1, 
+                            shuffle = False, num_workers = 1)
+    
+    # Select and import Model
+    net = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
+    reload_model(net, "./ResultModels/20220523_110557_MobileNetV3_Pre/checkpoint_epoch25.pth")
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    criterion = loss_funcion('bce_wl')
+
+
+    import argparse
+    parser = argparse.ArgumentParser(description='Train the Your Model on images and target age.')
+    args = parser.parse_args()
+    vars(args)['basedOnSex'] = False
+    vars(args)['input_size'] = 2
+
+    print(validate(net, args, val_loader, device, criterion))
