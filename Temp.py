@@ -14,7 +14,7 @@ import torch
 # from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 # Custom libs
 from Train import trainer
-from utils.dataloader import RSNATestDataset, RSNATrainDataset, data_wrapper
+from utils.dataloader import *
 from utils.get_args import get_args
 from Validation import validate
 from Evaluation import evaluate
@@ -26,54 +26,54 @@ from torch.utils.data import DataLoader, Dataset, random_split
 #     print(model.name)
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     
-    torch.cuda.empty_cache()
-    torch.cuda.memory_summary(device=None, abbreviated=False)
+#     torch.cuda.empty_cache()
+#     torch.cuda.memory_summary(device=None, abbreviated=False)
     
-    defualt_path = ''
-    train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset.csv'),
-                            image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset/boneage-training-dataset/'),
-                            basedOnSex=False, gender='female')
+#     defualt_path = ''
+#     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset.csv'),
+#                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age-kaggle/boneage-training-dataset/boneage-training-dataset/'),
+#                             basedOnSex=False, gender='female')
 
     
-    num_classes = train_dataset.num_classes
-    net = ResNet50(image_channels=1, num_classes=num_classes)
-    device = 'cuda'
-    # net.to(device=device, dtype=torch.float32) 
-    # images = images.to(device=device, dtype=torch.float32)
+#     num_classes = train_dataset.num_classes
+#     net = ResNet50(image_channels=1, num_classes=num_classes)
+#     device = 'cuda'
+#     # net.to(device=device, dtype=torch.float32) 
+#     # images = images.to(device=device, dtype=torch.float32)
 
 
-    learning_rate = 0.0001
-    epochs = 10
-    batch_size = 8
-    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
-    # test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
+#     learning_rate = 0.0001
+#     epochs = 10
+#     batch_size = 8
+#     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
+#     # test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=1, pin_memory=True)
 
 
-    for _, images, boneage, boneage_onehot, sex, num_classes in train_loader:
-        images = torch.unsqueeze(images, 1)
-        sex = torch.unsqueeze(sex, 1)
+#     for _, images, boneage, boneage_onehot, sex, num_classes in train_loader:
+#         images = torch.unsqueeze(images, 1)
+#         sex = torch.unsqueeze(sex, 1)
 
-        # net.cuda()
-        # images.cuda()
-        print(sex.shape)
-        net.to(device=device, dtype=torch.float32) 
-        images = images.to(device=device, dtype=torch.float32)
-        sex = sex.to(device=device, dtype=torch.float32)
-        print(images.shape)
-        print(sex.shape)
-        out = net([images,sex])
-        print(out.shape)
-        print('----')
-        print(out)
-        print(boneage_onehot.shape)
-        print('----')
-        print(boneage)
-        print(out.argmax(-1))
-        break
-    # train_net(net, device, train_loader, test_loader, 
-    #         epochs, batch_size, learning_rate)
+#         # net.cuda()
+#         # images.cuda()
+#         print(sex.shape)
+#         net.to(device=device, dtype=torch.float32) 
+#         images = images.to(device=device, dtype=torch.float32)
+#         sex = sex.to(device=device, dtype=torch.float32)
+#         print(images.shape)
+#         print(sex.shape)
+#         out = net([images,sex])
+#         print(out.shape)
+#         print('----')
+#         print(out)
+#         print(boneage_onehot.shape)
+#         print('----')
+#         print(boneage)
+#         print(out.argmax(-1))
+#         break
+#     # train_net(net, device, train_loader, test_loader, 
+#     #         epochs, batch_size, learning_rate)
 
 
 
@@ -129,29 +129,37 @@ if __name__ == '__main__':
 
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
 
-#     defualt_path = ''
-#     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
-#                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
-#                             basedOnSex=False, gender='female')
-#     # print(train_dataset.num_classes)
-#     test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'), 
-#                             image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
-#                             train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
+    # defualt_path = ''
+    # train_dataset = RSNATrainDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset.csv'),
+    #                         image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-training-dataset/boneage-training-dataset/'),
+    #                         basedOnSex=False, gender='female')
+    # # print(train_dataset.num_classes)
+    # test_dataset = RSNATestDataset(data_file = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset.csv'), 
+    #                         image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
+    #                         train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
 
-#     _, _, test_loader = data_wrapper(
-#                                                 train_dataset, 
-#                                                 test_dataset, 
-#                                                 1, 
-#                                                 val_percent = 0.3, 
-#                                                 shuffle = False, 
-#                                                 num_workers = 1)
-#     net = MobileNet_V2(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
-#     reload_model(net, "./ResultModels/20220511_043706_MobileNetV2_Pre2/checkpoint_epoch18.pth")
+    dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
+    basedOnSex = False
+    gender='male'
 
-#     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-#     criterion = torch.nn.BCEWithLogitsLoss()
+    train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
+                                        basedOnSex = basedOnSex, gender = gender, transform_action = 'train')
+    num_classes = train_dataset.num_classes 
+
+    train_loader, _, test_loader = data_wrapper(
+                                                train_dataset, 
+                                                test_dataset, 
+                                                1, 
+                                                val_percent = 0.3, 
+                                                shuffle = False, 
+                                                num_workers = 1)
+    net = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
+    reload_model(net, "./ResultModels/20220523_110557_MobileNetV3_Pre/checkpoint_epoch25.pth")
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    criterion = torch.nn.BCEWithLogitsLoss()
     
-#     print(evaluate(net, test_loader, device, criterion))
+    print(evaluate(net, test_loader, device, criterion))
     
