@@ -13,7 +13,7 @@ def get_args():
 
     parser.add_argument('--num-classes', '-nc', dest='num_classes', type=int, default=0, help='Number of classes')
     
-    parser.add_argument('--out-type', '-ot', dest='output_type', type=int, default=2, help='Output type (0:norm, 1:true, 2:onehot)')
+    parser.add_argument('--out-type', '-ot', dest='output_type', type=int, default=1, help='Output type (0:real, 1:onehot, 2:minmax, 3:zscore)')
 
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=0.0001,
                         help='Learning rate', dest='learning_rate')
