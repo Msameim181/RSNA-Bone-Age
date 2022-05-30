@@ -12,7 +12,7 @@ def loss_funcion(type='mse'):
     elif type == 'bce':
         return torch.nn.BCELoss()
 
-def optimizer(net, learning_rate: int = 0.001, amp: bool = False):
+def optimizer_loader(net, learning_rate: int = 0.001, amp: bool = False):
 
     # Defining the optimizer
     optimizer = torch.optim.Adam(

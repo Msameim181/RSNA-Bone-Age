@@ -9,11 +9,11 @@ def get_args():
 
     parser.add_argument('--batch-size', '-b', dest='batch_size', metavar='B', type=int, default=4, help='Batch size')
 
-    parser.add_argument('--input-size', '-i', dest='input_size', metavar='I', type=int, default=2, help='Input size')
+    parser.add_argument('--input-size', '-i', dest='input_size', metavar='I', type=int, default=2, help='Input size: gender or not')
 
-    parser.add_argument('--num-classes', '-nc', dest='num_classes', type=int, default=0, help='Number of classes')
+    parser.add_argument('--num-classes', '-nc', dest='num_classes', metavar='NUM', type=int, default=0, help='Number of classes')
     
-    parser.add_argument('--out-type', '-ot', dest='output_type', type=int, default=1, help='Output type (0:real, 1:onehot, 2:minmax, 3:zscore)')
+    parser.add_argument('--out-type', '-ot', dest='output_type', metavar='OT', type=int, default=1, help='Output type (0:real, 1:onehot, 2:minmax, 3:zscore)')
 
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=0.0001,
                         help='Learning rate', dest='learning_rate')
