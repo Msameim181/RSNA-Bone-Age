@@ -31,7 +31,7 @@ def validate(
         gender = torch.unsqueeze(gender, 1)
         gender = gender.to(device = device, dtype = torch.float32)
 
-        target_age = target.to(device = device, dtype = torch.float32)
+        target = target.to(device = device, dtype = torch.float32)
         boneage = boneage.to(device = device, dtype = torch.float32)
 
         with torch.no_grad():
@@ -39,7 +39,7 @@ def validate(
                 age_pred = net(images)
             else:
                 age_pred = net([images, gender])
-            val_loss += criterion(age_pred, target_age)
+            val_loss += criterion(age_pred, target.view_as(age_pred))
             
             pred = val_loader.dataset.dataset.predict_compiler(age_pred) 
 

@@ -44,10 +44,10 @@ def trainer(
     # Defining the optimizer
     # Defining the scheduler
     # goal: maximize Dice score
-    optimizer, scheduler, grad_scaler = optimizer(net, learning_rate = learning_rate, amp = amp)
+    optimizer, scheduler, grad_scaler = optimizer_loader(net, learning_rate = learning_rate, amp = amp)
 
     # Defining the loss function
-    criterion = loss_funcion(type='bce_wl')
+    criterion = loss_funcion(type=args.loss_type)
 
     # Defining the global step
     global_step = 0
@@ -101,7 +101,7 @@ def trainer(
         Targeted Gender:        "{args.gender}"
         Train Dataset Sample:   {args.train_dataset_size}
         Test Dataset Sample:    {args.test_dataset_size}
-        Target Type:            {args.target_type}
+        Target Type:            "{args.target_type}"
         ------------------------------------------------------
         Notes: {notes}''')
     rich_print(f'\n[INFO]: Start training as "{run_name}" ...')
@@ -115,7 +115,7 @@ def trainer(
         epoch_step = 0
         # Reading data and Training
         with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
-            for _, images, gender, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in train_loader:
+            for idx, images, gender, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in train_loader:
 
                 
 
@@ -139,7 +139,7 @@ def trainer(
                     else:
                         age_pred = net([images, gender])
                     # Calculate loss
-                    loss = criterion(age_pred, target)
+                    loss = criterion(age_pred, target.view_as(age_pred))
 
                 # Backward and optimize
                 optimizer.zero_grad()

@@ -406,7 +406,7 @@ if __name__ == '__main__':
     with data_progress:
         
         for img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, num_classes in data_progress.track(train_loader):
-            print(img_id, img.shape, sex, boneage, ba_minmax, ba_zscore)
+            print(img_id, img.shape, sex, boneage.shape, ba_minmax.shape, ba_zscore)
             print(train_loader.dataset.dataset.reverse_min_max_normal(ba_minmax), train_loader.dataset.dataset.a_min, train_loader.dataset.dataset.a_max)
             print(target, train_loader.dataset.dataset.predict_compiler(target), train_loader.dataset.dataset.reverse_zscore_normal(ba_zscore))
             print(train_loader.dataset.dataset.train_data)
