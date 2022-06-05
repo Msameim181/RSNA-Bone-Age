@@ -284,9 +284,12 @@ class RSNATestDataset(Dataset):
 def data_augmentation():
     return A.Compose([
         A.Resize(625, 500),
-        A.ColorJitter(brightness=0.0, contrast=0.5, saturation=0.5, hue=0.5, p=0.9, always_apply=True),
-        A.Rotate(limit=45, p=0.5),
-        A.HorizontalFlip(p=0.2),
+        # A.ColorJitter(brightness=0.0, contrast=0.5, saturation=0.5, hue=0.5, p=0.9, always_apply=True),
+        # A.Rotate(limit=45, p=0.5),
+        # A.HorizontalFlip(p=0.2),
+        A.ShiftScaleRotate(p=1, shift_limit=0.05, scale_limit=0.05, rotate_limit=5,
+                             border_mode=cv2.BORDER_CONSTANT),
+        A.RandomGamma(p=1, gamma_limit=(80, 120)),
         ToTensorV2(),
     ])
 
@@ -386,7 +389,7 @@ if __name__ == '__main__':
     train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age-kaggle', defualt_path = '', 
         basedOnSex = False, gender = 'male', target_type = 'minmax')
 
-    batch_size, val_percent = 3, 0.2
+    batch_size, val_percent = 1, 0.2
     train_loader, val_loader, test_loader = data_wrapper(
                                                 train_dataset = train_dataset, 
                                                 test_dataset = test_dataset, 

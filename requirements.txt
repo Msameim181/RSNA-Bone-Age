@@ -8,3 +8,4 @@ tqdm==4.62.3
 rich==11.2.0
 wandb==0.12.9
 Pillow==9.0.0
+albumentations
