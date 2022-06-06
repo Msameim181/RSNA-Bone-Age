@@ -35,7 +35,11 @@ if __name__ == '__main__':
 
     # Load data
     rich_print('\n[INFO]: Loading data...')
-    dataset_name = "rsna-bone-age" if args.dataset == "rsna" else "rsna-bone-age-kaggle" # rsna-bone-age-kaggle or rsna-bone-age
+    # rsna-bone-age-kaggle or rsna-bone-age or rsna-bone-age-neu
+    dataset_keys = ['rsna', 'rsnae', 'rsnak']
+    dataset_names = ['rsna-bone-age', 'rsna-bone-age-neu', 'rsna-bone-age-kaggle']
+    dataset_name = dataset_names[dataset_keys.index(args.dataset)] if args.dataset in dataset_keys else "rsna-bone-age-kaggle"
+    # dataset_name = "rsna-bone-age" if args.dataset == "rsna" else "rsna-bone-age-kaggle" # rsna-bone-age-kaggle or rsna-bone-age
     basedOnSex = args.basedOnSex
     gender = 'male' if args.gender == 'male' else 'female'
     vars(args)['dataset_name'] = dataset_name

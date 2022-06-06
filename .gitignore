@@ -8,6 +8,8 @@ dataset/rsna-bone-age-kaggle/boneage-test-dataset
 dataset/rsna-bone-age-kaggle/boneage-training-dataset
 dataset/rsna-bone-age/boneage-test-dataset
 dataset/rsna-bone-age/boneage-training-dataset
+dataset/rsna-bone-age-neu/boneage-test-dataset
+dataset/rsna-bone-age-neu/boneage-training-dataset
 
 # CheckPoints
 checkpoints
