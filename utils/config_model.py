@@ -29,6 +29,7 @@ def save_model(net, dir_checkpoint: str, run_name: str):
     Path(dir_checkpoint, run_name).mkdir(parents = True, exist_ok = True)
     # Save whole model
     torch.save(net, str(f"{dir_checkpoint}/{run_name}/checkpoint_model.pth"))
+    return str(f"{dir_checkpoint}/{run_name}/checkpoint_model.pth")
 
 def conflict(args, num_classes):
     if args.output_type == 1:

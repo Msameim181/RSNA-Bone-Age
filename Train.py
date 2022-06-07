@@ -44,7 +44,7 @@ def trainer(
 
     # Saving the model
     if save_checkpoint:
-        save_model(net, dir_checkpoint, run_name)
+        model_saved_path = save_model(net, dir_checkpoint, run_name)
 
     # Defining the optimizer
     # Defining the scheduler
@@ -80,7 +80,8 @@ def trainer(
         test_dataset_size = args.test_dataset_size)
 
     wandb_logger = wandb_setup(config, notes = notes) if WandB_usage else None
-
+    # Add Model Artifact
+    # wandb_log_model_artifact(wandb_logger, model_saved_path, run_name)
     tb_logger = tb_setup(config, args = args, notes = notes)
 
     rich_print(f'''\n[INFO]: Training Settings:
@@ -176,15 +177,18 @@ def trainer(
                 
                 net.train()
 
-        # Logging
-        if WandB_usage:
-            wandb_log_training(wandb_logger, epoch_loss / n_train, val_loss, epoch)
-
-        tb_log_training(tb_logger, epoch_loss / n_train, val_loss, epoch)
-
         # Save the model checkpoint
         if save_checkpoint:
             save_checkpoints(net, epoch, dir_checkpoint, run_name)
+
+        # Logging
+        if WandB_usage:
+            wandb_log_training(wandb_logger, epoch_loss / n_train, val_loss, epoch)
+            # wandb_log_model_artifact(wandb_logger, model_saved_path, run_name)
+
+
+        tb_log_training(tb_logger, epoch_loss / n_train, val_loss, epoch)
+
 
     tb_logger.close()
     rich_print('\n[INFO]: Finished Training Course.')
@@ -236,7 +240,8 @@ def validation(
         # WandB Storing the results
         if WandB_usage:
             wandb_log_validation(wandb_logger, optimizer, val_loss, acc, 
-                images, batch_size, gender, boneage, age_pred, 
+                images, batch_size, gender, boneage, 
+                val_loader.dataset.dataset.predict_compiler(age_pred).view_as(boneage), 
                 global_step, epoch, histograms)
 
         tb_log_validation(tb_logger, optimizer, val_loss, acc, 

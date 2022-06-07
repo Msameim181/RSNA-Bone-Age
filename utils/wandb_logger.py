@@ -86,9 +86,15 @@ def wandb_log_validation(wandb_logger, optimizer, val_loss, acc,
         # 'Images':               wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
         'Gender':               gender if batch_size == 1 else list(gender), 
         'Age': {
-            'True':             boneage.float().cpu() if batch_size == 1 else [age.float().cpu() for age in boneage], 
-            'Pred':             age_pred.argmax(dim=1, keepdim=True)[0].float().cpu() if batch_size == 1 else [age for age in age_pred.argmax(dim=1, keepdim=True).float().cpu()],
+            'True':             boneage.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in boneage], 
+            'Pred':             age_pred.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in age_pred],
         }, 
         'Process/Step':                 global_step, 
         'Process/Epoch':                epoch, 
         **histograms})
+
+
+def wandb_log_model_artifact(wandb_logger, net_saved_path: str, run_name: str):
+    model = wandb.Artifact(run_name, type='model')
+    model.add_file(net_saved_path)
+    wandb.log_artifact(model)
