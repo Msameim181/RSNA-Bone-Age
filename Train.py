@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 # Custom libs
-from utils.config_model import save_checkpoints
+from utils.config_model import save_checkpoints, save_model
 from utils.optimize_loss import *
 from utils.rich_logger import *
 from utils.tensorboard_logger import *
@@ -41,6 +41,10 @@ def trainer(
 
     if not run_name:
         run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{net.name}"
+
+    # Saving the model
+    if save_checkpoint:
+        save_model(net, dir_checkpoint, run_name)
 
     # Defining the optimizer
     # Defining the scheduler

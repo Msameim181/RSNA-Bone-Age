@@ -16,11 +16,17 @@ def load_model(path: str):
     """ Load model from path. """
     return torch.load(path)
 
-def save_checkpoints(net, epoch, dir_checkpoint, run_name):
+def save_checkpoints(net, epoch: int, dir_checkpoint: str, run_name: str):
     """ Save checkpoints to path. """
     Path(dir_checkpoint, run_name).mkdir(parents = True, exist_ok = True)
     # Save state dict
     torch.save(net.state_dict(), str(f"{dir_checkpoint}/{run_name}/checkpoint_epoch{epoch + 1}.pth"))
+    # Save whole model
+    save_model(net, dir_checkpoint, run_name)
+
+def save_model(net, dir_checkpoint: str, run_name: str):
+    """ Save model to path. """
+    Path(dir_checkpoint, run_name).mkdir(parents = True, exist_ok = True)
     # Save whole model
     torch.save(net, str(f"{dir_checkpoint}/{run_name}/checkpoint_model.pth"))
 
