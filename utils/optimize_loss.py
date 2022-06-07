@@ -7,6 +7,8 @@ import torch
 def loss_funcion(type='mse'):
     if type == 'mse':
         return torch.nn.MSELoss()
+    if type == 'mae':
+        return torch.nn.L1Loss()
     elif type == 'bce_wl':
         return torch.nn.BCEWithLogitsLoss()
     elif type == 'bce':
