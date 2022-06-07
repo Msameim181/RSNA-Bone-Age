@@ -47,7 +47,9 @@ class RSNATrainDataset(Dataset):
         self.target_type = target_type
 
         # Proccessing data and csv file
+        radiographs_images = np.array([f.stem for f in self.image_dir.glob('*.png')]).astype('int64')
         self.train_data = pd.read_csv(data_file)
+        self.train_data = self.train_data[self.train_data.id.isin(radiographs_images)]
 
         # Normalization Min, Max
         self.train_data['ba_minmax'], self.a_min, self.a_max = self.min_max_normal(self.train_data['boneage'].copy())
@@ -181,7 +183,9 @@ class RSNATestDataset(Dataset):
         self.target_type = target_type
 
         # Proccessing data and csv file
+        radiographs_images = np.array([f.stem for f in self.image_dir.glob('*.png')]).astype('int64')
         self.test_data = pd.read_csv(data_file)
+        self.test_data = self.test_data[self.test_data.id.isin(radiographs_images)]
 
         # Normalization Min, Max
         self.test_data['ba_minmax'], self.a_min, self.a_max = self.min_max_normal(self.test_data['boneage'].copy())
