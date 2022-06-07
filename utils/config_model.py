@@ -1,3 +1,5 @@
+from pathlib import Path
+
 # Deep learning libs
 import torch
 
@@ -9,6 +11,18 @@ from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 def reload_model(net, path: str):
     """ Reload model from path. """
     net.load_state_dict(torch.load(path))
+
+def load_model(path: str):
+    """ Load model from path. """
+    return torch.load(path)
+
+def save_checkpoints(net, epoch, dir_checkpoint, run_name):
+    """ Save checkpoints to path. """
+    Path(dir_checkpoint, run_name).mkdir(parents = True, exist_ok = True)
+    # Save state dict
+    torch.save(net.state_dict(), str(f"{dir_checkpoint}/{run_name}/checkpoint_epoch{epoch + 1}.pth"))
+    # Save whole model
+    torch.save(net, str(f"{dir_checkpoint}/{run_name}/checkpoint_model.pth"))
 
 def conflict(args, num_classes):
     if args.output_type == 1:

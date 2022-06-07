@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 # Custom libs
+from utils.config_model import save_checkpoints
 from utils.optimize_loss import *
 from utils.rich_logger import *
 from utils.tensorboard_logger import *
@@ -179,8 +180,7 @@ def trainer(
 
         # Save the model checkpoint
         if save_checkpoint:
-            Path(dir_checkpoint).mkdir(parents = True, exist_ok = True)
-            torch.save(net.state_dict(), str(f"{dir_checkpoint}/checkpoint_epoch{epoch + 1}.pth"))
+            save_checkpoints(net, epoch, dir_checkpoint, run_name)
 
     tb_logger.close()
     rich_print('\n[INFO]: Finished Training Course.')
