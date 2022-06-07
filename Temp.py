@@ -5,21 +5,21 @@ import sys
 import os
 from datetime import datetime
 from pathlib import Path
-
+import pandas as pd
 # Deep learning libs
-import torch
+# import torch
 
 # Models
 # from models.MobileNet import MobileNet_V2
 # from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 # Custom libs
-from Train import trainer
+# from Train import trainer
 from utils.dataloader import *
-from utils.get_args import get_args
-from Validation import validate
-from Evaluation import evaluate
-from utils.config_model import *
-from torch.utils.data import DataLoader, Dataset, random_split
+# from utils.get_args import get_args
+# from Validation import validate
+# from Evaluation import evaluate
+# from utils.config_model import *
+# from torch.utils.data import DataLoader, Dataset, random_split
 # if __name__ == '__main__':
 #     model = ResNet18(img_channel=1, num_classes=229)
 #     print(model)
@@ -140,26 +140,38 @@ if __name__ == '__main__':
     #                         image_dir = Path(defualt_path, 'dataset/rsna-bone-age/boneage-test-dataset/boneage-test-dataset/'), 
     #                         train_num_classes=train_dataset.num_classes, basedOnSex=False, gender='male')
 
-    dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
-    basedOnSex = False
-    gender='male'
+    # dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
+    # basedOnSex = False
+    # gender='male'
 
-    train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
-                                        basedOnSex = basedOnSex, gender = gender, transform_action = 'train')
-    num_classes = train_dataset.num_classes 
+    # train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
+    #                                     basedOnSex = basedOnSex, gender = gender, transform_action = 'train')
+    # num_classes = train_dataset.num_classes 
 
-    train_loader, _, test_loader = data_wrapper(
-                                                train_dataset, 
-                                                test_dataset, 
-                                                1, 
-                                                val_percent = 0.3, 
-                                                shuffle = False, 
-                                                num_workers = 1)
-    net = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
-    reload_model(net, "./ResultModels/20220523_110557_MobileNetV3_Pre/checkpoint_epoch25.pth")
+    # train_loader, _, test_loader = data_wrapper(
+    #                                             train_dataset, 
+    #                                             test_dataset, 
+    #                                             1, 
+    #                                             val_percent = 0.3, 
+    #                                             shuffle = False, 
+    #                                             num_workers = 1)
+    # net = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
+    # reload_model(net, "./ResultModels/20220523_110557_MobileNetV3_Pre/checkpoint_epoch25.pth")
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    criterion = torch.nn.BCEWithLogitsLoss()
+    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # criterion = torch.nn.BCEWithLogitsLoss()
     
-    print(evaluate(net, test_loader, device, criterion))
-    
+    # print(evaluate(net, test_loader, device, criterion))
+
+
+    # from pathlib import Path
+    # import pandas as pd
+    # import numpy as np
+    # dataset_name = "rsna-bone-age-neu"
+    # pathss = Path("dataset/rsna-bone-age-neu/boneage-training-dataset.csv")
+    # image_dir = Path("dataset/rsna-bone-age-neu/boneage-training-dataset/boneage-training-dataset/")
+    # train_data = pd.read_csv(pathss)
+    # radiographs_images = np.array([f.stem for f in image_dir.glob('*.png')]).astype('int64')
+    # print(train_data)
+    # train_data = train_data[train_data.id.isin(radiographs_images)]
+    # train_data.to_csv("dataset/rsna-bone-age-neu/boneage-training-dataset2.csv", index=False)

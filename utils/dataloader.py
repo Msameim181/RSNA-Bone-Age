@@ -47,9 +47,9 @@ class RSNATrainDataset(Dataset):
         self.target_type = target_type
 
         # Proccessing data and csv file
-        radiographs_images = np.array([f.stem for f in self.image_dir.glob('*.png')]).astype('int64')
+        # radiographs_images = np.array([f.stem for f in self.image_dir.glob('*.png')]).astype('int64')
         self.train_data = pd.read_csv(data_file)
-        self.train_data = self.train_data[self.train_data.id.isin(radiographs_images)]
+        # self.train_data = self.train_data[self.train_data.id.isin(radiographs_images)]
 
         # Normalization Min, Max
         self.train_data['ba_minmax'], self.a_min, self.a_max = self.min_max_normal(self.train_data['boneage'].copy())
@@ -390,7 +390,7 @@ def plot_data(img, r, c, i):
 
 if __name__ == '__main__':
 
-    train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age-kaggle', defualt_path = '', 
+    train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age-neu', defualt_path = '', 
         basedOnSex = False, gender = 'male', target_type = 'minmax')
 
     batch_size, val_percent = 1, 0.2
