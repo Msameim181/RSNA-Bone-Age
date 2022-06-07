@@ -34,8 +34,10 @@ def save_model(net, dir_checkpoint: str, run_name: str):
 def conflict(args, num_classes):
     if args.output_type == 1:
         assert num_classes > 1, "Output size must be match with number of classes."
+        assert args.loss_type in ['bce', 'bce_wl'], "Loss type must be 'bce' or 'bce_wl' for classification."
     else:
         assert num_classes == 1, "Output size must be 1 for one output in the end."
+        assert args.loss_type in ['mse', 'mae'], "Loss type must be mse or mae for regression."
 
 def select_model(args, image_channels: int, num_classes: int, **kwargs):
     """ Select model from list of available models.
