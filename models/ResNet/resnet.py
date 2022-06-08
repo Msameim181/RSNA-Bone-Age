@@ -109,15 +109,18 @@ class ResNet(torch.nn.Module):
 
         self.resnet.fc1 = torch.nn.Sequential(
 
-            torch.nn.Linear(1, 32),
+            torch.nn.Linear(1, 16),
             torch.nn.ReLU(),
         )
         self.resnet.fc = torch.nn.Sequential(
-
-            torch.nn.Linear(in_features + 32, 1000),
+            torch.nn.Dropout(0.2),
+            torch.nn.Linear(in_features + 16, 2048),
             torch.nn.ReLU(),
-
-            torch.nn.Linear(1000, num_classes),
+            torch.nn.Dropout(0.3),
+            torch.nn.Linear(2048, 2048),
+            torch.nn.ReLU(),
+            torch.nn.Linear(2048, num_classes),
+            torch.nn.Sigmoid(),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
