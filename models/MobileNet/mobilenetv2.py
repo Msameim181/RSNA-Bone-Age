@@ -41,14 +41,15 @@ class MobileNetV2(torch.nn.Module):
         
         self.mobilenet_v2.classifier = torch.nn.Sequential(
 
-            # torch.nn.Dropout(0.2),
+            torch.nn.Dropout(0.2),
             torch.nn.Linear(in_features + self.add_feature, 2048),
+            torch.nn.Dropout(0.3),
+            torch.nn.ELU(),
+            torch.nn.Linear(2048, 2048),
 
-            torch.nn.ReLU(),
-            torch.nn.Linear(2048, 512),
-
-            torch.nn.ReLU(),
-            torch.nn.Linear(512, num_classes)
+            torch.nn.ELU(),
+            torch.nn.Linear(2048, num_classes),
+            torch.nn.Sigmoid()
         )
 
     def forward(self, x) -> torch.Tensor:
