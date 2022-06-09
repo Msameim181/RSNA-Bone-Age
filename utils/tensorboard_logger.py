@@ -106,8 +106,14 @@ def tb_log_validation(tb_logger, optimizer, val_loss, acc,
     tb_logger.flush()
 
 
-def tb_log_evaluation(tb_logger, true_age, pred_age):
-    for item, t_age, p_age in enumerate(zip(true_age, pred_age)):
+def tb_log_evaluation(tb_logger, result):
+
+    tb_logger.add_text(tag='Evaluaion Loss (criterion)', text_string=str(result['test_loss_first']), global_step=0)
+    tb_logger.add_text(tag='Evaluaion Loss Second (MSE)', text_string=str(result['test_loss_second']), global_step=0)
+    tb_logger.add_text(tag='Evaluaion Accuracy', text_string=str(result['accuracy']), global_step=0)
+    tb_logger.add_text(tag='Evaluaion Correct', text_string=str(result['correct']), global_step=0)
+
+    for item, t_age, p_age in enumerate(zip(result['boneage'], result['pred'])):
         tb_logger.add_scalar('Results/Evaluaion Results', {
                 'TrueAge': t_age,
                 'PredAge': p_age,

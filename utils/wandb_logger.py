@@ -48,9 +48,9 @@ def wandb_setup(config, notes: str = '') -> wandb:
 def wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss_step):
     # Logging
     wandb_logger.log({
-        'Loss/Step Loss':            loss.item(),
+        'Loss/Step Loss':               loss.item(),
         'Process/Step':                 global_step,
-        'Loss/Train Loss (Step)':    epoch_loss_step,
+        'Loss/Train Loss (Step)':       epoch_loss_step,
         'Process/Epoch':                epoch
     })
 
@@ -60,7 +60,7 @@ def wandb_log_training(wandb_logger, epoch_loss, val_loss, epoch):
         'Loss/Train Loss':               epoch_loss,
         'Loss/Epoch Loss':               epoch_loss,
         'Loss/Validation Loss (Epoch)':  val_loss,
-        'Process/Epoch':                    epoch,
+        'Process/Epoch':                 epoch,
     })
 
 def wandb_log_histogram(net):
@@ -78,35 +78,42 @@ def wandb_log_validation(wandb_logger, optimizer, val_loss, acc,
     global_step, epoch, histograms):
     # WandB Storing the results
     wandb_logger.log({
-        'Process/Learning Rate':        optimizer.param_groups[0]['lr'], 
-        'Loss/Validation Loss':      val_loss, 
-        'Accuracy/Validation Correct':   acc, 
-        'Accuracy/Correct %':            acc * 100,
+        'Process/Learning Rate':            optimizer.param_groups[0]['lr'], 
+        'Loss/Validation Loss':             val_loss, 
+        'Accuracy/Validation Correct':      acc, 
+        'Accuracy/Correct %':               acc * 100,
         # Disable image uploading due to the size of the data and network traffic usage
         # 'Images':               wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
-        'Gender':               gender if batch_size == 1 else list(gender), 
+        'Gender':                           gender if batch_size == 1 else list(gender), 
         'Age': {
-            'True':             boneage.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in boneage], 
-            'Pred':             age_pred.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in age_pred],
+            'True':                         boneage.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in boneage], 
+            'Pred':                         age_pred.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in age_pred],
         }, 
-        'Process/Step':                 global_step, 
-        'Process/Epoch':                epoch, 
+        'Process/Step':                     global_step, 
+        'Process/Epoch':                    epoch, 
         **histograms})
 
 
-def wandb_log_evaluation(wandb_logger, true_age, pred_age):
+def wandb_log_evaluation(wandb_logger, result):
+    wandb_logger.log({
+        'Loss/Evaluation First Loss':           result['test_loss_first'],
+        'Loss/Evaluation Second Loss (MSE)':    result['test_loss_second'],
+        'Accuracy/Evaluation Accuracy':         result['accuracy'],
+        'Accuracy/Evaluation Correct':          result['correct'],
+    })
+
     from matplotlib import pyplot as plt
     fig, ax = plt.subplots()
-    ax.plot(true_age, 'r', label = 'True', s = 1)
-    ax.plot(true_age, 'b', label = 'Pred', s = 1)
+    ax.plot(result['boneage'], 'r', label = 'True', s = 1)
+    ax.plot(result['pred'], 'b', label = 'Pred', s = 1)
     wandb.log({"Results/Evaluaion Results": fig})
     wandb_logger.log({
-        'Results/True Age': true_age,
-        'Results/Pred Age': pred_age
+        'Results/True Age': result['boneage'],
+        'Results/Pred Age': result['pred']
     })
 
 
 def wandb_log_model_artifact(wandb_logger, net_saved_path: str, run_name: str):
     model = wandb.Artifact(run_name, type='model')
     model.add_file(net_saved_path)
-    wandb.log_artifact(model)
+    wandb_logger.log_artifact(model)
