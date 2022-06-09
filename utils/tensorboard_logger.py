@@ -19,27 +19,43 @@ def tb_setup(config, args, log_dir:str = './tensorboard/', notes: str = '') -> S
     if not log_dir:
         log_dir = './tensorboard'
     net = config['net']
-    model = config['model']
-    name = config['name']
-    device = config['device']
     epochs = config['epochs']
     batch_size = config['batch_size']
     learning_rate = config['learning_rate']
     save_checkpoint = config['save_checkpoint']
     amp = config['amp']
+    model = config['model']
+    name = config['name']
+    device = config['device']
+    optimizer = config['optimizer']
+    criterion = config['criterion']
+    WandB_usage = config['WandB_usage']
+    dataset_name = config['dataset_name']
+    basedOnSex = config['basedOnSex']
+    gender = config['gender']
+    train_dataset_size = config['train_dataset_size']
+    test_dataset_size = config['test_dataset_size']
 
     # Create a run
     tb_logger = SummaryWriter(log_dir=Path(log_dir, name))
 
-    tb_logger.add_text(tag='name', text_string=str(name), global_step=0)
-    tb_logger.add_text(tag='model', text_string=str(model), global_step=0)
-    tb_logger.add_text(tag='device', text_string=str(device), global_step=0)
+    tb_logger.add_text(tag='notes', text_string=notes, global_step=0)
     tb_logger.add_text(tag='epochs', text_string=str(epochs), global_step=0)
     tb_logger.add_text(tag='batch_size', text_string=str(batch_size), global_step=0)
     tb_logger.add_text(tag='learning_rate', text_string=str(learning_rate), global_step=0)
-    tb_logger.add_text(tag='amp', text_string=str(amp), global_step=0)
     tb_logger.add_text(tag='save_checkpoint', text_string=str(save_checkpoint), global_step=0)
-    tb_logger.add_text(tag='notes', text_string=notes, global_step=0)
+    tb_logger.add_text(tag='amp', text_string=str(amp), global_step=0)
+    tb_logger.add_text(tag='model', text_string=str(model), global_step=0)
+    tb_logger.add_text(tag='name', text_string=str(name), global_step=0)
+    tb_logger.add_text(tag='device', text_string=str(device), global_step=0)
+    tb_logger.add_text(tag='optimizer', text_string=str(optimizer), global_step=0)
+    tb_logger.add_text(tag='criterion', text_string=str(criterion), global_step=0)
+    tb_logger.add_text(tag='WandB_usage', text_string=str(WandB_usage), global_step=0)
+    tb_logger.add_text(tag='dataset_name', text_string=str(dataset_name), global_step=0)
+    tb_logger.add_text(tag='basedOnSex', text_string=str(basedOnSex), global_step=0)
+    tb_logger.add_text(tag='gender', text_string=str(gender), global_step=0)
+    tb_logger.add_text(tag='train_dataset_size', text_string=str(train_dataset_size), global_step=0)
+    tb_logger.add_text(tag='test_dataset_size', text_string=str(test_dataset_size), global_step=0)
 
     if args.basedOnSex and args.input_size == 1:
         tb_logger.add_graph(net.cuda(), (torch.randn(batch_size, 1, 500, 625).cuda(), ))
@@ -72,7 +88,6 @@ def tb_log_training(tb_logger, epoch_loss, val_loss, epoch):
     tb_logger.flush()
     
 
-
 def tb_log_validation(tb_logger, optimizer, val_loss, acc, 
     images, batch_size, global_step, epoch, net):
     # TensorBoard Storing the results
@@ -91,6 +106,16 @@ def tb_log_validation(tb_logger, optimizer, val_loss, acc,
     tb_logger.flush()
 
 
+def tb_log_evaluation(tb_logger, true_age, pred_age):
+    for item, t_age, p_age in enumerate(zip(true_age, pred_age)):
+        tb_logger.add_scalar('Results/Evaluaion Results', {
+                'TrueAge': t_age,
+                'PredAge': p_age,
+            }, item)
+
+    tb_logger.flush()
+
+    
 if __name__ == '__main__':
     # Test
     tb_setup(dict(

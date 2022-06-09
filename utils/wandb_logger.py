@@ -94,6 +94,18 @@ def wandb_log_validation(wandb_logger, optimizer, val_loss, acc,
         **histograms})
 
 
+def wandb_log_evaluation(wandb_logger, true_age, pred_age):
+    from matplotlib import pyplot as plt
+    fig, ax = plt.subplots()
+    ax.plot(true_age, 'r', label = 'True', s = 1)
+    ax.plot(true_age, 'b', label = 'Pred', s = 1)
+    wandb.log({"Results/Evaluaion Results": fig})
+    wandb_logger.log({
+        'Results/True Age': true_age,
+        'Results/Pred Age': pred_age
+    })
+
+
 def wandb_log_model_artifact(wandb_logger, net_saved_path: str, run_name: str):
     model = wandb.Artifact(run_name, type='model')
     model.add_file(net_saved_path)
