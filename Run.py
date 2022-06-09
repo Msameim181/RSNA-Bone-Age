@@ -124,7 +124,7 @@ if __name__ == '__main__':
 
     rich_print("\n[INFO]: Initiating testing phase...")
     # Initiate testing
-    evaluate(net, args, test_loader, device, criterion)
+    evaluate(net, args, test_loader, device, criterion, WandB_usage, wandb_logger, tb_logger, log_results = True, logger_usage = True)
 
     rich_print(f'\n[INFO]: Shutting Down...')
 
