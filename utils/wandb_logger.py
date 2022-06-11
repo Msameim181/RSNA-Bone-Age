@@ -98,6 +98,9 @@ def wandb_log_evaluation(wandb_logger, result):
     wandb_logger.log({
         'Loss/Evaluation First Loss':           result['test_loss_first'],
         'Loss/Evaluation Second Loss (MSE)':    result['test_loss_second'],
+        'Loss/Evaluation Third Loss (MAE)':     result['test_loss_third'],
+        'Loss/Evaluation Age Loss (MSE)':       result['test_loss_mse_age'],
+        'Loss/Evaluation Age Loss (MAE)':       result['test_loss_mae_age'],
         'Accuracy/Evaluation Accuracy':         result['accuracy'],
         'Accuracy/Evaluation Correct':          result['correct'],
     })
