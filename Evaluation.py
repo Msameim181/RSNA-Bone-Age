@@ -30,6 +30,9 @@ def evaluate(
     n_eval = len(test_loader.dataset)
     test_loss_first = 0
     test_loss_second = 0
+    test_loss_third = 0
+    test_loss_mse_age = 0
+    test_loss_mae_age = 0
     correct = 0
     predictions = []
     true_ages = []
@@ -55,11 +58,17 @@ def evaluate(
             true_ages.append(boneage.cpu().numpy().item())
             # test_loss_second += torch.nn.functional.mse_loss(pred, boneage.view_as(pred))
             test_loss_second += torch.nn.functional.mse_loss(test_loader.dataset.out_min_max_normal(pred.view_as(boneage)), ba_minmax)
+            test_loss_third += torch.nn.functional.l1_loss(test_loader.dataset.out_min_max_normal(pred.view_as(boneage)), ba_minmax)
+            test_loss_mse_age += torch.nn.functional.mse_loss(pred.view_as(boneage), boneage)
+            test_loss_mae_age += torch.nn.functional.l1_loss(pred.view_as(boneage), boneage)
     
     accuracy = correct
     if n_eval != 0:
         test_loss_first /= n_eval
         test_loss_second /= n_eval
+        test_loss_third /= n_eval
+        test_loss_mse_age /= n_eval
+        test_loss_mae_age /= n_eval
         accuracy /= n_eval
     
     # Sort based on boneage for charts
@@ -70,8 +79,9 @@ def evaluate(
     if log_results:
         print("\n")
         rich_print(f'\n[INFO]: Evaluation set:\n'
-                f'\tAverage loss (criterion): {test_loss_first:.4f} \t Average loss (MSE): {test_loss_second:.4f}\n'
-                f'\tAccuracy: {accuracy * 100:.2f}% \t Correct = {correct}/{n_eval}\n')
+                f'\tAverage loss (criterion): {test_loss_first:.4f} \t Average loss (MSE): {test_loss_second:.4f} \t Average loss (MAE): {test_loss_third:.4f}\n'
+                f'\tAccuracy: {accuracy * 100:.2f}% \t Correct = {correct}/{n_eval}\n'
+                f'\tAverage loss Age(m) (MSE): {test_loss_mse_age:.4f} \t Average loss Age(m) (MAE): {test_loss_mae_age:.4f}\n')
     
         rich_print('\n[INFO]: Finished Testing Round.')
 
@@ -79,6 +89,9 @@ def evaluate(
         result = {
             'test_loss_first': test_loss_first,
             'test_loss_second': test_loss_second,
+            'test_loss_third': test_loss_third,
+            'test_loss_mse_age': test_loss_mse_age,
+            'test_loss_mae_age': test_loss_mae_age,
             'accuracy': accuracy,
             'correct': correct,
             'n_eval': n_eval,
