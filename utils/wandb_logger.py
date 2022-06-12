@@ -101,7 +101,7 @@ def wandb_log_evaluation(wandb_logger, result):
         'Loss/Evaluation Age Loss (MSE)': result['test_loss_mse_age'],
         'Loss/Evaluation Age Loss (MAE)': result['test_loss_mae_age'],
         'Accuracy/Evaluation Accuracy': result['accuracy'],
-        'Accuracy/Evaluation Correct':  result['correct'],
+        'Accuracy/Evaluation Correct': result['correct'],
     })
 
     from matplotlib import pyplot as plt
