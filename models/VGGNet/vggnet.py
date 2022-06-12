@@ -20,6 +20,8 @@ class VGGNet(torch.nn.Module):
         self.name = name + self.type + name_suffix
         self.in_channels = image_channels
         self.num_classes = num_classes
+        self.add_feature = 0 if input_size <= 1 else input_size - 1
+
 
         if name == "VGGNet11":
             self.vggnet = models.vgg11(pretrained=pretrained)
@@ -118,13 +120,13 @@ def VGGNet19(pretrained = False, image_channels = 3, num_classes = 1000, **kwarg
    
 
 if __name__ == '__main__':
-    model = VGGNet11(pretrained=False, image_channels = 1, num_classes = 229)
+    model = VGGNet11(pretrained=False, image_channels = 1, num_classes = 1)
     # print(model)
 
     model.cuda()
     
     inp = torch.randn(1, 1, 500, 625).cuda()
-    sx = torch.randn(1).cuda()
+    sx = torch.randn(1, 1).cuda()
     out = model([inp, sx])
     # print(out.argmax(dim=1, keepdim=True))
     print(out)
