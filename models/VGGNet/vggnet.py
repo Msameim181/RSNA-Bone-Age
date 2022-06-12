@@ -34,16 +34,13 @@ class VGGNet(torch.nn.Module):
 
         self.vggnet.features[0] = torch.nn.Conv2d(image_channels, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
 
-        # self.vggnet.fc1 = torch.nn.Sequential(
-        #     torch.nn.Linear(1, 16),
-        #     torch.nn.ReLU(),
-        # )
+        self.vggnet.fc1 = torch.nn.Sequential(
+            torch.nn.Linear(1, 16),
+            torch.nn.ReLU(),
+        )
 
         self.vggnet.classifier = torch.nn.Sequential(
             torch.nn.Linear((512 * 7 * 7) + 1, 4096),
-            torch.nn.ReLU(True),
-            torch.nn.Dropout(0.5),
-            torch.nn.Linear(4096, 4096),
             torch.nn.ReLU(True),
             torch.nn.Dropout(0.5),
             torch.nn.Linear(4096, 2048),
@@ -83,7 +80,7 @@ class VGGNet(torch.nn.Module):
         x = torch.nn.functional.adaptive_avg_pool2d(x, (7, 7))
         x = torch.flatten(x, 1)
 
-        # y = self.vggnet.fc1(y)
+        y = self.vggnet.fc1(y)
 
         if self.add_feature > 0:
             x = torch.cat((x, y), dim=1)

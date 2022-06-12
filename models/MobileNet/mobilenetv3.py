@@ -49,8 +49,19 @@ class MobileNetV3(torch.nn.Module):
             torch.nn.Dropout(0.2),
             torch.nn.Linear(2048, 2048),
             torch.nn.Hardswish(inplace=True),
+
+            torch.nn.Dropout(0.3),
+            torch.nn.Linear(2048, 1024),
+            torch.nn.Hardswish(inplace=True),
+
+            torch.nn.Dropout(0.3),
+            torch.nn.Linear(1024, 512),
+            torch.nn.Hardswish(inplace=True),
+
+            torch.nn.Linear(512, num_classes),
+
             # torch.nn.Dropout(0.5),
-            torch.nn.Linear(2048, num_classes),
+            # torch.nn.Linear(2048, num_classes),
             torch.nn.Sigmoid()
         )
 
