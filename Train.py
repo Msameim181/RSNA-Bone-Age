@@ -166,9 +166,9 @@ def trainer(
                 pbar.set_postfix(**{'Step Loss (Batch)': loss.item(), 'Epoch Loss (Train)': log_epoch_loss})
                 # Logging
                 if WandB_usage:
-                    wandb_log_training_step(wandb_logger, loss, global_step, epoch, log_epoch_loss)
+                    wandb_log_training_step(wandb_logger, loss.item(), global_step, epoch, log_epoch_loss)
                 
-                tb_log_training_step(tb_logger, loss, global_step, epoch, log_epoch_loss)
+                tb_log_training_step(tb_logger, loss.item(), global_step, epoch, log_epoch_loss)
                 
                 # Validation
                 val_loss = validation(wandb_logger, tb_logger, net, args, device, optimizer, scheduler, criterion, 
@@ -223,7 +223,7 @@ def validation(
     # Let's See if is it evaluation time or not
     n_train_batch = n_train // batch_size
     last_point = (n_train_batch + 1) if n_train % batch_size else n_train_batch
-    val_point = [last_point if item == val_repeat else ((n_train_batch//val_repeat) * item)  for item in range(1, val_repeat + 1)]
+    val_point = [last_point if item == val_repeat else ((n_train_batch//val_repeat) * item) for item in range(1, val_repeat + 1)]
     # Solving The Validation in end of epoch problem and tensorboard overflow problem
     if epoch_step in val_point:
 
