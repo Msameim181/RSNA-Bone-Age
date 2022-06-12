@@ -58,7 +58,7 @@ class RSNATrainDataset(Dataset):
         # Number of classes for the one hot encoding
         self.num_classes = np.max(self.train_data['boneage']) + 1
         # One Hoting the bone age
-        self.age_onehot  = torch.nn.functional.one_hot(torch.tensor(self.train_data['boneage']), num_classes = self.num_classes)
+        self.age_onehot = torch.nn.functional.one_hot(torch.tensor(self.train_data['boneage']), num_classes = self.num_classes)
         # Remebering the index for the one hot encoding and gender discrimination
         self.train_data['indx'] = range(len(self.train_data))
 
@@ -192,7 +192,7 @@ class RSNATestDataset(Dataset):
         # Normalization Zscore
         self.test_data['ba_zscore'], self.a_mean, self.a_std = self.zscore_normal(self.test_data['boneage'].copy())
         # One Hoting the bone age
-        self.age_onehot  = torch.nn.functional.one_hot(torch.tensor(self.test_data['boneage']), num_classes = train_num_classes)
+        self.age_onehot = torch.nn.functional.one_hot(torch.tensor(self.test_data['boneage']), num_classes = train_num_classes)
         # Remebering the index for the one hot encoding and gender discrimination
         self.test_data['indx'] = range(len(self.test_data))
 

@@ -47,19 +47,19 @@ def wandb_setup(config, notes: str = '') -> wandb:
 def wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss_step):
     # Logging
     wandb_logger.log({
-        'Loss/Step Loss':               loss,
-        'Process/Step':                 global_step,
-        'Loss/Train Loss (Step)':       epoch_loss_step,
-        'Process/Epoch':                epoch
+        'Loss/Step Loss': loss,
+        'Process/Step': global_step,
+        'Loss/Train Loss (Step)': epoch_loss_step,
+        'Process/Epoch': epoch
     })
 
 def wandb_log_training(wandb_logger, epoch_loss, val_loss, epoch):
     # Logging
     wandb_logger.log({
-        'Loss/Train Loss':               epoch_loss,
-        'Loss/Epoch Loss':               epoch_loss,
-        'Loss/Validation Loss (Epoch)':  val_loss,
-        'Process/Epoch':                 epoch,
+        'Loss/Train Loss': epoch_loss,
+        'Loss/Epoch Loss': epoch_loss,
+        'Loss/Validation Loss (Epoch)': val_loss,
+        'Process/Epoch': epoch,
     })
 
 def wandb_log_histogram(net):
@@ -77,31 +77,31 @@ def wandb_log_validation(wandb_logger, optimizer, val_loss, acc,
     global_step, epoch, histograms):
     # WandB Storing the results
     wandb_logger.log({
-        'Process/Learning Rate':            optimizer.param_groups[0]['lr'], 
-        'Loss/Validation Loss':             val_loss, 
-        'Accuracy/Validation Correct':      acc, 
-        'Accuracy/Correct %':               acc * 100,
+        'Process/Learning Rate': optimizer.param_groups[0]['lr'], 
+        'Loss/Validation Loss': val_loss, 
+        'Accuracy/Validation Correct': acc, 
+        'Accuracy/Correct %': acc * 100,
         # Disable image uploading due to the size of the data and network traffic usage
-        # 'Images':               wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
-        'Gender':                           gender if batch_size == 1 else list(gender), 
+        # 'Images': wandb.Image(images.cpu()) if batch_size == 1 else [wandb.Image(image.cpu()) for image in images], 
+        'Gender': gender if batch_size == 1 else list(gender), 
         'Age': {
-            'True':                         boneage.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in boneage], 
-            'Pred':                         age_pred.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in age_pred],
+            'True': boneage.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in boneage], 
+            'Pred': age_pred.float().cpu().item() if batch_size == 1 else [age.float().cpu().item() for age in age_pred],
         }, 
-        'Process/Step':                     global_step, 
-        'Process/Epoch':                    epoch, 
+        'Process/Step': global_step, 
+        'Process/Epoch': epoch, 
         **histograms})
 
 
 def wandb_log_evaluation(wandb_logger, result):
     wandb_logger.log({
-        'Loss/Evaluation First Loss':           result['test_loss_first'],
-        'Loss/Evaluation Second Loss (MSE)':    result['test_loss_second'],
-        'Loss/Evaluation Third Loss (MAE)':     result['test_loss_third'],
-        'Loss/Evaluation Age Loss (MSE)':       result['test_loss_mse_age'],
-        'Loss/Evaluation Age Loss (MAE)':       result['test_loss_mae_age'],
-        'Accuracy/Evaluation Accuracy':         result['accuracy'],
-        'Accuracy/Evaluation Correct':          result['correct'],
+        'Loss/Evaluation First Loss': result['test_loss_first'],
+        'Loss/Evaluation Second Loss (MSE)': result['test_loss_second'],
+        'Loss/Evaluation Third Loss (MAE)': result['test_loss_third'],
+        'Loss/Evaluation Age Loss (MSE)': result['test_loss_mse_age'],
+        'Loss/Evaluation Age Loss (MAE)': result['test_loss_mae_age'],
+        'Accuracy/Evaluation Accuracy': result['accuracy'],
+        'Accuracy/Evaluation Correct':  result['correct'],
     })
 
     from matplotlib import pyplot as plt
