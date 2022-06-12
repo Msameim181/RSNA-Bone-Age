@@ -9,13 +9,15 @@ class VGGNet_Pre2(torch.nn.Module):
         image_channels: int = 3, 
         num_classes: int = 100, 
         name: str='VGGNet',
-        type: str='Pre2',
-        pretrained = True,
+        pretrained: bool = True,
+        input_size: int = 2,
+        name_suffix: str = '',
         **kwargs
     ) -> None:
         super(VGGNet_Pre2, self).__init__()
 
-        self.name = f'{name}_{type}'
+        self.type = '_Pre' if pretrained else ""
+        self.name = name + self.type + name_suffix
         self.in_channels = image_channels
         self.num_classes = num_classes
 
@@ -29,6 +31,12 @@ class VGGNet_Pre2(torch.nn.Module):
             self.vggnet = models.vgg19(pretrained=pretrained)
 
         self.vggnet.features[0] = torch.nn.Conv2d(image_channels, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+
+        self.resnet.fc1 = torch.nn.Sequential(
+
+            torch.nn.Linear(1, 16),
+            torch.nn.ReLU(),
+        )
 
         self.vggnet.classifier = torch.nn.Sequential(
             torch.nn.Linear((512 * 7 * 7) + 1, 4096),
@@ -59,22 +67,24 @@ class VGGNet_Pre2(torch.nn.Module):
             # torch.nn.ReLU(True),
             # torch.nn.Dropout(0.5),
             # torch.nn.Linear(64, 1),
+            torch.nn.Sigmoid(),
             
         )
 
 
     def forward(self, x) -> torch.Tensor:
-        y = x[1]
-        x = x[0]
+        if self.add_feature > 0:
+            y = x[1]
+            x = x[0]
         
         x = self.vggnet.features(x)
 
         x = torch.nn.functional.adaptive_avg_pool2d(x, (7, 7))
         x = torch.flatten(x, 1)
 
-        z = x
-        y = torch.unsqueeze(y, 1).to(device='cuda', dtype=torch.float32)
-        x = torch.cat((z, y), dim=1)
+        if self.add_feature > 0:
+            x = torch.cat((x, y), dim=1)
+
 
         x = self.vggnet.classifier(x)
 

@@ -44,10 +44,10 @@ class MobileNetV2(torch.nn.Module):
             torch.nn.Dropout(0.2),
             torch.nn.Linear(in_features + self.add_feature, 2048),
             torch.nn.Dropout(0.3),
-            torch.nn.ELU(),
+            torch.nn.ReLU(),
             torch.nn.Linear(2048, 2048),
 
-            torch.nn.ELU(),
+            torch.nn.ReLU(),
             torch.nn.Linear(2048, num_classes),
             torch.nn.Sigmoid()
         )
