@@ -1,1 +1,1 @@
-from .vggnet import VGGNet
+from .vggnet import VGGNet11, VGGNet13, VGGNet16, VGGNet19

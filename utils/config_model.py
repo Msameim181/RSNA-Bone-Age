@@ -4,8 +4,9 @@ from pathlib import Path
 import torch
 
 # Models
-from models.MobileNet import MobileNet_V2, MobileNet_V3
-from models.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+from models.MobileNet import *
+from models.ResNet import *
+from models.VGGNet import *
 
 
 def reload_model(net, path: str):
@@ -83,6 +84,26 @@ def select_model(args, image_channels: int, num_classes: int, **kwargs):
 
     elif args.model == 'MobileNet_V3':
         return MobileNet_V3(pretrained = args.pretrained == 'True', 
+                    image_channels = image_channels, num_classes = num_classes, 
+                    input_size = args.input_size, **kwargs)
+
+    elif args.model == 'VGGNet11':
+        return VGGNet11(pretrained = args.pretrained == 'True', 
+                    image_channels = image_channels, num_classes = num_classes, 
+                    input_size = args.input_size, **kwargs)
+
+    elif args.model == 'VGGNet13':
+        return VGGNet13(pretrained = args.pretrained == 'True', 
+                    image_channels = image_channels, num_classes = num_classes, 
+                    input_size = args.input_size, **kwargs)
+
+    elif args.model == 'VGGNet16':
+        return VGGNet16(pretrained = args.pretrained == 'True', 
+                    image_channels = image_channels, num_classes = num_classes, 
+                    input_size = args.input_size, **kwargs)
+
+    elif args.model == 'VGGNet19':
+        return VGGNet19(pretrained = args.pretrained == 'True', 
                     image_channels = image_channels, num_classes = num_classes, 
                     input_size = args.input_size, **kwargs)
 
