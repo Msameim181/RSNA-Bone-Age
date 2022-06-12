@@ -3,7 +3,7 @@ from torchvision import models
 
 
 
-class VGGNet_Pre2(torch.nn.Module):
+class VGGNet(torch.nn.Module):
     def __init__(
         self, 
         image_channels: int = 3, 
@@ -14,7 +14,7 @@ class VGGNet_Pre2(torch.nn.Module):
         name_suffix: str = '',
         **kwargs
     ) -> None:
-        super(VGGNet_Pre2, self).__init__()
+        super(VGGNet, self).__init__()
 
         self.type = '_Pre' if pretrained else ""
         self.name = name + self.type + name_suffix
@@ -32,11 +32,10 @@ class VGGNet_Pre2(torch.nn.Module):
 
         self.vggnet.features[0] = torch.nn.Conv2d(image_channels, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
 
-        self.resnet.fc1 = torch.nn.Sequential(
-
-            torch.nn.Linear(1, 16),
-            torch.nn.ReLU(),
-        )
+        # self.vggnet.fc1 = torch.nn.Sequential(
+        #     torch.nn.Linear(1, 16),
+        #     torch.nn.ReLU(),
+        # )
 
         self.vggnet.classifier = torch.nn.Sequential(
             torch.nn.Linear((512 * 7 * 7) + 1, 4096),
@@ -82,6 +81,8 @@ class VGGNet_Pre2(torch.nn.Module):
         x = torch.nn.functional.adaptive_avg_pool2d(x, (7, 7))
         x = torch.flatten(x, 1)
 
+        # y = self.vggnet.fc1(y)
+
         if self.add_feature > 0:
             x = torch.cat((x, y), dim=1)
 
@@ -92,26 +93,26 @@ class VGGNet_Pre2(torch.nn.Module):
         return x
 
 
-def VGGNet11(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet_Pre2:
+def VGGNet11(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet:
 
-    return VGGNet_Pre2(image_channels = image_channels, 
+    return VGGNet(image_channels = image_channels, 
                 num_classes = num_classes, name='VGGNet11', pretrained = pretrained, **kwargs)
     
 
-def VGGNet13(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet_Pre2:
+def VGGNet13(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet:
 
-    return VGGNet_Pre2(image_channels = image_channels, 
+    return VGGNet(image_channels = image_channels, 
                 num_classes = num_classes, name='VGGNet13', pretrained = pretrained,**kwargs)
 
 
-def VGGNet16(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet_Pre2:
+def VGGNet16(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet:
 
-    return VGGNet_Pre2(image_channels = image_channels, 
+    return VGGNet(image_channels = image_channels, 
                 num_classes = num_classes, name='VGGNet16', pretrained = pretrained,**kwargs)
 
-def VGGNet19(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet_Pre2:
+def VGGNet19(pretrained = False, image_channels = 3, num_classes = 1000, **kwargs) -> VGGNet:
 
-    return VGGNet_Pre2(image_channels = image_channels, 
+    return VGGNet(image_channels = image_channels, 
                 num_classes = num_classes, name='VGGNet19', pretrained = pretrained,**kwargs)
 
    
