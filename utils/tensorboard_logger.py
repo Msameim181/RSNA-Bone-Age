@@ -4,13 +4,10 @@ from pathlib import Path
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
-from utils.rich_logger import make_console
+from utils.rich_logger import rich_print
 
 # from tensorboardX import SummaryWriter
 
-
-
-console = make_console()
 
 def tb_setup(config, args, log_dir:str = './tensorboard/', notes: str = '') -> SummaryWriter:
     """
@@ -70,7 +67,7 @@ def tb_setup(config, args, log_dir:str = './tensorboard/', notes: str = '') -> S
 
 def tb_log_training_step(tb_logger, loss, global_step, epoch, epoch_loss_step):
      # Logging
-    tb_logger.add_scalar('Loss/Step Loss', loss.item(), global_step)
+    tb_logger.add_scalar('Loss/Step Loss', loss, global_step)
     tb_logger.add_scalar('Loss/Train Loss (Step)', epoch_loss_step, global_step)
     tb_logger.add_scalar('Process/Step', global_step, global_step)
     tb_logger.add_scalar('Process/Epoch', epoch, global_step)
@@ -83,7 +80,7 @@ def tb_log_training(tb_logger, epoch_loss, val_loss, epoch):
     tb_logger.add_scalar('Loss/Train Loss', epoch_loss, epoch)
     tb_logger.add_scalar('Loss/Epoch Loss', epoch_loss, epoch)
     tb_logger.add_scalar('Loss/Validation Loss (Epoch)', val_loss, epoch)
-    console.print(f'\n[INFO]: Epoch: {epoch + 1} | Train Loss: {epoch_loss:.4f} | Validation Loss: {val_loss:.4f}\n')
+    rich_print(f'\n[INFO]: Epoch: {epoch + 1} | Train Loss: {epoch_loss:.4f} | Validation Loss: {val_loss:.4f}\n')
 
     tb_logger.flush()
     

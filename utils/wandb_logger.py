@@ -4,12 +4,11 @@ from pathlib import Path
 
 import wandb
 
-from utils.rich_logger import make_console
+from utils.rich_logger import rich_print
 
-console = make_console()
 
 def wandb_setup(config, notes: str = '') -> wandb:
-    console.print("\n[INFO]: Setting up WandB...")
+    rich_print("\n[INFO]: Setting up WandB...")
     # Reading the config file, Key: Value
     f = open("temp/key/key.txt", "r")
     key = f.read()
@@ -41,14 +40,14 @@ def wandb_setup(config, notes: str = '') -> wandb:
     # Configure wandb
     wandb_logger.config.update(config)
     # Logging
-    console.print("[INFO]: WandB setup completed.")
+    rich_print("[INFO]: WandB setup completed.")
     return wandb_logger
 
 
 def wandb_log_training_step(wandb_logger, loss, global_step, epoch, epoch_loss_step):
     # Logging
     wandb_logger.log({
-        'Loss/Step Loss':               loss.item(),
+        'Loss/Step Loss':               loss,
         'Process/Step':                 global_step,
         'Loss/Train Loss (Step)':       epoch_loss_step,
         'Process/Epoch':                epoch
@@ -107,8 +106,8 @@ def wandb_log_evaluation(wandb_logger, result):
 
     from matplotlib import pyplot as plt
     fig, ax = plt.subplots()
-    ax.plot(result['boneage'], 'r', label = 'True', s = 1)
-    ax.plot(result['pred'], 'b', label = 'Pred', s = 1)
+    ax.plot(result['boneage'], 'r', label = 'True')
+    ax.plot(result['pred'], 'b', label = 'Pred')
     wandb.log({"Results/Evaluaion Results": fig})
     wandb_logger.log({
         'Results/True Age': result['boneage'],
