@@ -113,7 +113,6 @@ def trainer(
     rich_print(f'\n[INFO]: Start training as "{run_name}" ...')
 
     # Start training
-
     for epoch in range(epochs):
         net.to(device = device, dtype = torch.float32)
         net.train()
@@ -137,7 +136,6 @@ def trainer(
 
                 target = target.to(device = device, dtype = torch.float32)
 
-
                 # Forward pass
                 with torch.cuda.amp.autocast(enabled = amp):
                     if args.basedOnSex and args.input_size == 1:
@@ -152,7 +150,6 @@ def trainer(
                 grad_scaler.scale(loss).backward()
                 grad_scaler.step(optimizer)
                 grad_scaler.update()
-
 
                 # Add the loss to epoch_loss
                 pbar.update(images.shape[0])
@@ -186,11 +183,8 @@ def trainer(
             wandb_log_training(wandb_logger, epoch_loss / n_train, val_loss, epoch)
             # wandb_log_model_artifact(wandb_logger, model_saved_path, run_name)
 
-
         tb_log_training(tb_logger, epoch_loss / n_train, val_loss, epoch)
 
-
-    tb_logger.close()
     rich_print('\n[INFO]: Finished Training Course.')
     return criterion, wandb_logger, tb_logger
 

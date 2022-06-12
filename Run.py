@@ -126,6 +126,9 @@ if __name__ == '__main__':
     # Initiate testing
     evaluate(net, args, test_loader, device, criterion, WandB_usage, wandb_logger, tb_logger, log_results = True, logger_usage = True)
 
+    # Ending Testing and Cleaning up the loggers
+    tb_logger.close()
+
     rich_print(f'\n[INFO]: Shutting Down...')
 
     
