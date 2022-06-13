@@ -29,8 +29,8 @@ if __name__ == '__main__':
     rich_print(f'[INFO]: Using device "{device}", Now!')
 
     # Cuda free memory
-    torch.cuda.empty_cache()
-    torch.cuda.memory_summary(device = None, abbreviated = False)
+    # torch.cuda.empty_cache()
+    # torch.cuda.memory_summary(device = None, abbreviated = False)
     rich_print('[INFO]: Cuda memory released.')
 
     # Load data
