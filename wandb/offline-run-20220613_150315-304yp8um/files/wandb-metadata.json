@@ -1,0 +1,43 @@
+{
+    "os": "Windows-10-10.0.19041-SP0",
+    "python": "3.8.5",
+    "heartbeatAt": "2022-06-13T10:33:16.993605",
+    "startedAt": "2022-06-13T10:33:15.618354",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3060",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "-e",
+        "20",
+        "-b",
+        "8",
+        "-l",
+        "0.001",
+        "-n",
+        "Run on MobileNetV3, New Aug New FC 'zscore' output type, 1 output (num_classes)",
+        "-d",
+        "rsna",
+        "-m",
+        "MobileNet_V3",
+        "-ot",
+        "3",
+        "-nc",
+        "1",
+        "-loss",
+        "mae"
+    ],
+    "state": "running",
+    "program": "Run.py",
+    "codePath": "Run.py",
+    "git": {
+        "remote": "https://github.com/Msameim181/RSNA-Bone-Age.git",
+        "commit": "4b3208d7dd9351ecf7110abacbed3f5346dfae97"
+    },
+    "email": "9259samei@gmail.com",
+    "root": "G:/Samei/Repo/RSNA-Bone-Age",
+    "host": "DESKTOP-ISIIVT7",
+    "username": "sameie",
+    "executable": "C:\\ProgramData\\Anaconda3\\python.exe"
+}
