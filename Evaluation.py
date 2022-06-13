@@ -59,8 +59,8 @@ def evaluate(
             # test_loss_second += torch.nn.functional.mse_loss(pred, boneage.view_as(pred))
             test_loss_second += torch.nn.functional.mse_loss(test_loader.dataset.out_min_max_normal(pred.view_as(boneage)), ba_minmax)
             test_loss_third += torch.nn.functional.l1_loss(test_loader.dataset.out_min_max_normal(pred.view_as(boneage)), ba_minmax)
-            test_loss_mse_age += torch.nn.functional.mse_loss(pred.view_as(boneage), boneage)
-            test_loss_mae_age += torch.nn.functional.l1_loss(pred.view_as(boneage), boneage)
+            test_loss_mse_age += torch.nn.functional.mse_loss(pred.view_as(boneage), boneage).float()
+            test_loss_mae_age += torch.nn.functional.l1_loss(pred.view_as(boneage), boneage).float()
     
     accuracy = correct
     if n_eval != 0:
@@ -79,7 +79,7 @@ def evaluate(
     if log_results:
         print("\n")
         rich_print(f'\n[INFO]: Evaluation set:\n'
-                f'\tAverage loss (criterion): {test_loss_first:.4f} \t Average loss (MSE): {test_loss_second:.4f} \t Average loss (MAE): {test_loss_third:.4f}\n'
+                f'\tAverage loss (criterion): {test_loss_first:.4f} \t Average loss "MinMax" (MSE): {test_loss_second:.4f} \t Average loss "MinMax" (MAE): {test_loss_third:.4f}\n'
                 f'\tAccuracy: {accuracy * 100:.2f}% \t Correct = {correct}/{n_eval}\n'
                 f'\tAverage loss Age(m) (MSE): {test_loss_mse_age:.4f} \t Average loss Age(m) (MAE): {test_loss_mae_age:.4f}\n')
     
