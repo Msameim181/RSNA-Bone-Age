@@ -105,16 +105,16 @@ def tb_log_validation(tb_logger, optimizer, val_loss, acc,
 
 def tb_log_evaluation(tb_logger, result):
 
-    tb_logger.add_text(tag='Evaluaion Loss (criterion)', text_string=str(result['test_loss_first']), global_step=0)
-    tb_logger.add_text(tag='Evaluaion Loss Second (MSE)', text_string=str(result['test_loss_second']), global_step=0)
-    tb_logger.add_text(tag='Evaluation Third Loss (MAE)', text_string=str(result['test_loss_third']), global_step=0)
-    tb_logger.add_text(tag='Evaluation Age Loss (MSE)', text_string=str(result['test_loss_mse_age']), global_step=0)
-    tb_logger.add_text(tag='Evaluation Age Loss (MAE)', text_string=str(result['test_loss_mae_age']), global_step=0)
-    tb_logger.add_text(tag='Evaluaion Accuracy', text_string=str(result['accuracy']), global_step=0)
-    tb_logger.add_text(tag='Evaluaion Correct', text_string=str(result['correct']), global_step=0)
+    tb_logger.add_text(tag='Results/Evaluaion Loss (criterion)', text_string=str(result['test_loss_first']), global_step=0)
+    tb_logger.add_text(tag='Results/Evaluaion Loss Second (MSE)', text_string=str(result['test_loss_second']), global_step=0)
+    tb_logger.add_text(tag='Results/Evaluation Third Loss (MAE)', text_string=str(result['test_loss_third']), global_step=0)
+    tb_logger.add_text(tag='Results/Evaluation Age Loss (MSE)', text_string=str(result['test_loss_mse_age']), global_step=0)
+    tb_logger.add_text(tag='Results/Evaluation Age Loss (MAE)', text_string=str(result['test_loss_mae_age']), global_step=0)
+    tb_logger.add_text(tag='Results/Evaluaion Accuracy', text_string=str(result['accuracy']), global_step=0)
+    tb_logger.add_text(tag='Results/Evaluaion Correct', text_string=str(result['correct']), global_step=0)
 
-    for item, t_age, p_age in enumerate(zip(result['boneage'], result['pred'])):
-        tb_logger.add_scalar('Results/Evaluaion Results', {
+    for item, (t_age, p_age) in enumerate(zip(result['boneage'], result['pred'])):
+        tb_logger.add_scalars('Results/Evaluaion Results', {
                 'TrueAge': t_age,
                 'PredAge': p_age,
             }, item)
