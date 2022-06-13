@@ -114,11 +114,11 @@ def wandb_log_evaluation(wandb_logger, result):
             'Results/Pred Age': p_age,
             'Results/Step': item
     })
-    from matplotlib import pyplot as plt
-    fig, ax = plt.subplots(figsize=(20, 10), dpi=100)
-    ax.plot(result['boneage'], 'r', label = 'True')
-    ax.plot(result['pred'], 'b', label = 'Pred')
-    wandb.log({"Results/Evaluaion Results": wandb.Image(fig)})
+    # from matplotlib import pyplot as plt
+    # fig, ax = plt.subplots(figsize=(20, 10), dpi=100)
+    # ax.plot(result['boneage'], 'r', label = 'True')
+    # ax.plot(result['pred'], 'b', label = 'Pred')
+    # wandb.log({"Results/Evaluaion Results": wandb.Image(fig)})
 
 
 def wandb_log_model_artifact(wandb_logger, net_saved_path: str, run_name: str):
