@@ -108,7 +108,7 @@ def wandb_log_evaluation(wandb_logger, result):
     fig, ax = plt.subplots()
     ax.plot(result['boneage'], 'r', label = 'True')
     ax.plot(result['pred'], 'b', label = 'Pred')
-    wandb.log({"Results/Evaluaion Results": fig})
+    wandb.log({"Results/Evaluaion Results": wandb.Image(fig)})
     wandb_logger.log({
         'Results/True Age': result['boneage'],
         'Results/Pred Age': result['pred']
