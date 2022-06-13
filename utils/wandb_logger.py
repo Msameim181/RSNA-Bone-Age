@@ -95,25 +95,30 @@ def wandb_log_validation(wandb_logger, optimizer, val_loss, acc,
 
 def wandb_log_evaluation(wandb_logger, result):
     wandb_logger.log({
-        'Results/Evaluation First Loss': result['test_loss_first'],
-        'Results/Evaluation Second Loss (MSE)': result['test_loss_second'],
-        'Results/Evaluation Third Loss (MAE)': result['test_loss_third'],
-        'Results/Evaluation Age Loss (MSE)': result['test_loss_mse_age'],
-        'Results/Evaluation Age Loss (MAE)': result['test_loss_mae_age'],
-        'Results/Evaluation Accuracy': result['accuracy'],
-        'Results/Evaluation Correct': result['correct'],
+            'Results/Evaluation First Loss': result['test_loss_first'],
+            'Results/Evaluation Second Loss (MSE)': result['test_loss_second'],
+            'Results/Evaluation Third Loss (MAE)': result['test_loss_third'],
+            'Results/Evaluation Age Loss (MSE)': result['test_loss_mse_age'],
+            'Results/Evaluation Age Loss (MAE)': result['test_loss_mae_age'],
+            'Results/Evaluation Accuracy': result['accuracy'],
+            'Results/Evaluation Correct': result['correct'],
     })
     wandb_logger.log({
-        'Results/True Age All': result['boneage'],
-        'Results/Pred Age All': result['pred'],
-        'Results/Step All': [item for item in range(len(result['pred']))]
+            'Results/True Age All': result['boneage'], 
+            'Results/Pred Age All': result['pred'], 
+            'Results/Step All': list(range(len(result['pred'])))
     })
     for item, (t_age, p_age) in enumerate(zip(result['boneage'], result['pred'])):
         wandb_logger.log({
             'Results/True Age': t_age,
             'Results/Pred Age': p_age,
             'Results/Step': item
-        })
+    })
+    from matplotlib import pyplot as plt
+    fig, ax = plt.subplots(figsize=(20, 10), dpi=100)
+    ax.plot(result['boneage'], 'r', label = 'True')
+    ax.plot(result['pred'], 'b', label = 'Pred')
+    wandb.log({"Results/Evaluaion Results": wandb.Image(fig)})
 
 
 def wandb_log_model_artifact(wandb_logger, net_saved_path: str, run_name: str):
