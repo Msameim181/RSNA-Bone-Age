@@ -40,7 +40,7 @@ class VGGNet(torch.nn.Module):
         )
 
         self.vggnet.classifier = torch.nn.Sequential(
-            torch.nn.Linear((512 * 7 * 7) + 1, 4096),
+            torch.nn.Linear((512 * 7 * 7) + 16, 4096),
             torch.nn.ReLU(True),
             torch.nn.Dropout(0.5),
             torch.nn.Linear(4096, 2048),
