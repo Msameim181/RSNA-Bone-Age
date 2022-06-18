@@ -85,7 +85,7 @@ def select_model(args, image_channels: int, num_classes: int, **kwargs):
     elif args.model == 'MobileNet_V3':
         return MobileNet_V3(pretrained = args.pretrained == 'True', 
                     image_channels = image_channels, num_classes = num_classes, 
-                    input_size = args.input_size, **kwargs)
+                    input_size = args.input_size, gender_fc_type = args.gender_fc_type, **kwargs)
 
     elif args.model == 'VGGNet11':
         return VGGNet11(pretrained = args.pretrained == 'True', 

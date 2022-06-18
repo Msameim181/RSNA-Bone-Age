@@ -16,6 +16,8 @@ def get_args():
     parser.add_argument('--loss', '-loss', dest='loss_type', metavar='LOSS', type=str, default="bce_wl", help='Type of loss function (mse, bce_wl, bce, mae)')
     
     parser.add_argument('--out-type', '-ot', dest='output_type', metavar='OT', type=int, default=1, help='Output type (0:real, 1:onehot, 2:minmax, 3:zscore)')
+    
+    parser.add_argument('--gender-fc', '-gfc', dest='gender_fc_type', metavar='GFT', type=int, default=1, help='Output type (0: only 1 node append, 1: separate fc for gender append)')
 
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=0.0001,
                         help='Learning rate', dest='learning_rate')
