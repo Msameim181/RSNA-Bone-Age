@@ -1,4 +1,5 @@
 # Deep learning libs
+from tkinter.tix import Tree
 import torch
 from torchvision import models
 
@@ -44,10 +45,10 @@ class MobileNetV3(torch.nn.Module):
 
         self.mobilenet_v3.fc_gender = torch.nn.Sequential(
 
-            torch.nn.Linear(1, 16),
+            torch.nn.Linear(1, 32),
             torch.nn.Hardswish(inplace=True),
         )
-        self.fc_gender_feature = 16 if gender_fc_type else 1
+        self.fc_gender_feature = 32 if gender_fc_type else 1
 
         self.mobilenet_v3.classifier = torch.nn.Sequential(
 
@@ -106,9 +107,10 @@ def MobileNet_V3(**kwargs) -> MobileNetV3:
 
 
 if __name__ == '__main__':
-    model = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = 229)
+    model = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = 229, gender_fc_type = True)
     # print(models.mobilenet_v3_large(pretrained=False))
     print(model.name)
+    print(model)
     
     # model.cuda()
     # inp = torch.randn(1, 1, 500, 625).cuda()
