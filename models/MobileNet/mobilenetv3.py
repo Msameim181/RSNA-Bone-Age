@@ -1,5 +1,4 @@
 # Deep learning libs
-from tkinter.tix import Tree
 import torch
 from torchvision import models
 
