@@ -20,7 +20,9 @@ def optimizer_loader(net, learning_rate: int = 0.001, amp: bool = False):
     optimizer = torch.optim.Adam(
                             net.parameters(), 
                             lr=learning_rate, 
-                            weight_decay=1e-8)
+                            betas=(0.5, 0.999), 
+                            weight_decay=1e-8,
+                            )
 
     # Defining the scheduler
     # goal: maximize Dice score
