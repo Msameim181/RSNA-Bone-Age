@@ -80,7 +80,7 @@ def tb_log_training(tb_logger, epoch_loss, val_loss, epoch):
     tb_logger.add_scalar('Loss/Train Loss', epoch_loss, epoch)
     tb_logger.add_scalar('Loss/Epoch Loss', epoch_loss, epoch)
     tb_logger.add_scalar('Loss/Validation Loss (Epoch)', val_loss, epoch)
-    rich_print(f'\n[INFO]: Epoch: {epoch + 1} | Train Loss: {epoch_loss:.4f} | Validation Loss: {val_loss:.4f}\n')
+    rich_print(f'\n[INFO]: Epoch: {epoch + 1} | Train Loss: {epoch_loss:.10f} | Validation Loss: {val_loss:.10f}\n')
 
     tb_logger.flush()
     

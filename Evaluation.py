@@ -79,9 +79,9 @@ def evaluate(
     if log_results:
         print("\n")
         rich_print(f'\n[INFO]: Evaluation set:\n'
-                f'\tAverage loss (criterion): {test_loss_first:.4f}\n'
-                f'\t Accuracy: {accuracy * 100:.2f}% \t Correct = {correct}/{n_eval}\n'
-                f'\t MSE loss "MinMax": {test_loss_second:.4f} \t MAE loss "MinMax": {test_loss_third:.4f}\n'
+                f'\tAverage loss (criterion): {test_loss_first:.10f}\n'
+                f'\t Accuracy: {accuracy * 100:.2f}% \t\t Correct = {correct}/{n_eval}\n'
+                f'\t MSE loss "MinMax": {test_loss_second:.8f} \t MAE loss "MinMax": {test_loss_third:.8f}\n'
                 f'\t MSE loss Age(m): {test_loss_mse_age:.4f} \t MAE loss Age(m): {test_loss_mae_age:.4f}\n')
     
         rich_print('\n[INFO]: Finished Testing Round.')
