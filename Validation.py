@@ -54,7 +54,7 @@ def validate(
     if log_results:
         print("\n")
         rich_print(f'\n[INFO]: Validation set:\n'
-                f'\tAverage loss: {val_loss:.4f}\n'
+                f'\tAverage loss: {val_loss:.10f}\n'
                 f'\tAccuracy: {accuracy * 100:.2f}% \t Correct = {correct}/{n_val}\n')
     
     return val_loss, accuracy, correct
