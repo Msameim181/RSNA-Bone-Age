@@ -390,7 +390,7 @@ def plot_data(img, r, c, i):
 
 if __name__ == '__main__':
 
-    train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age-neu', defualt_path = '', 
+    train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age-kaggle', defualt_path = '', 
         basedOnSex = False, gender = 'male', target_type = 'minmax')
 
     batch_size, val_percent = 1, 0.2
@@ -418,16 +418,19 @@ if __name__ == '__main__':
             print(target, train_loader.dataset.dataset.predict_compiler(target), train_loader.dataset.dataset.reverse_zscore_normal(ba_zscore))
             print(train_loader.dataset.dataset.train_data)
 
-            # plot_data(transf(img[0]), row, col, count)
+            img1 = transf(img[0])
+            plot_data(img1, row, col, count)
+            img1.save(f'zzz/{img_id.item()}.jpg')
             # plot_data(img[0], row, col, count)
-            # count += 1
-            # if count == 25:
-            #     break
-            break
 
-        # plt.tight_layout()
-        # plt.savefig("C0555.png", dpi=300)
-        # plt.show()
+            count += 1
+            if count == 25:
+                break
+            # break
+
+        plt.tight_layout()
+        plt.savefig("Gamma.png", dpi=300)
+        plt.show()
 
         print("---------------")
     
