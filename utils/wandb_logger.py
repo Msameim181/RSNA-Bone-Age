@@ -90,7 +90,8 @@ def wandb_log_validation(wandb_logger, optimizer, val_loss, acc,
         }, 
         'Process/Step': global_step, 
         'Process/Epoch': epoch, 
-        **histograms})
+        # **histograms
+        })
 
 
 def wandb_log_evaluation(wandb_logger, result):

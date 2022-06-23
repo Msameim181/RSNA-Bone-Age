@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from numpy import histogram
 
 # Deep learning libs
 import torch
@@ -223,7 +224,8 @@ def validation(
 
         # WandB Storing the model parameters
         if WandB_usage:
-            histograms = wandb_log_histogram(net)
+            # histograms = wandb_log_histogram(net)
+            histograms = None
 
 
         # Evaluating the model
