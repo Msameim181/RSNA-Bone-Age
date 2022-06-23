@@ -37,6 +37,10 @@ class MobileNetV3(torch.nn.Module):
 
         self.mobilenet_v3.features[0][0] = torch.nn.Conv2d(image_channels, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
 
+        # Freeze all features to avoid training
+        for param in self.mobilenet_v3.features.parameters():
+            param.requires_grad = False
+
         self.avgpool = torch.nn.AdaptiveAvgPool2d(1)
 
         in_features = self.mobilenet_v3.classifier[0].in_features
@@ -109,8 +113,8 @@ if __name__ == '__main__':
     model = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = 229, gender_fc_type = True)
     # print(models.mobilenet_v3_large(pretrained=False))
     print(model.name)
+    # print(model.mobilenet_v3.features.parameters().)
     print(model)
-    
     # model.cuda()
     # inp = torch.randn(1, 1, 500, 625).cuda()
     # sx = torch.randn(1, 1).cuda()
