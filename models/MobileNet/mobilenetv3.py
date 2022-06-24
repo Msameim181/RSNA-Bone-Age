@@ -38,15 +38,15 @@ class MobileNetV3(torch.nn.Module):
         self.mobilenet_v3.features[0][0] = torch.nn.Conv2d(image_channels, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
 
         # Freeze all features to avoid training
-        for param in self.mobilenet_v3.features.parameters():
-            param.requires_grad = False
+        # for param in self.mobilenet_v3.features.parameters():
+        #     param.requires_grad = False
 
         self.avgpool = torch.nn.AdaptiveAvgPool2d(1)
 
         in_features = self.mobilenet_v3.classifier[0].in_features
         self.add_feature = 0 if input_size <= 1 else input_size - 1
 
-        self.mobilenet_v3.fc_gender = torch.nn.Sequential(
+        self.fc_gender = torch.nn.Sequential(
 
             torch.nn.Linear(1, 32),
             torch.nn.Hardswish(inplace=True),
@@ -88,7 +88,7 @@ class MobileNetV3(torch.nn.Module):
         x = torch.flatten(x, 1)
 
         if self.fc_gender_feature:
-            y = self.mobilenet_v3.fc_gender(y)
+            y = self.fc_gender(y)
 
         if self.add_feature > 0:
             x = torch.cat((x, y), dim=1)
