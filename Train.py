@@ -224,8 +224,7 @@ def validation(
 
         # WandB Storing the model parameters
         if WandB_usage:
-            # histograms = wandb_log_histogram(net)
-            histograms = None
+            histograms = wandb_log_histogram(net)
 
 
         # Evaluating the model
