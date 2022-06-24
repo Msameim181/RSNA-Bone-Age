@@ -8,13 +8,13 @@ class InceptionV3(torch.nn.Module):
         self, 
         image_channels: int, 
         num_classes: int = 100, 
-        name: str = 'MobileNetV3', 
+        name: str = 'InceptionV3', 
         pretrained: bool = True,
         input_size: int = 2,
         name_suffix: str = '',
         gender_fc_type: bool = False,
     ) -> None:
-        """MobileNetV3 class.
+        """InceptionV3 class.
 
         Args:
             image_channels (int): Number of channels in the input image.
@@ -31,7 +31,7 @@ class InceptionV3(torch.nn.Module):
         self.in_channels = image_channels
         self.num_classes = num_classes
 
-        self.inception_v3 = models.inception_v3(pretrained=pretrained)
+        self.inception_v3 = models.inception_v3(pretrained=pretrained, aux_logits=True)
 
         self.inception_v3.Conv2d_1a_3x3.conv = torch.nn.Conv2d(image_channels, 32, kernel_size=(3, 3), stride=(2, 2), bias=False)
 
@@ -76,8 +76,8 @@ class InceptionV3(torch.nn.Module):
 
         if self.fc_gender_feature:
             y = self.fc_gender(y)
-        
-        x = x.logits
+
+        x = x[0]
         if self.add_feature > 0:
             x = torch.cat((x, y), dim=1)
 
@@ -88,7 +88,7 @@ class InceptionV3(torch.nn.Module):
 
 def Inception_V3(**kwargs) -> InceptionV3:
     """
-    Constructs a MobileNetV2 model
+    Constructs a InceptionV3 model
     Args:
         kwargs: Keyword arguments.
     """

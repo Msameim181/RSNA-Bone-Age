@@ -1,7 +1,7 @@
 # Deep learning libs
 import torch
 from torchvision import models, utils
-from attention import SpatialAttn, ProjectorBlock
+from .attention import SpatialAttn, ProjectorBlock
 
 class MobileNetV3(torch.nn.Module):
     def __init__(
@@ -117,9 +117,9 @@ class MobileNetV3(torch.nn.Module):
             m1, x1 = self.attn1(self.projector1(a1), x)
             m2, x2 = self.attn2(self.projector2(a2), x)
             m3, x3 = self.attn3(self.projector3(a3), x)
-            print("1", m1.shape, x1.shape)
-            print("2", m2.shape, x2.shape)
-            print("3", m3.shape, x3.shape)
+            # print("1", m1.shape, x1.shape)
+            # print("2", m2.shape, x2.shape)
+            # print("3", m3.shape, x3.shape)
 
             x = torch.cat((x1,x2,x3), dim=1) # batch_sizex3C
             # print("x", x.shape)
