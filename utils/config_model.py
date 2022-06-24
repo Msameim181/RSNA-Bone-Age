@@ -7,6 +7,8 @@ import torch
 from models.MobileNet import *
 from models.ResNet import *
 from models.VGGNet import *
+from models.Attention import *
+from models.Inception import *
 
 
 def reload_model(net, path: str):
@@ -106,6 +108,17 @@ def select_model(args, image_channels: int, num_classes: int, **kwargs):
         return VGGNet19(pretrained = args.pretrained == 'True', 
                     image_channels = image_channels, num_classes = num_classes, 
                     input_size = args.input_size, **kwargs)
+
+    elif args.model == 'MobileNet_V3_Atten':
+        return MobileNet_V3_Attention(pretrained = args.pretrained == 'True', 
+                    image_channels = image_channels, num_classes = num_classes, 
+                    input_size = args.input_size, gender_fc_type = args.gender_fc_type, **kwargs)
+
+    elif args.model == 'Inception_V3':
+        return Inception_V3(pretrained = args.pretrained == 'True', 
+                    image_channels = image_channels, num_classes = num_classes, 
+                    input_size = args.input_size, gender_fc_type = args.gender_fc_type, **kwargs)
+
 
     else:
         assert None, 'Model not supported.'
