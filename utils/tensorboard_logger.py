@@ -54,10 +54,11 @@ def tb_setup(config, args, log_dir:str = './tensorboard/', notes: str = '') -> S
     tb_logger.add_text(tag='train_dataset_size', text_string=str(train_dataset_size), global_step=0)
     tb_logger.add_text(tag='test_dataset_size', text_string=str(test_dataset_size), global_step=0)
 
-    if args.basedOnSex and args.input_size == 1:
-        tb_logger.add_graph(net.cuda(), (torch.randn(batch_size, 1, 500, 625).cuda(), ))
-    else:
-        tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size, 1).cuda()], ))
+    if args.model != 'Inception_V3':
+        if args.basedOnSex and args.input_size == 1:
+            tb_logger.add_graph(net.cuda(), (torch.randn(batch_size, 1, 500, 625).cuda(), ))
+        else:
+            tb_logger.add_graph(net.cuda(), ([torch.randn(batch_size, 1, 500, 625).cuda(), torch.randn(batch_size, 1).cuda()], ))
 
     tb_logger.flush()
 

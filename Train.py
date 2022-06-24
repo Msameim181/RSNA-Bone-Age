@@ -140,9 +140,16 @@ def trainer(
                 # Forward pass
                 with torch.cuda.amp.autocast(enabled = amp):
                     if args.basedOnSex and args.input_size == 1:
-                        age_pred = net(images)
+                        if args.attention:
+                            age_pred, _, _, _ = net(images)
+                        else:
+                            age_pred = net(images)
+                    elif args.attention:
+                        age_pred, _, _, _ = net([images, gender])
                     else:
                         age_pred = net([images, gender])
+                            
+                        
                     # Calculate loss
                     loss = criterion(age_pred, target.view_as(age_pred))
 

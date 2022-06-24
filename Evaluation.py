@@ -48,7 +48,15 @@ def evaluate(
         ba_minmax = ba_minmax.to(device = device, dtype = torch.float32)
 
         with torch.no_grad():
-            age_pred = net([images, gender])
+            if args.basedOnSex and args.input_size == 1:
+                if args.attention:
+                    age_pred, _, _, _ = net(images)
+                else:
+                    age_pred = net(images)
+            elif args.attention:
+                age_pred, _, _, _ = net([images, gender])
+            else:
+                age_pred = net([images, gender])
 
             test_loss_first += criterion(age_pred, target.view_as(age_pred))  # sum up batch loss
             

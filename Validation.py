@@ -36,9 +36,15 @@ def validate(
 
         with torch.no_grad():
             if args.basedOnSex and args.input_size == 1:
-                age_pred = net(images)
+                if args.attention:
+                    age_pred, _, _, _ = net(images)
+                else:
+                    age_pred = net(images)
+            elif args.attention:
+                age_pred, _, _, _ = net([images, gender])
             else:
                 age_pred = net([images, gender])
+                
             val_loss += criterion(age_pred, target.view_as(age_pred))
             
             pred = val_loader.dataset.dataset.predict_compiler(age_pred) 

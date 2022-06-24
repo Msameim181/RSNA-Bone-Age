@@ -19,6 +19,8 @@ def get_args():
     
     parser.add_argument('--gender-fc', '-gfc', dest='gender_fc_type', metavar='GFT', type=int, default=1, help='Output type (0: only 1 node append, 1: separate fc for gender append)')
 
+    parser.add_argument('--attention', '-atten', action='store_true', default=False, help='Using attention models.')
+
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=0.0001,
                         help='Learning rate', dest='learning_rate')
 
@@ -69,7 +71,7 @@ if __name__ == '__main__':
     print(arg.input_size, type(arg.input_size))
     print(arg.basedOnSex, type(arg.basedOnSex))
     print(arg.gender, type(arg.gender))
-    print(arg.notes, type(arg.notes))
+    print(arg.attention, type(arg.attention))
     # vars(arg)['kkp'] = "loop"
     # print(arg.kkp, type(arg.kkp))
 
