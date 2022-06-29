@@ -1,7 +1,7 @@
 # Deep learning libs
 import torch
 from torchvision import models, utils
-from attention import SpatialAttn, ProjectorBlock
+from .attention import SpatialAttn, ProjectorBlock
 
 class MobileNetV3(torch.nn.Module):
     def __init__(
