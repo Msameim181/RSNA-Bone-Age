@@ -1,7 +1,7 @@
 # Deep learning libs
 import torch
 from torchvision import models, utils
-from .attention import SpatialAttn, ProjectorBlock
+from attention import SpatialAttn, ProjectorBlock
 
 class MobileNetV3(torch.nn.Module):
     def __init__(
@@ -39,9 +39,9 @@ class MobileNetV3(torch.nn.Module):
 
         self.attention = attention
         if self.attention:
-            self.projector1 = ProjectorBlock(24, 960)
-            self.projector2 = ProjectorBlock(40, 960)
-            self.projector3 = ProjectorBlock(112, 960)
+            self.projector1 = ProjectorBlock(40, 960)
+            self.projector2 = ProjectorBlock(80, 960)
+            self.projector3 = ProjectorBlock(160, 960)
             self.attn1 = SpatialAttn(in_features=960, normalize_attn=normalize_attn)
             self.attn2 = SpatialAttn(in_features=960, normalize_attn=normalize_attn)
             self.attn3 = SpatialAttn(in_features=960, normalize_attn=normalize_attn)
@@ -89,23 +89,23 @@ class MobileNetV3(torch.nn.Module):
         # print("x", x.shape)
         x = self.mobilenet_v3.features[0](x)
         x = self.mobilenet_v3.features[1](x)
-        a1 = self.mobilenet_v3.features[2](x)
+        x = self.mobilenet_v3.features[2](x)
+        x = self.mobilenet_v3.features[3](x)
+        a1 = self.mobilenet_v3.features[4](x)
+        
+        x = self.mobilenet_v3.features[5](a1)
+        x = self.mobilenet_v3.features[6](x)
+        x = self.mobilenet_v3.features[7](x)
+        a2 = self.mobilenet_v3.features[8](x)
 
-        x = self.mobilenet_v3.features[3](a1)
-        x = self.mobilenet_v3.features[4](x)
-        x = self.mobilenet_v3.features[5](x)
-        a2 = self.mobilenet_v3.features[6](x)
-
-        x = self.mobilenet_v3.features[7](a2)
-        x = self.mobilenet_v3.features[8](x)
-        x = self.mobilenet_v3.features[9](x)
+        x = self.mobilenet_v3.features[9](a2)
         x = self.mobilenet_v3.features[10](x)
         x = self.mobilenet_v3.features[11](x)
-        a3 = self.mobilenet_v3.features[12](x)
+        x = self.mobilenet_v3.features[12](x)
+        x = self.mobilenet_v3.features[13](x)
+        a3 = self.mobilenet_v3.features[14](x)
 
-        x = self.mobilenet_v3.features[13](a3)
-        x = self.mobilenet_v3.features[14](x)
-        x = self.mobilenet_v3.features[15](x)
+        x = self.mobilenet_v3.features[15](a3)
         x = self.mobilenet_v3.features[16](x)
 
         x = self.avgpool(x)
@@ -149,24 +149,6 @@ def MobileNet_V3_Attention(**kwargs) -> MobileNetV3:
 
 
 
-# import cv2
-# def visualize_attn(I, c):
-#     # Image
-#     img = I.permute((1,2,0)).cpu().numpy()
-#     # Heatmap
-#     N, C, H, W = c.size()
-#     a = torch.nn.functional.softmax(c.view(N,C,-1), dim=2).view(N,C,H,W)
-#     up_factor = 32/H
-#     print(up_factor, I.size(), c.size())
-#     if up_factor > 1:
-#         a = torch.nn.functional.interpolate(a, scale_factor=up_factor, mode='bilinear', align_corners=False)
-#     attn = utils.make_grid(a, nrow=4, normalize=True, scale_each=True)
-#     attn = attn.permute((1,2,0)).mul(255).byte().cpu().numpy()
-#     attn = cv2.applyColorMap(attn, cv2.COLORMAP_JET)
-#     attn = cv2.cvtColor(attn, cv2.COLOR_BGR2RGB)
-#     # Add the heatmap to the image
-#     vis = 0.4 * attn
-#     return torch.from_numpy(vis).permute(2,0,1)
 
 if __name__ == '__main__':
     model = MobileNet_V3_Attention(pretrained = True, image_channels = 1, num_classes = 1, gender_fc_type = True).cuda()
@@ -178,40 +160,4 @@ if __name__ == '__main__':
     inp = torch.randn(1, 1, 500, 500).cuda()
     sx = torch.randn(1, 1).cuda()
     out = model([inp, sx])
-    # print(out.shape)
-
-    # import matplotlib.pyplot as plt
-    # model.eval()
-    # with torch.no_grad():
-    #     images = torch.randn(1, 1, 500, 500).cuda()
-    #     sx = torch.randn(1, 1).cuda()
-    #     I = utils.make_grid(images, nrow=4, normalize=True, scale_each=True)
-    #     # writer.add_image('origin', I)
-    #     _, c1, c2, c3 = model([images, sx])
-    #     # print(I.shape, c1.shape, c2.shape, c3.shape, c4.shape)
-    #     attn1 = visualize_attn(I, c1)
-    #     # writer.add_image('attn1', attn1)
-    #     attn2 = visualize_attn(I, c2)
-    #     # writer.add_image('attn2', attn2)
-    #     attn3 = visualize_attn(I, c3)
-    #     # writer.add_image('attn3', attn3)
-        
-    #     # plot image and attention maps
-    #     plt.figure(figsize=(10, 10))
-    #     plt.subplot(2, 4, 1)
-    #     plt.imshow(I.permute((1,2,0)).cpu().numpy())
-    #     plt.subplot(2, 4, 2)
-    #     plt.imshow(utils.make_grid(c1, nrow=4).permute(1, 2, 0).cpu().numpy())
-    #     plt.subplot(2, 4, 3)
-    #     plt.imshow(utils.make_grid(c2, nrow=4).permute(1, 2, 0).cpu().numpy())
-    #     plt.subplot(2, 4, 4)
-    #     plt.imshow(utils.make_grid(c3, nrow=4).permute(1, 2, 0).cpu().numpy())
-    #     plt.subplot(2, 4, 5)
-    #     plt.imshow(attn1.permute((1,2,0)).cpu().numpy())
-    #     plt.subplot(2, 4, 4)
-    #     plt.imshow(attn2.permute((1,2,0)).cpu().numpy())
-    #     plt.subplot(2, 4, 7)
-    #     plt.imshow(attn3.permute((1,2,0)).cpu().numpy())
-    #     plt.show()
-
-    
+    print(out[0].shape, out[1].shape, out[2].shape, out[3].shape)
