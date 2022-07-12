@@ -253,6 +253,19 @@ class RSNATestDataset(Dataset):
 
         return img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, 0
 
+    
+    def load_image(self, id_name):
+        # spec_data = self.test_data_filtered[self.test_data_filtered.id == id_name]
+        img_addr = Path(self.image_dir, f'{str(id_name)}.png')
+
+        assert os.path.exists(img_addr), f'Image {img_addr} does not exist'
+
+        img = Image.open(img_addr)
+        img = np.array(img)
+
+        return img
+
+
     def min_max_normal(self, ba_minmax):
         a_min, a_max = ba_minmax.min(), ba_minmax.max()
         ba_minmax -= a_min
@@ -312,6 +325,36 @@ def data_type_interpretor(data_type):
         return 'zscore'
     else:
         return 'real'
+
+def add_text_to_image(img: np.array, text: str):
+    """Add Text tom image using pillow
+    
+    Arguments:
+        img {np.array} -- Image to add text to
+        text {str} -- Text to add
+    
+    Returns:
+        np.array -- Image with text added
+    """
+    from PIL import Image, ImageDraw, ImageFont
+
+    # Convert to PIL image
+    img = Image.fromarray(img)
+
+    # Create a draw object
+    draw = ImageDraw.Draw(img)
+
+    # Set the font to Cinzel and set the font size to 50
+    font = ImageFont.truetype("utils/resource/font/Cinzel.ttf", 40)
+
+    # Draw the text
+    draw.multiline_text((20, 20), text, stroke_fill=(255, 255, 255), font=font, fill=255)
+
+    # Convert to numpy array
+    img = np.array(img)
+
+    return img
+
 
 # Data Packaging
 def data_wrapper(train_dataset: Dataset, test_dataset: Dataset, 
