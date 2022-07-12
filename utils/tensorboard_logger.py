@@ -120,9 +120,32 @@ def tb_log_evaluation(tb_logger, result):
                 'PredAge': p_age,
             }, item)
 
+    tb_log_evaluation_images(tb_logger, result)
+
     tb_logger.flush()
 
+def tb_log_evaluation_images(tb_logger, result):
+
+    best_predictions = result['best_predictions']
+    for item in range(len(best_predictions['difference'])):
+        tb_logger.add_image('Results/Best Prediction Image', 
+        best_predictions['predictions_images'][item], item, dataformats='HW')
+    # tb_logger.add_images('Results/Best Prediction Image', 
+    #     best_predictions['predictions_images'], 0, dataformats='NWH')
     
+    worst_predictions = result['worst_predictions']
+    for item in range(len(worst_predictions['difference'])):
+        tb_logger.add_image('Results/Worst Prediction Image', 
+        worst_predictions['predictions_images'][item], item, dataformats='HW')
+    # tb_logger.add_images('Results/Worst Prediction Image',
+    #     worst_predictions['predictions_images'], 0, dataformats='NWH')
+
+    tb_logger.flush()
+
+def tb_rewrite_log(log_addr: str):
+    return SummaryWriter(log_dir=Path(log_addr))
+
+
 if __name__ == '__main__':
     # Test
     tb_setup(dict(
