@@ -1,11 +1,9 @@
 # System and utils for preprocessing
-import logging
 import os
 from pathlib import Path
 
 import albumentations as A
 import cv2
-import matplotlib.pyplot as plt
 # Deep learning libs
 import numpy as np
 import pandas as pd
@@ -16,6 +14,7 @@ from PIL import Image
 from torch.utils.data import DataLoader, Dataset, random_split
 
 from utils.rich_logger import *
+
 # from rich_logger import *
 
 
@@ -23,7 +22,8 @@ from utils.rich_logger import *
 class RSNATrainDataset(Dataset):
     def __init__(self, data_file: str, image_dir: str, 
             transform = None, basedOnSex: bool=False, 
-            gender:str='male', target_type: str = 'onehot'):
+            gender: str = 'male', target_type: str = 'onehot', 
+            age_filter: bool = False, age_bound: list = None):
         """Train dataset.
 
         Args:
@@ -34,17 +34,26 @@ class RSNATrainDataset(Dataset):
             gender (str, optional): _description_. Defaults to 'male'. Options: ['male', 'female']
             target_type (str, optional): Data targeted. What type age data. Defaults to 'onehot'. 
                 Options: ['onehot', 'minmax', 'zscore', 'real']
+            age_filter (bool, optional): If filter the age data. Defaults to False.
+            age_bound (list, optional): The age bound. Defaults to None.
+                Options: [0, 84], [84, 144], [144, 229]
+                Bounding will be used in the following order:
+                    (0, 84], (84, 144], (144, 229]
 
         Raises:
             RuntimeError: No data file found.
             RuntimeError: Train data is empty file.
         """
+        if age_bound is None and age_filter:
+            age_bound = [0, 84]
         self.data_file = Path(data_file)
         self.image_dir = Path(image_dir)
         self.transform = transform
         self.basedOnSex = basedOnSex
         self.gender = gender
         self.target_type = target_type
+        self.age_filter = age_filter
+        self.age_bound = age_bound
 
         # Proccessing data and csv file
         # radiographs_images = np.array([f.stem for f in self.image_dir.glob('*.png')]).astype('int64')
@@ -62,13 +71,8 @@ class RSNATrainDataset(Dataset):
         # Remebering the index for the one hot encoding and gender discrimination
         self.train_data['indx'] = range(len(self.train_data))
 
-        # Dividing data based on gender (gender discrimination)
-        if self.basedOnSex and self.gender == 'male':
-            self.train_data_filtered = self.train_data[self.train_data['male'] == True]
-        elif self.basedOnSex and self.gender == 'female':
-            self.train_data_filtered = self.train_data[self.train_data['male'] == False]
-        else:
-            self.train_data_filtered = self.train_data
+        self.train_data_filtered = self.filtering_data_by_gender()
+        self.train_data_filtered = self.filtering_data_by_age(self.train_data_filtered)
 
         # Raise Errors
         if not os.path.exists(data_file):
@@ -76,7 +80,7 @@ class RSNATrainDataset(Dataset):
         if self.train_data.empty:
             raise RuntimeError('Train data is empty file')
 
-        rich_print(f"[INFO]: Creating 'Train' dataset with {len(self.train_data)} samples.")
+        rich_print(f"[INFO]: Creating 'Train' dataset with {len(self.train_data)} samples and {len(self.train_data_filtered)} selected.")
 
     def __len__(self):
         return len(self.train_data_filtered)
@@ -123,6 +127,23 @@ class RSNATrainDataset(Dataset):
 
         return img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, num_classes
 
+
+    def filtering_data_by_gender(self):
+        # Dividing data based on gender (gender discrimination)
+        if self.basedOnSex and self.gender == 'male':
+            return self.train_data[self.train_data['male'] == True]
+        elif self.basedOnSex and self.gender == 'female':
+            return self.train_data[self.train_data['male'] == False]
+        else:
+            return self.train_data
+        
+    def filtering_data_by_age(self, df):
+        # Dividing data based on gender (gender discrimination)
+        if self.age_filter:
+            return df[(df['boneage'] >= self.age_bound[0]) & (df['boneage'] < self.age_bound[1])]
+        else:
+            return df
+
     def min_max_normal(self, ba_minmax):
         a_min, a_max = ba_minmax.min(), ba_minmax.max()
         ba_minmax -= a_min
@@ -152,10 +173,9 @@ class RSNATrainDataset(Dataset):
             return preds
 
 class RSNATestDataset(Dataset):
-    def __init__(self, data_file: str, image_dir: str, 
-            train_num_classes: int, transform = None, 
-            basedOnSex: bool = False, gender:str='male', 
-            target_type: str = 'onehot'):
+    def __init__(self, data_file: str, image_dir: str, train_num_classes: int, 
+            transform = None, basedOnSex: bool = False, gender:str='male', 
+            target_type: str = 'onehot', age_filter: bool = False, age_bound: list = None):
         
         """Test dataset.
 
@@ -168,19 +188,27 @@ class RSNATestDataset(Dataset):
             gender (str, optional): _description_. Defaults to 'male'. Options: ['male', 'female']
             target_type (str, optional): Data targeted. What type age data. Defaults to 'onehot'. 
                 Options: ['onehot', 'minmax', 'zscore', 'real']
+            age_filter (bool, optional): If filter the age data. Defaults to False.
+            age_bound (list, optional): The age bound. Defaults to None.
+                Options: [0, 84], [84, 144], [144, 229]
+                Bounding will be used in the following order:
+                    (0, 84], (84, 144], (144, 229]
 
         Raises:
             RuntimeError: No data file found.
             RuntimeError: Test data is empty file.
         """
 
-
+        if age_bound is None and age_filter:
+            age_bound = [0, 84]
         self.data_file = Path(data_file)
         self.image_dir = Path(image_dir)
         self.transform = transform
         self.basedOnSex = basedOnSex
         self.gender = gender
         self.target_type = target_type
+        self.age_filter = age_filter
+        self.age_bound = age_bound
 
         # Proccessing data and csv file
         radiographs_images = np.array([f.stem for f in self.image_dir.glob('*.png')]).astype('int64')
@@ -197,12 +225,8 @@ class RSNATestDataset(Dataset):
         self.test_data['indx'] = range(len(self.test_data))
 
         # Dividing data based on gender
-        if self.basedOnSex and self.gender == 'male':
-            self.test_data_filtered = self.test_data[self.test_data['male'] == True]
-        elif self.basedOnSex and self.gender == 'female':
-            self.test_data_filtered = self.test_data[self.test_data['male'] == False]
-        else:
-            self.test_data_filtered = self.test_data
+        self.test_data_filtered = self.filtering_data_by_gender()
+        self.test_data_filtered = self.filtering_data_by_age(self.test_data_filtered)
 
         # Raise Errors
         if not os.path.exists(self.data_file):
@@ -210,7 +234,7 @@ class RSNATestDataset(Dataset):
         if self.test_data.empty:
             raise RuntimeError('Test data is empty file')
 
-        rich_print(f"[INFO]: Creating 'Test' dataset with {len(self.test_data)} samples.")
+        rich_print(f"[INFO]: Creating 'Test' dataset with {len(self.test_data)} samples and {len(self.test_data_filtered)} selected.")
 
     def __len__(self):
         return len(self.test_data_filtered)
@@ -265,6 +289,21 @@ class RSNATestDataset(Dataset):
 
         return img
 
+    def filtering_data_by_gender(self):
+        # Dividing data based on gender (gender discrimination)
+        if self.basedOnSex and self.gender == 'male':
+            return self.test_data[self.test_data['male'] == True]
+        elif self.basedOnSex and self.gender == 'female':
+            return self.test_data[self.test_data['male'] == False]
+        else:
+            return self.test_data
+        
+    def filtering_data_by_age(self, df):
+        # Dividing data based on gender (gender discrimination)
+        if self.age_filter:
+            return df[(df['boneage'] >= self.age_bound[0]) & (df['boneage'] < self.age_bound[1])]
+        else:
+            return df
 
     def min_max_normal(self, ba_minmax):
         a_min, a_max = ba_minmax.min(), ba_minmax.max()
@@ -386,7 +425,8 @@ def data_wrapper(train_dataset: Dataset, test_dataset: Dataset,
 # Data Loading
 def data_handler(dataset_name:str = 'rsna-bone-age-kaggle', defualt_path: str = '', 
         basedOnSex: bool = False, gender: str = 'male', 
-        transform_action: str = 'both', target_type = "onehot") -> Dataset:
+        transform_action: str = 'both', target_type: str = "onehot",
+        age_filter: bool = False, age_bound_selection: int = 0) -> Dataset:
     """Load dataset class from files.
 
     Args:
@@ -402,6 +442,14 @@ def data_handler(dataset_name:str = 'rsna-bone-age-kaggle', defualt_path: str = 
                 both: Trainsformation for train and test.
         target_type (str, optional): Data targeted. What type age data. Defaults to 'onehot'. 
                 Options: ['onehot', 'minmax', 'zscore', 'real']
+        age_filter (bool, optional): If filter the age data. Defaults to False.
+        age_bound (int, optional): The age bound to filter. Defaults to 0.
+            Options: 0 - 229 in three parts.
+                0: [0, 84], 
+                1: [84, 144], 
+                2: [144, 229]
+            Bounding will be used in the following order:
+                (0, 84], (84, 144], (144, 229]
 
     Returns:
         datasets: The train and test datasets.
@@ -409,79 +457,26 @@ def data_handler(dataset_name:str = 'rsna-bone-age-kaggle', defualt_path: str = 
     train_transform = data_augmentation() if transform_action in {'train', 'both'} else basic_transform()
     test_transform = data_augmentation() if transform_action in {'test', 'both'} else basic_transform()
     
+    age_bound_dict = dict(
+        a0 = [12 * 0,   12 * 7], 
+        a1 = [12 * 7,   12 * 13], 
+        a2 = [12 * 13,  12 * 19])
+    age_bound = age_bound_dict[f"a{age_bound_selection}"]
+
     train_dataset = RSNATrainDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset.csv'),
                            image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-training-dataset/boneage-training-dataset/'),
-                           basedOnSex = basedOnSex, gender = gender, transform = train_transform, target_type = target_type)
+                           basedOnSex = basedOnSex, gender = gender, 
+                           transform = train_transform, target_type = target_type,
+                           age_filter = age_filter, age_bound = age_bound)
 
 
     test_dataset = RSNATestDataset(data_file = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset.csv'),
                            image_dir = Path(defualt_path, f'dataset/{dataset_name}/boneage-test-dataset/boneage-test-dataset/'),
                            basedOnSex = basedOnSex, gender = gender, transform=test_transform,
-                           train_num_classes = train_dataset.num_classes, target_type = target_type)
+                           train_num_classes = train_dataset.num_classes, target_type = target_type,
+                           age_filter = age_filter, age_bound = age_bound)
+                           
     return train_dataset, test_dataset
 
 
-
-
-# Test
-def plot_data(img, r, c, i):
-    plt.subplot(r, c, i)
-    plt.imshow(img, cmap='gray')
-    plt.axis('off')
-    plt.tight_layout()
-
-
-if __name__ == '__main__':
-
-    train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age-kaggle', defualt_path = '', 
-        basedOnSex = False, gender = 'male', target_type = 'minmax')
-
-    batch_size, val_percent = 1, 0.2
-    train_loader, val_loader, test_loader = data_wrapper(
-                                                train_dataset = train_dataset, 
-                                                test_dataset = test_dataset, 
-                                                batch_size = batch_size, test_val_batch_size = 1,
-                                                val_percent = val_percent, 
-                                                shuffle = False, 
-                                                num_workers = 1)
-
-    print(len(train_loader.dataset))
-    print(len(val_loader.dataset))
-    print(len(test_loader.dataset))
-
-    transf = torchvision.transforms.ToPILImage()
-    count = 1
-    row = 5
-    col = 5
-    with data_progress:
-        
-        for img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, num_classes in data_progress.track(train_loader):
-            print(img_id, img.shape, sex, boneage.shape, ba_minmax.shape, ba_zscore)
-            print(train_loader.dataset.dataset.reverse_min_max_normal(ba_minmax), train_loader.dataset.dataset.a_min, train_loader.dataset.dataset.a_max)
-            print(target, train_loader.dataset.dataset.predict_compiler(target), train_loader.dataset.dataset.reverse_zscore_normal(ba_zscore))
-            print(train_loader.dataset.dataset.train_data)
-
-            img1 = transf(img[0])
-            plot_data(img1, row, col, count)
-            img1.save(f'zzz/{img_id.item()}.jpg')
-            # plot_data(img[0], row, col, count)
-
-            count += 1
-            if count == 25:
-                break
-            # break
-
-        plt.tight_layout()
-        plt.savefig("Gamma.png", dpi=300)
-        plt.show()
-
-        print("---------------")
-    
-        for img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in data_progress.track(test_loader):
-            print(img_id, img.shape, sex, boneage, ba_minmax, ba_zscore)
-            print(test_loader.dataset.reverse_min_max_normal(ba_minmax), test_loader.dataset.a_min, test_loader.dataset.a_max)
-            print(target, test_loader.dataset.predict_compiler(target), test_loader.dataset.reverse_zscore_normal(ba_zscore))
-            print(test_loader.dataset.test_data)
-            
-            break
 
