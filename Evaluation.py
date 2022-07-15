@@ -1,6 +1,5 @@
 # System and utils for preprocessing
 import argparse
-import logging
 
 # Deep learning libs
 import torch
@@ -97,8 +96,17 @@ def evaluate(
     true_ages = []
     idx_img = []
 
-    for idx, images, gender, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in tqdm(test_loader, total = n_eval, desc='Evaluation Round...', unit = 'img', leave=False):
-
+    for eval_batch in tqdm(test_loader, total = n_eval, desc='Evaluation Round...', unit = 'img', leave=True):
+        
+        # Unpacking the data
+        idx = eval_batch['img_id']
+        images = eval_batch['image']
+        gender = eval_batch['gender']
+        target = eval_batch['target']
+        boneage = eval_batch['boneage']
+        ba_minmax = eval_batch['ba_minmax']
+        
+        # Processing data before feeding the network
         images = images.to(device = device, dtype = torch.float32)
 
         gender = torch.unsqueeze(gender, 1)
@@ -191,89 +199,4 @@ def evaluate(
         )
         log_evaluation_results(WandB_usage, wandb_logger, tb_logger, result)
     
-    return best_predictions, worst_predictions
-
-
-
-# Testing
-
-def make_fake_args():
-    args = argparse.ArgumentParser()
-    return args.parse_args()
-
-if __name__=='__main__':
-    from utils.config_model import *
-    from utils.dataloader import *
-    dataset_name = "rsna-bone-age" # rsna-bone-age-kaggle or rsna-bone-age
-    basedOnSex = False
-    gender='male'
-    args = make_fake_args()
-    vars(args)['basedOnSex'] = False
-    vars(args)['attention'] = False
-
-    train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
-                                        basedOnSex = basedOnSex, gender = gender, transform_action = 'train', target_type = 'minmax')
-    num_classes = train_dataset.num_classes 
-
-    _, _, test_loader = data_wrapper(train_dataset = train_dataset, 
-                            test_dataset = test_dataset, 
-                            batch_size = 1,
-                            test_val_batch_size = 1, 
-                            shuffle = False, num_workers = 1)
-    
-    # Select and import Model
-    # net = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
-
-    net = load_model("./ResultModels/20220628_111939_MobileNetV3_Pre_MSE_G-32/checkpoint_model.pth").cuda()
-    # reload_model(net, "./ResultModels/20220619_172133_MobileNetV3_Pre_MSE_G-FC32_RSNA/checkpoint_epoch17.pth")
-
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    criterion = loss_funcion('mse')
-    # test_loss_first, test_loss_second, accuracy, correct, true_ages, predictions, idx_img = evaluate(net, args, test_loader, device, criterion, 
-    best_predictions, worst_predictions = evaluate(net, args, test_loader, device, criterion, 
-            logger_usage = False, WandB_usage = False, tb_logger = None, wandb_logger = None)
-    # print(test_loss_first, test_loss_second, accuracy, correct)
-    # print("-----------------------------------------------------")
-    # print(true_ages, predictions)
-    # print("-----------------------------------------------------")
-
-    # import matplotlib.pyplot as plt
-    
-    # plt.plot(np.array(true_ages), 'r', label = 'True')
-    # plt.plot(np.array(predictions), 'b', label = 'Pred')
-    # plt.legend()
-    # plt.show()
-
-    # --------------------------------------------
-
-    # best_predictions, worst_predictions = find_best_and_worst(idx_img, true_ages, predictions)
-    # print(best_predictions)
-    # print("---------------------")
-    # print(worst_predictions)
-    # print("---------------------")
-
-    # for item in range(len(best_predictions['difference'])):
-    #     print(f"{best_predictions['idx_img'][item]}: {best_predictions['difference'][item]:.4f} / {best_predictions['true_age'][item]:.4f} / {best_predictions['prediction'][item]:.4f}")
-    # print("---------------------")
-
-    # for item in range(len(worst_predictions['difference'])):
-    #     print(f"{worst_predictions['idx_img'][item]}: {worst_predictions['difference'][item]:.4f} / {worst_predictions['true_age'][item]:.4f} / {worst_predictions['prediction'][item]:.4f}")
-    # print("---------------------")
-
-
-    # for item in range(len(best_predictions['difference'])):
-    #     img = Image.fromarray(best_predictions['predictions_images'][item])
-
-    #     img.show()
-
-    # for item in range(len(worst_predictions['difference'])):
-    #     img = Image.fromarray(worst_predictions['predictions_images'][item])
-
-    #     img.show()
-
-    tb_logger = tb_rewrite_log('tensorboardLocal/Part2/20220628_111939_MobileNetV3_Pre_MSE_G-32')
-    result = dict(
-        best_predictions = best_predictions,
-        worst_predictions = worst_predictions,
-    )
-    tb_log_evaluation_images(tb_logger, result)
+    return test_loss_first, accuracy, correct, best_predictions, worst_predictions

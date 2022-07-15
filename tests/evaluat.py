@@ -27,14 +27,13 @@ from utils.wandb_logger import *
 
 def sava_image_results(predictions: dict, save_dir: str, type: str):
     # create directory if it doesn't exist: "save_dir/type" using Path.mkdir(parents=True, exist_ok=True)
-    Path(save_dir + "/" + type).mkdir(parents=True, exist_ok=True)
-    
-    
+    Path(f"{save_dir}/{type}").mkdir(parents=True, exist_ok=True)
+
     for item in range(len(predictions['difference'])):
         img = predictions['predictions_images'][item]
         # Change the image to a PIL image and save it as a PNG
         img = Image.fromarray(img)
-        img.save(os.path.join(save_dir, f'{type}/{type}_Prediction_' + str(item) + '.png'))
+        img.save(os.path.join(save_dir, f'{type}/{type}_Prediction_{str(item)}.png'))
         
     
 
@@ -51,16 +50,22 @@ if __name__=='__main__':
     vars(args)['basedOnSex'] = False
     vars(args)['attention'] = False
 
-    train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
-                                        basedOnSex = basedOnSex, gender = gender, transform_action = 'train', target_type = 'minmax')
-    num_classes = train_dataset.num_classes 
+    datasets = data_handler(dataset_name = 'rsna-bone-age-neu', defualt_path = '', 
+        basedOnSex = True, gender = 'male', target_type = 'minmax', 
+        age_filter = False, age_bound_selection = 1)
 
-    _, _, test_loader = data_wrapper(train_dataset = train_dataset, 
-                            test_dataset = test_dataset, 
-                            batch_size = 1,
-                            test_val_batch_size = 1, 
-                            shuffle = False, num_workers = 1)
-    
+    num_classes = datasets['train_dataset'].num_classes 
+
+    batch_size, val_percent = 1, 0.3
+    loaders = data_wrapper(
+        train_dataset = datasets['train_dataset'], 
+        test_dataset = datasets['test_dataset'], 
+        batch_size = batch_size, 
+        test_val_batch_size = 1,
+        val_percent = val_percent, 
+        shuffle = False, 
+        num_workers = 1)
+    test_loader = loaders['test_loader']
     # Select and import Model
     # net = MobileNet_V3(pretrained = True, image_channels = 1, num_classes = train_dataset.num_classes).cuda()
 
@@ -74,12 +79,12 @@ if __name__=='__main__':
             logger_usage = False, WandB_usage = False, tb_logger = None, wandb_logger = None)
     
     
-    sava_image_results(predictions = best_predictions,
-                       save_dir = 'tensorboardLocal/Part2/20220626_113847_MobileNetV3_Pre_male_MSE_G-32_Male/Top5', 
-                       type = 'Best')
-    sava_image_results(predictions = worst_predictions,
-                       save_dir = 'tensorboardLocal/Part2/20220626_113847_MobileNetV3_Pre_male_MSE_G-32_Male/Top5', 
-                       type = 'Worst')
+    # sava_image_results(predictions = best_predictions,
+    #                    save_dir = 'tensorboardLocal/Part2/20220626_113847_MobileNetV3_Pre_male_MSE_G-32_Male/Top5', 
+    #                    type = 'Best')
+    # sava_image_results(predictions = worst_predictions,
+    #                    save_dir = 'tensorboardLocal/Part2/20220626_113847_MobileNetV3_Pre_male_MSE_G-32_Male/Top5', 
+    #                    type = 'Worst')
     # print(test_loss_first, test_loss_second, accuracy, correct)
     # print("-----------------------------------------------------")
     # print(true_ages, predictions)
