@@ -124,8 +124,9 @@ class RSNATrainDataset(Dataset):
             augmentations = self.transform(image=img)
             img = augmentations["image"]
 
-
-        return img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, num_classes
+        return dict(img_id = img_id, image = img, gender = sex, target = target, 
+            boneage = boneage, ba_minmax = ba_minmax, ba_zscore = ba_zscore, 
+            boneage_onehot = boneage_onehot, num_classes = num_classes)
 
 
     def filtering_data_by_gender(self):
@@ -274,10 +275,11 @@ class RSNATestDataset(Dataset):
         if self.transform is not None:
             augmentations = self.transform(image=img)
             img = augmentations["image"]
+        
+        return dict(img_id = img_id, image = img, gender = sex, target = target, 
+            boneage = boneage, ba_minmax = ba_minmax, ba_zscore = ba_zscore, 
+            boneage_onehot = boneage_onehot)
 
-        return img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, 0
-
-    
     def load_image(self, id_name):
         # spec_data = self.test_data_filtered[self.test_data_filtered.id == id_name]
         img_addr = Path(self.image_dir, f'{str(id_name)}.png')
@@ -336,7 +338,7 @@ class RSNATestDataset(Dataset):
         elif self.target_type == 'real':
             return preds
 
-
+# Necessary functions for the data loaders
 def data_augmentation():
     return A.Compose([
         A.Resize(625, 500),
@@ -420,7 +422,7 @@ def data_wrapper(train_dataset: Dataset, test_dataset: Dataset,
 
     test_loader = DataLoader(dataset = test_dataset, batch_size = test_val_batch_size, shuffle = shuffle, num_workers = num_workers, pin_memory = True)
 
-    return train_loader, val_loader, test_loader
+    return dict(train_loader = train_loader, val_loader = val_loader, test_loader = test_loader)
 
 # Data Loading
 def data_handler(dataset_name:str = 'rsna-bone-age-kaggle', defualt_path: str = '', 
@@ -475,8 +477,8 @@ def data_handler(dataset_name:str = 'rsna-bone-age-kaggle', defualt_path: str = 
                            basedOnSex = basedOnSex, gender = gender, transform=test_transform,
                            train_num_classes = train_dataset.num_classes, target_type = target_type,
                            age_filter = age_filter, age_bound = age_bound)
-                           
-    return train_dataset, test_dataset
+
+    return dict(train_dataset = train_dataset, test_dataset = test_dataset)
 
 
 

@@ -35,21 +35,22 @@ def plot_data(img, r, c, i):
 
 if __name__ == '__main__':
 
-    train_dataset , test_dataset = data_handler(dataset_name = 'rsna-bone-age', defualt_path = '', 
-        basedOnSex = False, gender = 'male', target_type = 'minmax', age_filter = True, age_bound_selection = 1)
+    datasets = data_handler(dataset_name = 'rsna-bone-age', defualt_path = '', 
+        basedOnSex = False, gender = 'male', target_type = 'minmax', 
+        age_filter = True, age_bound_selection = 1)
 
     batch_size, val_percent = 1, 0.2
-    train_loader, val_loader, test_loader = data_wrapper(
-                                                train_dataset = train_dataset, 
-                                                test_dataset = test_dataset, 
-                                                batch_size = batch_size, test_val_batch_size = 1,
-                                                val_percent = val_percent, 
-                                                shuffle = False, 
-                                                num_workers = 1)
+    loaders = data_wrapper(
+        train_dataset = datasets['train_dataset'], 
+        test_dataset = datasets['test_dataset'], 
+        batch_size = batch_size, test_val_batch_size = 1,
+        val_percent = val_percent, 
+        shuffle = False, 
+        num_workers = 1)
 
-    print("Train: ", len(train_loader.dataset))
-    print("Valid: ", len(val_loader.dataset))
-    print("Tests:", len(test_loader.dataset))
+    print("Train: ", len(loaders['train_loader'].dataset))
+    print("Valid: ", len(loaders['val_loader'].dataset))
+    print("Tests:", len(loaders['test_loader'].dataset))
 
     
     # print(train_dataset.train_data_filtered['boneage'].count())
@@ -57,13 +58,24 @@ if __name__ == '__main__':
 
 
     # transf = torchvision.transforms.ToPILImage()
-    # count = 1
+    count = 1
     # row = 5
     # col = 5
-    # with data_progress:
+    train_loader = loaders['train_loader']
+    test_loader = loaders['test_loader']
+    with data_progress:
         
-        # for img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, num_classes in data_progress.track(train_loader):
-            # print(img_id, img.shape, sex, boneage.shape, ba_minmax.shape, ba_zscore)
+        for train_batch in data_progress.track(train_loader):
+            img_id = train_batch['img_id']
+            images = train_batch['image']
+            gender = train_batch['gender']
+            target = train_batch['target']
+            boneage = train_batch['boneage']
+            ba_minmax = train_batch['ba_minmax']
+            ba_zscore = train_batch['ba_zscore']
+            boneage_onehot = train_batch['boneage_onehot'], 
+            num_classes = train_batch['num_classes']
+            print(img_id, images.shape, gender, boneage.shape, ba_minmax.shape, ba_zscore)
             # print(train_loader.dataset.dataset.reverse_min_max_normal(ba_minmax), train_loader.dataset.dataset.a_min, train_loader.dataset.dataset.a_max)
             # print(target, train_loader.dataset.dataset.predict_compiler(target), train_loader.dataset.dataset.reverse_zscore_normal(ba_zscore))
             # print(train_loader.dataset.dataset.train_data)
@@ -73,9 +85,9 @@ if __name__ == '__main__':
             # img1.save(f'zzz/{img_id.item()}.jpg')
             # # plot_data(img[0], row, col, count)
 
-            # count += 1
-            # if count == 25:
-            #     break
+            count += 1
+            if count == 25:
+                break
             # break
 
         # plt.tight_layout()
@@ -84,11 +96,11 @@ if __name__ == '__main__':
 
         # print("---------------")
     
-        # for img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in data_progress.track(test_loader):
-        #     print(img_id, img.shape, sex, boneage, ba_minmax, ba_zscore)
+        for img_id, img, sex, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in data_progress.track(test_loader):
+            print(img_id, img.shape, sex, boneage, ba_minmax, ba_zscore)
         #     print(test_loader.dataset.reverse_min_max_normal(ba_minmax), test_loader.dataset.a_min, test_loader.dataset.a_max)
         #     print(target, test_loader.dataset.predict_compiler(target), test_loader.dataset.reverse_zscore_normal(ba_zscore))
         #     print(test_loader.dataset.test_data)
             
-        #     break
+            break
 
