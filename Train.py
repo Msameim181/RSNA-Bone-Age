@@ -121,10 +121,15 @@ def trainer(
         epoch_step = 0
         # Reading data and Training
         with tqdm(total = n_train, desc = f'Epoch {epoch + 1}/{epochs}', unit = 'img') as pbar:
-            for idx, images, gender, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in train_loader:
+            for train_batch in train_loader:
 
+                # Unpacking the data
+                images = train_batch['image']
+                gender = train_batch['gender']
+                target = train_batch['target']
+                boneage = train_batch['boneage']
                 
-
+                # Processing data before feeding to network
                 assert images.shape[1] == net.in_channels, \
                     f'Network has been defined with {net.in_channels} input channels, ' \
                     f'but loaded images have {images.shape[1]} channels. Please check that ' \

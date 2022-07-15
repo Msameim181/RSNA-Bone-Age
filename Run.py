@@ -49,12 +49,13 @@ if __name__ == '__main__':
                 f'\tBased On Gender: {basedOnSex}\n'
                 f'\tTargeted Gender: "{gender}"')
     
-    train_dataset , test_dataset = data_handler(dataset_name = dataset_name, defualt_path = '', 
-                                        basedOnSex = basedOnSex, gender = gender, 
-                                        transform_action = 'train', target_type = data_type_interpretor(args.output_type))
-    num_classes = train_dataset.num_classes if args.num_classes == 0 else args.num_classes
-    vars(args)['train_dataset_size'] = len(train_dataset)
-    vars(args)['test_dataset_size'] = len(test_dataset)
+    datasets = data_handler(dataset_name = dataset_name, defualt_path = '', 
+        basedOnSex = basedOnSex, gender = gender, 
+        transform_action = 'train', target_type = data_type_interpretor(args.output_type),
+        age_filter = False, age_bound_selection = 1)
+    num_classes = datasets['train_dataset'].num_classes if args.num_classes == 0 else args.num_classes
+    vars(args)['train_dataset_size'] = len(datasets['train_dataset'])
+    vars(args)['test_dataset_size'] = len(datasets['test_dataset'])
     vars(args)['target_type'] = data_type_interpretor(args.output_type)
 
     # Set up training hyperparameters
@@ -67,16 +68,16 @@ if __name__ == '__main__':
 
     # Packaging the data
     rich_print('\n[INFO]: Packaging the data...')
-    train_loader, val_loader, test_loader = data_wrapper(train_dataset = train_dataset, 
-                                                test_dataset = test_dataset, 
-                                                batch_size = batch_size, test_val_batch_size = 1,
-                                                val_percent = val_percent, 
-                                                shuffle = False, num_workers = 1)
+    loaders = data_wrapper(train_dataset = datasets['train_dataset'], 
+        test_dataset = datasets['test_dataset'], 
+        batch_size = batch_size, test_val_batch_size = 1,
+        val_percent = val_percent, 
+        shuffle = False, num_workers = 1)
     rich_print(f'''[INFO]: Data Packaged as:
         Training Batch Size:    {batch_size}
-        Training Size:          {len(train_loader.dataset)}
-        Validation Size:        {len(val_loader.dataset)}
-        Test Size:              {len(test_loader.dataset)}
+        Training Size:          {len(loaders['train_loader'].dataset)}
+        Validation Size:        {len(loaders['val_loader'].dataset)}
+        Test Size:              {len(loaders['test_loader'].dataset)}
         Validation %:           {val_percent}
     ''')
 
@@ -102,8 +103,8 @@ if __name__ == '__main__':
         net = net,
         args = args,
         device = device,
-        train_loader = train_loader, 
-        val_loader = val_loader, 
+        train_loader = loaders['train_loader'], 
+        val_loader = loaders['val_loader'], 
         epochs = epochs, 
         batch_size = batch_size, 
         learning_rate = learning_rate, 
@@ -124,7 +125,17 @@ if __name__ == '__main__':
 
     rich_print("\n[INFO]: Initiating testing phase...")
     # Initiate testing
-    evaluate(net, args, test_loader, device, criterion, WandB_usage, wandb_logger, tb_logger, log_results = True, logger_usage = True)
+    _, _, _, _, _ = evaluate(
+        net = net, 
+        args = args, 
+        test_loader = loaders['test_loader'], 
+        device = device, 
+        criterion = criterion, 
+        WandB_usage = WandB_usage, 
+        wandb_logger = wandb_logger, 
+        tb_logger = tb_logger, 
+        log_results = True, 
+        logger_usage = True)
 
     # Ending Testing and Cleaning up the loggers
     tb_logger.close()

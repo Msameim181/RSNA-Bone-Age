@@ -24,8 +24,15 @@ def validate(
     correct = 0
 
 
-    for _, images, gender, target, boneage, ba_minmax, ba_zscore, boneage_onehot, _ in tqdm(val_loader, total = n_val, desc='Validation Round...', unit = 'img', leave=False):
+    for valid_batch in tqdm(val_loader, total = n_val, desc='Validation Round...', unit = 'img', leave=False):
 
+        # Unpacking the data
+        images = valid_batch['image']
+        gender = valid_batch['gender']
+        target = valid_batch['target']
+        boneage = valid_batch['boneage']
+        
+        # Processing data before feeding the network
         images = images.to(device = device, dtype = torch.float32)
 
         gender = torch.unsqueeze(gender, 1)
